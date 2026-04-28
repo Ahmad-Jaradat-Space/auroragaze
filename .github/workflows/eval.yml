@@ -1,0 +1,30 @@
+name: eval
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.DEEPSEEK_API_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e .[dev]
+      - run: python -c "from auroragaze.retrieval.ingest import ingest_corpus; print(ingest_corpus())"
+      - run: python eval/run_eval.py --out eval/results.json
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      - run: python eval/judge.py --in eval/results.json --out eval/results_judged.json
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      - name: gate on precision
+        run: |
+          python -c "import json; s=json.load(open('eval/results_judged.json'))['summary']['overall']; assert s['precision']>=0.80, s"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval/results_judged.json
