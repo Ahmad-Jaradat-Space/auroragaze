@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import Literal, TypedDict
+from operator import add
+from typing import Annotated, Literal, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -73,4 +74,4 @@ class BriefingState(TypedDict, total=False):
     visibility: Visibility
     fleet_impact: dict[str, object]
     briefing: AuroraBriefing | SatelliteBriefing
-    trace: list[str]
+    trace: Annotated[list[str], add]

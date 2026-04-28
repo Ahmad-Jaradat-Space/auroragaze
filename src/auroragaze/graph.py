@@ -31,9 +31,7 @@ from auroragaze.tools.xray import get_goes_xray
 
 
 def _trace(state: BriefingState, line: str) -> list[str]:
-    existing = list(state.get("trace", []))
-    existing.append(line)
-    return existing
+    return [line]
 
 
 def supervisor_node(state: BriefingState) -> dict[str, Any]:
