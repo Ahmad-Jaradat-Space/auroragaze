@@ -1,0 +1,17 @@
+# date=2024-05-11 location=South Australia kp_at_observation=9 source=https://auroraaustralis.org.au/2024-05-11-south-australia/ event_type=aurora_observation persona=aurora
+
+South Australia aurora observations during the May 2024 Gannon storm.
+Confirmed photographs from Adelaide (-34.93°S), the Adelaide Hills, the
+Fleurieu Peninsula, Kangaroo Island, and as far north as the Flinders
+Ranges. Reports also from Whyalla and Port Augusta.
+
+Time window: 10:00 to 14:00 UTC. Local time 19:30 to 23:30 ACST.
+Visibility quality: overhead arcs from dark sites south of Adelaide;
+horizon glow with structure from the city itself.
+
+Cloud cover: largely clear across most of the state. Moon: waxing crescent,
+low impact.
+
+Reference frame: confirms aurora overhead at -34.9°S during Kp 9 conditions.
+A useful southern-state point for calibration in addition to the Tasmania
+and Victoria reference cases.

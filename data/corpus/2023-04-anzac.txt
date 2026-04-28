@@ -1,0 +1,19 @@
+# date=2023-04-23 kp_peak=8 bz_min=-32 dst_min=-213 source=https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-watch-23-april-2023 event_type=storm persona=both
+
+April 2023 Anzac Day storm. A halo CME from active region 13283 arrived at
+Earth on April 23. Kp reached 8 (G4 severe). Dst reached -213 nT. Bz turned
+sharply southward to -32 nT for several hours.
+
+Satellite impact: multiple operators reported anomalies; LEO drag increased
+by an estimated 15-25 percent at 400-500 km altitude. No widely-publicised
+satellite losses but increased station-keeping reported.
+
+Aurora visibility: substantial southern-hemisphere aurora event. Photographs
+reported from Tasmania (very widely), Victoria including Melbourne suburbs,
+South Australia (Adelaide and beyond), parts of southern New South Wales,
+and the South Island of New Zealand. The auroraaustralis.org.au community
+recorded one of its largest event galleries to date.
+
+Reference frame: a strong-but-not-extreme storm. Useful as the modern
+reference case for southern Australia aurora at G4 conditions, and as a
+calibration point for "what does Kp 8 actually look like at -38°S."

@@ -1,0 +1,17 @@
+# date=2024-10-10 kp_peak=8 bz_min=-30 dst_min=-335 source=https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024 event_type=storm persona=both
+
+October 2024 G4 storm. A series of CMEs from active region 13848 arrived at
+Earth on October 10-11. Kp reached 8 (G4 severe). Dst reached -335 nT. Bz
+minimum -30 nT. Solar wind speed peaked above 750 km/s.
+
+Satellite impact: multiple LEO operators reported drag-related station
+keeping; SpaceX Starlink fleet operations adjusted. No publicly-reported
+satellite losses. GPS positioning errors reported up to several metres.
+
+Aurora visibility: widely visible across southern Australia, New Zealand,
+and unusually as far north as central Queensland and central New South
+Wales. The auroraaustralis.org.au gallery for this event has confirmed
+photographs from Brisbane, Sydney, and Perth.
+
+Reference frame: a recent strong G4 event useful as a calibration point
+for May 2024-style impacts at Kp 8 conditions.

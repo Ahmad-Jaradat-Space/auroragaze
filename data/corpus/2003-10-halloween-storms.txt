@@ -1,0 +1,27 @@
+# date=2003-10-29 kp_peak=9 bz_min=-50 dst_min=-383 source=https://www.swpc.noaa.gov/sites/default/files/images/u33/SatelliteAnomaliesFromOctober2003.pdf event_type=storm persona=both
+
+October-November 2003 Halloween storms. A series of X-class flares and CMEs
+from active region 10486 produced multiple G5 storms. The October 29 event
+saw Kp 9 sustained for 9 hours, Dst -383 nT. Bz reached -50 nT. Solar wind
+exceeded 1500 km/s briefly during the second storm on October 30.
+
+Satellite impact: the most-cited modern reference for severe-storm satellite
+anomalies. ADEOS-II (Japanese Earth-observation) was lost. The Kodama relay
+satellite suffered a permanent loss of attitude control. SOHO and Stardust
+went into safe-mode. NOAA's GOES-12 lost its X-ray sensor temporarily.
+Multiple commercial geostationary satellites reported single-event upsets
+and surface-charging events. GPS positioning errors of 50 metres reported.
+
+Aurora visibility: aurora was reported as far equatorward as Florida and
+Texas in the northern hemisphere; in the southern hemisphere aurora was
+photographed across all of Australia and New Zealand including northern
+Queensland and Brisbane. South African and southern South American
+observations were also confirmed.
+
+Power grid: Sweden's Malmo region lost power for about an hour. South Africa
+reported transformer damage. The Hydro-Québec system in Canada (already
+hardened after 1989) survived without major outage.
+
+Reference frame: this is the modern reference for "what an extreme storm
+actually does." Anything claiming to be a Carrington-class analogue should
+be measured against the Halloween 2003 sequence first.

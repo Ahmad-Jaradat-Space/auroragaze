@@ -1,0 +1,30 @@
+# date=2024-12-01 reference=true source=https://www.swpc.noaa.gov/phenomena/aurora event_type=reference persona=aurora
+
+Aurora physics, brief reference. The aurora forms when energetic charged
+particles from the magnetosphere precipitate into the upper atmosphere
+along magnetic field lines and excite atmospheric atoms and molecules,
+which then emit characteristic colours: green from atomic oxygen at
+~100-150 km altitude, red from atomic oxygen at higher altitudes
+(~150-300 km), blue and purple from molecular nitrogen at lower altitudes.
+
+The auroral oval is a ring of precipitation centred roughly on each
+geomagnetic pole. During quiet conditions the southern oval sits near
+67°S geomagnetic latitude. During geomagnetic storms the oval expands
+equatorward in proportion to Kp.
+
+Visibility from the ground requires:
+- The oval (or its equatorward boundary) to be near or above your horizon.
+- A dark sky (no city lights).
+- Clear weather and a low moon.
+- Open horizon to the south (in the southern hemisphere).
+
+Naked-eye visibility threshold:
+- Overhead aurora when you are inside the oval.
+- Horizon glow when the oval's equatorward boundary is within ~5 to 10 degrees
+  poleward of your latitude.
+- Photographable with a long exposure even when below naked-eye threshold.
+
+Reference frame: aurora briefings should distinguish "naked-eye visible"
+from "photographable," because photographic visibility extends roughly 5
+to 15 degrees further equatorward than naked-eye visibility depending on
+Kp and brightness.

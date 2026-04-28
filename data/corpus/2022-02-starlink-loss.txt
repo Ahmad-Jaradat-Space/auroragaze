@@ -1,0 +1,25 @@
+# date=2022-02-03 kp_peak=5 bz_min=-15 dst_min=-66 source=https://www.swpc.noaa.gov/news/swpc-statement-loss-spacex-starlink-satellites event_type=storm persona=satellite
+
+February 2022 Starlink loss. SpaceX launched a batch of 49 Starlink satellites
+on February 3, 2022 into a low parking orbit (~210 km altitude). On February 4
+a moderate (G1-G2) geomagnetic storm arrived at Earth. Kp peaked at 5. The
+storm was small in magnitude but its timing was the issue: it raised the
+density of the upper thermosphere by an estimated 50 percent at the satellites'
+parking altitude, increasing atmospheric drag substantially.
+
+SpaceX placed the satellites into safe-mode (edge-on flight orientation to
+minimise drag) but the increased drag exceeded what safe-mode could compensate.
+38 of the 49 satellites failed to raise their orbits and re-entered the
+atmosphere within days.
+
+Reference frame: this event is the canonical case for "small storm, big
+operational impact." It is the anchor case for satellite operators who need
+storm-time density forecasts translated into actions like deferring orbit
+raises or extending parking-orbit altitudes. NOAA SWPC published a statement
+on February 8, 2022 noting the operational lesson.
+
+Operational lessons:
+- A G1-G2 storm is non-trivial for very-low-orbit deployments.
+- Density at deployment altitude is the operationally relevant metric, not Kp alone.
+- Safe-mode flight orientation is necessary but not always sufficient.
+- Storm-time briefings should include drag delta at deployment altitude.

@@ -1,0 +1,35 @@
+# date=2024-12-01 reference=true source=NOAA SWPC Empirical Density Models event_type=reference persona=satellite
+
+Atmospheric density and satellite drag during geomagnetic storms.
+
+The thermospheric density at LEO altitudes (200 to 800 km) increases
+during geomagnetic storms in proportion to the energy deposited by the
+auroral electrojet and the Joule heating of the upper atmosphere. Empirical
+estimates from NOAA SWPC and the JB2008 model give the following indicative
+density-increase ranges versus storm strength at common LEO altitudes:
+
+- 300 km altitude:
+  - G1 (Kp 5): density +20 to +30%
+  - G3 (Kp 7): +50 to +80%
+  - G5 (Kp 9): +200 to +400% during peak hours
+- 500 km altitude:
+  - G1: +5 to +10%
+  - G3: +15 to +30%
+  - G5: +60 to +150%
+- 800 km altitude:
+  - G1: +2 to +5%
+  - G3: +8 to +15%
+  - G5: +25 to +60%
+
+Drag delta-v is approximately proportional to density times v^2 times
+ballistic coefficient. For a typical Starlink-class satellite at 350 km:
+- G1 storm timing during deployment can increase drag delta-v over 24
+  hours by enough to prevent successful orbit raising. This is the Feb
+  2022 lesson.
+- G3+ storms during sustained station-keeping require extra propellant
+  budget on the order of 10 to 40 percent of nominal weekly burn.
+
+Operational implication: density at the satellite altitude is the
+operationally relevant quantity, not Kp alone. Two storms of equal Kp can
+have very different drag impacts depending on duration, ring-current
+recovery, and altitude.

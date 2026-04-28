@@ -1,0 +1,22 @@
+# date=2024-12-01 reference=true source=https://www.swpc.noaa.gov/noaa-scales-explanation event_type=reference persona=both
+
+NOAA G-scale and Kp index reference. The Kp index is a quasi-logarithmic
+3-hour planetary index from 0 to 9. NOAA categorises geomagnetic storms
+on a G-scale derived from Kp:
+
+- G1 minor: Kp 5. Power systems weak fluctuations; spacecraft minor impact;
+  aurora may be visible at high latitudes (Tasmania in Australia).
+- G2 moderate: Kp 6. Power systems voltage alarms possible; spacecraft
+  drag may extend onto LEO satellites. Aurora visible from southern
+  Victoria, parts of South Australia.
+- G3 strong: Kp 7. Voltage corrections required on power systems; surface
+  charging on satellites. Aurora visible from much of southern Australia.
+- G4 severe: Kp 8. Voltage instability and protective system trips
+  possible; satellite tracking issues. Aurora across most of southern
+  Australia and into mainland NZ.
+- G5 extreme: Kp 9. Power grid widespread voltage problems possible;
+  satellite operations severely affected. Aurora possible into central
+  Australia and as far north as central Queensland.
+
+Reference frame: this is the canonical NOAA-published mapping of Kp to
+storm impact level. Briefings should reference these categories explicitly.

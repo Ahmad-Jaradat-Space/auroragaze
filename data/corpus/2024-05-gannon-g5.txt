@@ -1,0 +1,24 @@
+# date=2024-05-10 kp_peak=9 bz_min=-50 dst_min=-412 source=https://www.swpc.noaa.gov/news/may-2024-storm event_type=storm persona=both
+
+May 2024 Gannon storm. The first G5 (extreme) geomagnetic storm since the
+Halloween storms of October 2003. A series of CMEs from active region 13664
+arrived at Earth from May 10. The interplanetary magnetic field turned strongly
+southward with Bz reaching -50 nT. Solar wind speed exceeded 800 km/s at peak.
+Planetary Kp reached 9 on the night of May 10-11 UTC. Dst reached -412 nT.
+
+Satellite impact: SpaceX reported significant atmospheric drag on the Starlink
+fleet, requiring extensive station-keeping. Multiple operators reported single
+event upsets and surface charging anomalies. GPS positioning errors of up to
+several metres were reported. HF communications were degraded across most
+sectors for 24 to 48 hours.
+
+Aurora visibility: The southern auroral oval extended unusually equatorward.
+Confirmed aurora photographs from as far north as Brisbane (-27.5°) on the
+Australian east coast and from northern Queensland reports the next night.
+Photographers across Tasmania, Victoria, and South Australia reported
+overhead aurora with full red-green-purple structure. New Zealand reports
+came from as far north as Auckland. Cloud-cover impact was significant on
+the east coast of Australia but inland sites had clear viewing.
+
+Reference frame: this event is the modern analogue for satellite-fleet drag
+risk and for "aurora visible from temperate Australia" planning.

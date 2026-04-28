@@ -1,0 +1,18 @@
+# date=2000-07-15 kp_peak=9 bz_min=-58 dst_min=-301 source=https://www.swpc.noaa.gov/news/bastille-day-event event_type=storm persona=both
+
+Bastille Day 2000 storm. An X5.7 flare from active region 9077 on July 14
+produced a fast halo CME that arrived at Earth on July 15-16. Kp reached 9
+for an extended period. Dst reached -301 nT. Bz reached -58 nT, the most
+strongly southward IMF in the modern record at the time.
+
+Satellite impact: ASCA was lost (Japanese X-ray observatory; lost attitude
+control, never recovered, eventual reentry). Multiple GEO satellites
+reported single-event upsets. GPS-IIA navigation errors of tens of metres.
+ACE was temporarily disabled.
+
+Aurora visibility: aurora photographed at unusually low latitudes in both
+hemispheres. Southern aurora reports from across Tasmania, Victoria, South
+Australia, and southern New South Wales. Auckland reports from New Zealand.
+
+Reference frame: an analogue for fast-onset storms with very strong southward
+Bz. Useful comparison case for storms where Bz dominates over speed.

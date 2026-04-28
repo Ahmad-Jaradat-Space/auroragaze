@@ -1,0 +1,31 @@
+# date=2024-12-01 reference=true source=public space-weather operations playbooks event_type=reference persona=satellite
+
+Operational actions for satellite operators during geomagnetic storms.
+
+Standard menu of decisions during a forecast or in-progress storm:
+
+1. Safe-mode the bus: reorient to minimise drag (LEO) or reduce surface
+   charging risk (GEO). Used during G3+ storms for sensitive payloads.
+2. Defer maneuvers: planned orbit raises, station-keeping burns, or
+   formation flying maneuvers can be delayed to avoid pointing changes
+   during high-density periods.
+3. Raise the orbit: pre-storm proactive altitude increase for very low
+   parking orbits to reduce drag exposure. Generally only useful with
+   advance warning of 24 hours plus.
+4. Disable non-essential payloads: reduce power draw and thermal
+   variability while protective settings are active.
+5. Increase telemetry cadence: prepare for anomaly detection and faster
+   investigation if upsets occur.
+6. Notify customers: scheduled downtime windows, expected service quality
+   changes (e.g. GPS positioning errors), and contact paths.
+
+Per-orbit-class indicative thresholds:
+- LEO below 400 km: action threshold G2 (Kp 6) or higher.
+- LEO 400-800 km: action threshold G3 (Kp 7) or higher.
+- MEO/GPS: surface-charging threshold G3 plus high-energy electron flux
+  enhancement; check GOES SEM data.
+- GEO: surface charging G3+; deep-dielectric charging on multi-day events.
+
+Reference frame: a briefing for satellite operators should match the
+recommended action to the specific orbit and mission profile, citing the
+storm condition that triggered the recommendation.

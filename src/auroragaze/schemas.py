@@ -48,15 +48,29 @@ class AuroraBriefing(BaseModel):
     citations: list[Citation]
 
 
+class SatelliteBriefing(BaseModel):
+    fleet_label: str
+    storm_summary: str
+    headline: str
+    body: str
+    per_unit_actions: list[str]
+    citations: list[Citation]
+
+
 class BriefingState(TypedDict, total=False):
     persona: Literal["aurora", "satellite"]
     lat: float
     lon: float
     location_label: str
+    fleet: list[dict[str, str | float]]
+    fleet_label: str
     query: str
     solar_wind: SolarWind
     kp: KpReading
+    dst_nt: float
+    flare_class: str
     chunks: list[Chunk]
     visibility: Visibility
-    briefing: AuroraBriefing
+    fleet_impact: dict[str, object]
+    briefing: AuroraBriefing | SatelliteBriefing
     trace: list[str]

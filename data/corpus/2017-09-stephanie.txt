@@ -1,0 +1,15 @@
+# date=2017-09-08 kp_peak=8 bz_min=-31 dst_min=-122 source=https://www.swpc.noaa.gov/news/g4-severe-geomagnetic-storm-warning-issued event_type=storm persona=both
+
+September 2017 storm. Two X-class flares from active region 12673 (X9.3 on
+September 6 was the largest of solar cycle 24) produced fast CMEs that
+arrived at Earth on September 7-8. Kp reached 8 (G4). Dst -122 nT. Bz -31 nT.
+
+Satellite impact: LEO drag increase reported. No publicly-reported satellite
+losses. HF communications were degraded across multiple sectors during the
+flare phase.
+
+Aurora visibility: aurora confirmed across southern Australia, New Zealand,
+and as far north as parts of southern Queensland.
+
+Reference frame: a late-cycle-24 event useful for calibrating "X9 flare
+plus G4 storm" combined impacts.

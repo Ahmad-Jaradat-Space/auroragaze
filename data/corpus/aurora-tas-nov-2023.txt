@@ -1,0 +1,19 @@
+# date=2023-11-05 location=Hobart, Tasmania kp_at_observation=7 source=https://auroraaustralis.org.au/2023-11-05-tasmania-event/ event_type=aurora_observation persona=aurora
+
+Tasmanian aurora event, November 5 2023. Multiple confirmed observations
+across southern Tasmania between 10:00 and 13:00 UTC (21:00 AEDT to 00:00
+AEDT next day). Kp 7 sustained through the observation window.
+
+Reported sites: Bruny Island (south Hobart, dark sky), Goat Bluff, South
+Arm Peninsula, Howden, and the eastern shore of Hobart. Photographs show
+clear pink-red curtain structure with overhead arcs visible from the darker
+sites. Naked-eye visibility reported from Bruny Island and South Arm; arcs
+were visible looking southward at about 10 to 30 degrees above the horizon.
+
+Cloud cover was variable. Clear in the south, partly cloudy in the north of
+Tasmania (Launceston reports were limited by cloud). Moon phase was first
+quarter; moonset was before peak observation window.
+
+Reference frame: this event confirms that Kp 7 with clear southern viewing
+gives reliable naked-eye aurora from Tasmania at -42.88°S. Useful as a
+ground-truth point for the visibility threshold model.

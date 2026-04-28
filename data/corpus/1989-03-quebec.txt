@@ -1,0 +1,21 @@
+# date=1989-03-13 kp_peak=9 bz_min=-30 dst_min=-589 source=https://www.swpc.noaa.gov/news/march-1989-event event_type=storm persona=both
+
+March 1989 Hydro-Québec storm. The CME arrived at Earth on March 13 1989.
+Kp reached 9. Dst reached -589 nT, the deepest Dst excursion in the modern
+record. The geomagnetically induced currents tripped the Hydro-Québec power
+grid; the entire province lost power for about nine hours. Multiple
+transformers across the North American eastern grid were damaged.
+
+Satellite impact: GOES-7 lost half its solar array output permanently. The
+Anik-E1 and Anik-E2 commercial communications satellites suffered
+attitude-control failures. Multiple GEO satellites reported surface charging.
+SOHO did not exist yet.
+
+Aurora visibility: aurora was photographed in Cuba, the Cayman Islands, and
+the Florida Keys in the northern hemisphere. In the southern hemisphere
+reports included aurora as far north as Cairns in tropical Queensland; this
+is among the lowest-latitude southern aurora sightings in the modern record.
+
+Reference frame: the canonical reference for power-grid GIC damage and for
+"low-latitude aurora was not just hyperbole" historical context. The most
+extreme Dst excursion since 1957.

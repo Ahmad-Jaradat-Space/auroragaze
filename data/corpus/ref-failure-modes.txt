@@ -1,0 +1,38 @@
+# date=2024-12-01 reference=true source=public space-weather operations literature event_type=reference persona=satellite
+
+Common spacecraft anomaly modes during geomagnetic storms.
+
+1. Single-event upset (SEU). Energetic protons or heavy ions cause logic
+   bit flips in onboard computers or memory. Frequent during solar
+   particle events and at high-latitude passes during G3+ storms.
+   Mitigation: error-correcting codes, watchdog timers, redundant logic.
+
+2. Surface charging. Differential charging of spacecraft surfaces during
+   substorms; arc discharges damage insulation, bias sensors, and degrade
+   solar arrays. GEO and MEO satellites are most affected.
+
+3. Deep-dielectric charging. High-energy electrons (MeV) penetrate
+   spacecraft skin and accumulate in dielectric materials over days;
+   eventual discharge can damage onboard electronics. Multi-day storm
+   exposure is the trigger.
+
+4. Atmospheric drag enhancement. Thermospheric density rises during
+   storms, increasing drag at LEO altitudes. Operationally relevant
+   from below ~600 km and severe below 400 km. The Feb 2022 Starlink
+   loss is the canonical case.
+
+5. Attitude-control degradation. Star-tracker dazzling by solar
+   particle events, magnetometer-based attitude error during disturbed
+   geomagnetic field, sun-sensor flares.
+
+6. Solar array degradation. Particle-induced damage to solar cells; over
+   the course of a single severe storm, end-of-life loss of array output
+   can be accelerated by a measurable amount.
+
+7. Communication outages. Polar-cap absorption during solar particle
+   events disrupts HF and VHF; ionospheric scintillation degrades GNSS
+   carriers and S-band telemetry.
+
+Reference frame: a satellite-side briefing should map the current storm
+profile to the most-likely anomaly modes for the operator's specific
+mission profile, not list all of them generically.

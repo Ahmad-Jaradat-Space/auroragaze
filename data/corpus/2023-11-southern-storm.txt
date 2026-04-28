@@ -1,0 +1,17 @@
+# date=2023-11-05 kp_peak=7 bz_min=-25 dst_min=-163 source=https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-watch-5-nov-2023 event_type=storm persona=both
+
+November 2023 storm. CME arrival on November 5. Kp reached 7 briefly with
+sustained Kp 6 conditions for most of the night UTC. Dst reached -163 nT.
+Bz minimum -25 nT.
+
+Satellite impact: nominal. No publicly-reported losses. Increased drag at
+LEO; routine station-keeping.
+
+Aurora visibility: a notable southern aurora event in Tasmania and Victoria.
+Confirmed photographs from Hobart, Bruny Island, the Otways, and southern
+South Australia. The display was visible for about three hours after local
+sunset. New Zealand reports included Wellington and the South Island.
+
+Reference frame: a clear case of "Kp 7 storm gives definite aurora across
+southern Tasmania and Victoria but unlikely north of about -37°S." Calibration
+point for the visibility threshold.

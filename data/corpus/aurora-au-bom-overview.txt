@@ -1,0 +1,26 @@
+# date=2024-12-01 reference=true source=http://www.bom.gov.au/aurora/ event_type=reference persona=aurora
+
+Bureau of Meteorology Australian aurora reporting overview. The Bureau of
+Meteorology Space Weather Services issues alerts when the southern auroral
+oval is forecast to extend over Australia. Their alert thresholds:
+- Aurora alert level 1: Kp 5+, possible aurora from Tasmania.
+- Aurora alert level 2: Kp 7+, possible aurora from southern Victoria,
+  southern South Australia, and southern Western Australia.
+- Aurora alert level 3: Kp 8-9, aurora across most of southern Australia
+  and possibly into central Australia.
+
+Best viewing conditions in Australia:
+- Dark sky site away from city lights.
+- Look toward the south horizon.
+- Avoid full-moon nights.
+- Check cloud cover via BoM forecasts.
+
+Useful Australian dark-sky locations for aurora viewing:
+- Tasmania: Bruny Island, South Arm, Cradle Mountain, Tarkine, Mount Wellington.
+- Victoria: Otways, Wilsons Promontory, Cape Schanck, Aireys Inlet.
+- South Australia: Fleurieu Peninsula, Kangaroo Island, Yorke Peninsula.
+- Western Australia: Albany, Esperance, Margaret River.
+- New South Wales: south coast (Eden, Bermagui, Tathra).
+
+Reference frame: this is the Australian operational reference for matching
+Kp values to viewing-region expectations.

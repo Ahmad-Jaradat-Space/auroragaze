@@ -1,0 +1,16 @@
+# date=2015-03-17 kp_peak=8 bz_min=-27 dst_min=-223 source=https://www.swpc.noaa.gov/news/g4-severe-geomagnetic-storm-observed-march-17-2015 event_type=storm persona=both
+
+March 2015 St Patrick's Day storm. CME arrival on March 17. Kp reached 8
+(G4 severe). Dst reached -223 nT. Bz minimum -27 nT.
+
+Satellite impact: increased LEO drag and several reported single-event
+upsets. No major losses publicly reported. HF communications were degraded
+across the Pacific sector.
+
+Aurora visibility: widespread southern Australian aurora. Reports from
+Tasmania, Victoria, South Australia, and the southern coast of New South
+Wales. New Zealand reports across both islands.
+
+Reference frame: a useful G4 reference case in the previous solar cycle
+(cycle 24, lower-amplitude than cycle 25). Comparison case for "G4 in a
+weaker cycle."

@@ -1,0 +1,21 @@
+# date=1859-09-02 kp_peak=9 bz_min=NA dst_min=-1760 source=https://www.swpc.noaa.gov/phenomena/carrington-event event_type=storm persona=both
+
+Carrington Event 1859. Reconstructed Dst on the order of -800 to -1760 nT;
+Kp at saturation (9). The event followed a white-light flare observed by
+Richard Carrington from Redhill on September 1, 1859. CME transit time was
+about 17.6 hours, the fastest documented.
+
+Satellite impact: not applicable (no satellites). Telegraph operators
+reported sparks from grounded equipment, telegraph keys jamming, and
+operators able to send messages with batteries disconnected.
+
+Aurora visibility: aurora seen over Cuba, Hawaii, Colombia, and the Caribbean
+in the northern hemisphere. In the southern hemisphere reports include
+Queensland (Brisbane and northwards), Honolulu, and Santiago de Chile.
+
+Reference frame: the canonical worst-case scenario in modern engineering risk
+analysis. Modern infrastructure has not been tested at this magnitude. Used
+as the upper-bound case in NOAA SWPC reference scenarios.
+
+Out-of-scope warning: any briefing claiming a "Carrington-class" event is
+imminent without concrete present-day evidence is a hallucination flag.

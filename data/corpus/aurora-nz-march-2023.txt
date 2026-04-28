@@ -1,0 +1,16 @@
+# date=2023-03-24 location=New Zealand South Island kp_at_observation=8 source=https://www.aurora-service.org/southern-aurora/2023-march/ event_type=aurora_observation persona=aurora
+
+New Zealand aurora event, March 24 2023. Kp 8 conditions during the
+storm. Confirmed observations from across the South Island: Lake Tekapo,
+Wanaka, Queenstown, Dunedin (-45.87°S), the Catlins, and Stewart Island.
+North Island reports came from Wellington, Wairarapa, and Auckland
+(-36.85°S), with Auckland observations being naked-eye horizon glow rather
+than overhead structure.
+
+Time window: 09:00 to 14:00 UTC, local time 22:00 to 03:00 NZDT.
+Cloud cover was variable across the South Island; clear weather over
+Otago and Canterbury. Moon was new; ideal conditions.
+
+Reference frame: a strong calibration point at -45 to -37°S. Auckland
+horizon-glow at Kp 8 is at the edge of visibility; Stewart Island
+overhead aurora at Kp 8 is reliable.

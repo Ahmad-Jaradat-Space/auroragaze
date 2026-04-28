@@ -1,0 +1,20 @@
+# date=2024-05-11 location=Victoria, Australia kp_at_observation=9 source=https://auroraaustralis.org.au/2024-05-11-mainland-australia/ event_type=aurora_observation persona=aurora
+
+Victoria aurora observations during the May 2024 G5 Gannon storm. Confirmed
+photographs from across the state including suburban Melbourne (-37.81°S),
+the Mornington Peninsula, the Otways, and central and northern Victoria
+(Bendigo, Castlemaine, and as far north as Mildura at -34.2°S).
+
+Time window: 10:00 UTC May 11 through 16:00 UTC. Local time: 20:00 AEST
+to 02:00 AEST. Naked-eye visibility was extensive even from suburban areas.
+Photographers reported overhead arcs and curtain structure with red, pink,
+and green colours. The aurora was bright enough to be photographed with
+phone cameras at urban dark-sky scores.
+
+Cloud cover varied. Eastern Victoria was largely clear. Western Victoria
+had some cloud impact. Moon was waxing crescent; minimal interference.
+
+Reference frame: the May 2024 storm produced overhead aurora across the
+entire state at Kp 9. This is the calibration point for "what Kp 9 looks
+like at -37 to -34°S." Confirms that during G5 conditions the auroral oval
+extends well into mainland Australia.
