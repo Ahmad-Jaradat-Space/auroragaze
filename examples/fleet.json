@@ -1,0 +1,5 @@
+[
+  {"name": "bus-A", "altitude_km": 350, "orbit_class": "LEO_low", "hardness": "standard", "mission": "communications"},
+  {"name": "bus-B", "altitude_km": 550, "orbit_class": "LEO_mid", "hardness": "standard", "mission": "communications"},
+  {"name": "geo-comms", "altitude_km": 35786, "orbit_class": "GEO", "hardness": "hardened", "mission": "communications"}
+]
