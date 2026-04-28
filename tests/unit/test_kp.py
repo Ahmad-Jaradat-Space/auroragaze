@@ -4,9 +4,8 @@ from pytest_httpx import HTTPXMock
 from auroragaze.tools.kp import KP_URL, get_kp_now
 
 _KP_PAYLOAD = [
-    ["time_tag", "kp", "a_running", "station_count"],
-    ["2026-04-29 12:00:00.000", "4.33", "20", "10"],
-    ["2026-04-29 15:00:00.000", "6.20", "32", "10"],
+    {"time_tag": "2026-04-29T12:00:00", "Kp": 4.33, "a_running": 20, "station_count": 8},
+    {"time_tag": "2026-04-29T15:00:00", "Kp": 6.20, "a_running": 32, "station_count": 8},
 ]
 
 

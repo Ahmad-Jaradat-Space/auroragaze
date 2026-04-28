@@ -17,7 +17,7 @@ async def get_kp_now(client: httpx.AsyncClient | None = None) -> KpReading:
         if own_client:
             await client.aclose()
 
-    # data[0] is the header; rows are [time_tag, kp, a_running, station_count]
     last = data[-1]
-    ts = datetime.fromisoformat(last[0].replace(" ", "T")).replace(tzinfo=UTC)
-    return KpReading(kp=float(last[1]), timestamp=ts)
+    ts_raw = last["time_tag"].replace(" ", "T").rstrip("Z")
+    ts = datetime.fromisoformat(ts_raw).replace(tzinfo=UTC)
+    return KpReading(kp=float(last["Kp"]), timestamp=ts)

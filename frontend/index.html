@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AuroraGaze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --ink: #1a1a2e;
+    --muted: #5b6178;
+    --line: rgba(26, 26, 46, 0.08);
+    --card: #ffffff;
+    --aurora-1: #e9d8ff;
+    --aurora-2: #c8b4ff;
+    --aurora-ink: #4a2d7a;
+    --sky-1: #d8ecff;
+    --sky-2: #a9d0f5;
+    --sky-ink: #1a4378;
+    --good: #2f6f4d;
+    --warn: #b27a00;
+    --bad: #a23a3a;
+    --shadow: 0 1px 2px rgba(26,26,46,0.04), 0 8px 24px rgba(26,26,46,0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    padding: 28px 40px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .brand-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-left: 12px;
+  }
+  .toggle {
+    display: inline-flex;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .toggle button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .toggle button.active.aurora { background: var(--aurora-2); color: var(--aurora-ink); }
+  .toggle button.active.satellite { background: var(--sky-2); color: var(--sky-ink); }
+
+  main { padding: 32px 40px 80px; max-width: 1100px; margin: 0 auto; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .card .value { font-size: 28px; font-weight: 500; margin-top: 8px; letter-spacing: -0.02em; }
+  .card .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .card .stamp { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 12px; }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .panel h2 { margin: 0 0 16px; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .input {
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    background: white;
+  }
+  .input:focus { outline: 2px solid var(--aurora-2); outline-offset: -1px; }
+  .satellite-mode .input:focus { outline-color: var(--sky-2); }
+
+  .btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-aurora { background: var(--aurora-2); color: var(--aurora-ink); }
+  .btn-aurora:hover { background: var(--aurora-1); }
+  .btn-satellite { background: var(--sky-2); color: var(--sky-ink); }
+  .btn-satellite:hover { background: var(--sky-1); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .trace {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: #fbfbf8;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 60px;
+    color: var(--muted);
+  }
+  .trace .step {
+    padding: 4px 0;
+    border-left: 2px solid var(--aurora-2);
+    padding-left: 12px;
+    margin-bottom: 6px;
+    color: var(--ink);
+    animation: slidein 0.25s ease;
+  }
+  .satellite-mode .trace .step { border-left-color: var(--sky-2); }
+  @keyframes slidein {
+    from { opacity: 0; transform: translateX(-4px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .briefing {
+    margin-top: 16px;
+    background: linear-gradient(135deg, var(--aurora-1) 0%, #f2eaff 100%);
+    border: 1px solid var(--aurora-2);
+    border-radius: 16px;
+    padding: 24px;
+    color: var(--aurora-ink);
+    animation: slidein 0.4s ease;
+  }
+  .satellite-mode .briefing {
+    background: linear-gradient(135deg, var(--sky-1) 0%, #ecf5ff 100%);
+    border-color: var(--sky-2);
+    color: var(--sky-ink);
+  }
+  .briefing h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .briefing .body { font-size: 15px; line-height: 1.6; }
+  .briefing .meta { font-size: 13px; opacity: 0.85; margin-top: 12px; }
+  .briefing ul { margin: 8px 0; padding-left: 20px; font-size: 14px; }
+  .briefing .citations { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 12.5px; }
+  .briefing .citations .src { font-family: 'JetBrains Mono', monospace; }
+
+  .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; }
+  .level.likely { background: rgba(47,111,77,0.15); color: var(--good); }
+  .level.possible { background: rgba(178,122,0,0.15); color: var(--warn); }
+  .level.unlikely { background: rgba(162,58,58,0.12); color: var(--bad); }
+
+  .hidden { display: none; }
+
+  footer { padding: 24px 40px; color: var(--muted); font-size: 13px; text-align: center; border-top: 1px solid var(--line); }
+  footer a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <span class="brand">AuroraGaze</span>
+    <span class="brand-sub">live solar-wind briefings</span>
+  </div>
+  <div class="toggle" id="persona-toggle">
+    <button class="active aurora" data-mode="aurora">Aurora</button>
+    <button data-mode="satellite">Satellite</button>
+  </div>
+</header>
+
+<main id="app">
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Solar wind (DSCOVR)</div>
+      <div class="value" id="sw-bz">—</div>
+      <div class="sub" id="sw-extra">—</div>
+      <div class="stamp" id="sw-time">—</div>
+    </div>
+    <div class="card">
+      <div class="label">Kp index</div>
+      <div class="value" id="kp-val">—</div>
+      <div class="sub" id="kp-cat">—</div>
+      <div class="stamp" id="kp-time">—</div>
+    </div>
+    <div class="card">
+      <div class="label">Updated</div>
+      <div class="value" id="age">—</div>
+      <div class="sub">refreshes every 5 minutes</div>
+      <div class="stamp" id="now-stamp">—</div>
+    </div>
+  </div>
+
+  <div class="panel" id="aurora-panel">
+    <h2>Where can I see the aurora tonight?</h2>
+    <div class="row">
+      <input class="input" id="city" placeholder="Hobart, Melbourne, Dunedin..." value="Hobart" />
+      <input class="input" id="lat" placeholder="lat" value="-42.88" style="max-width:110px" />
+      <input class="input" id="lon" placeholder="lon" value="147.32" style="max-width:110px" />
+      <button class="btn btn-aurora" id="brief-aurora">Get briefing →</button>
+    </div>
+  </div>
+
+  <div class="panel hidden" id="satellite-panel">
+    <h2>Brief my fleet</h2>
+    <div class="row">
+      <input class="input" id="fleet-label" placeholder="fleet name" value="example LEO constellation" />
+      <button class="btn btn-satellite" id="brief-satellite">Get briefing →</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5">
+      Default fleet: bus-A 350 km LEO_low, bus-B 550 km LEO_mid, geo-comms 35 786 km GEO. Edit in JSON form (coming).
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Agent trace</h2>
+    <div class="trace" id="trace">
+      <span style="color:var(--muted)">No briefing yet — pick a location and click <em>Get briefing</em>.</span>
+    </div>
+    <div id="briefing-slot"></div>
+  </div>
+
+</main>
+
+<footer>
+  Open source on <a href="https://github.com/Ahmad-Jaradat-Space/auroragaze" target="_blank">GitHub</a>.
+  Data: NOAA SWPC, DSCOVR, GOES, Kyoto WDC. Aurora reports: <a href="https://auroraaustralis.org.au" target="_blank">auroraaustralis.org.au</a>.
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+let mode = "aurora";
+const toggle = $("persona-toggle");
+toggle.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  mode = btn.dataset.mode;
+  document.body.classList.toggle("satellite-mode", mode === "satellite");
+  for (const b of toggle.querySelectorAll("button")) {
+    b.classList.toggle("active", b.dataset.mode === mode);
+    b.classList.remove("aurora", "satellite");
+    b.classList.add(b.dataset.mode);
+  }
+  $("aurora-panel").classList.toggle("hidden", mode !== "aurora");
+  $("satellite-panel").classList.toggle("hidden", mode !== "satellite");
+});
+
+function gscale(kp) {
+  if (kp < 5) return "quiet";
+  if (kp < 6) return "G1 minor";
+  if (kp < 7) return "G2 moderate";
+  if (kp < 8) return "G3 strong";
+  if (kp < 9) return "G4 severe";
+  return "G5 extreme";
+}
+
+function fmtAge(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  const mins = Math.round((Date.now() - d.getTime()) / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return mins + " min ago";
+  const h = Math.round(mins / 60);
+  return h + " h ago";
+}
+
+async function loadSnapshot() {
+  try {
+    const r = await fetch("/api/snapshot");
+    const d = await r.json();
+    const sw = d.solar_wind, kp = d.kp;
+    $("sw-bz").textContent = sw.bz.toFixed(1) + " nT";
+    $("sw-extra").textContent = `v ${sw.speed_kms.toFixed(0)} km/s · n ${sw.density_cm3.toFixed(1)} cm⁻³`;
+    $("sw-time").textContent = sw.timestamp;
+    $("kp-val").textContent = kp.kp.toFixed(1);
+    $("kp-cat").textContent = gscale(kp.kp);
+    $("kp-time").textContent = kp.timestamp;
+    $("age").textContent = fmtAge(sw.timestamp);
+    $("now-stamp").textContent = new Date().toISOString().slice(0, 16) + "Z";
+  } catch (e) {
+    $("sw-bz").textContent = "offline";
+  }
+}
+
+function streamSSE(url, body, onStep, onBriefing) {
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then(async (resp) => {
+      if (!resp.ok) { reject(new Error("HTTP " + resp.status)); return; }
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const parts = buf.split("\n\n");
+        buf = parts.pop();
+        for (const part of parts) {
+          if (!part.startsWith("data: ")) continue;
+          const payload = JSON.parse(part.slice(6));
+          if (payload.type === "step") onStep(payload.line);
+          else if (payload.type === "briefing") onBriefing(payload.briefing);
+          else if (payload.type === "done") resolve();
+        }
+      }
+      resolve();
+    }).catch(reject);
+  });
+}
+
+function renderAurora(b) {
+  const v = b.visibility || {};
+  const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
+  return `
+    <div class="briefing">
+      <h3>${b.headline} <span class="level ${v.level || ''}">${v.level || ''}</span></h3>
+      <div class="body">${b.body}</div>
+      <div class="meta"><strong>${b.location}</strong> · ${b.when_local}</div>
+      <div class="meta">${v.reasoning || ''}</div>
+      <div class="citations"><strong>Cited sources</strong><ul>${cites}</ul></div>
+    </div>`;
+}
+
+function renderSatellite(b) {
+  const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
+  const actions = (b.per_unit_actions || []).map(a => `<li>${a}</li>`).join("");
+  return `
+    <div class="briefing">
+      <h3>${b.headline}</h3>
+      <div class="body">${b.body}</div>
+      <div class="meta"><strong>${b.fleet_label}</strong></div>
+      <div class="meta">${b.storm_summary}</div>
+      <div class="meta"><strong>Recommended actions</strong><ul>${actions}</ul></div>
+      <div class="citations"><strong>Cited sources</strong><ul>${cites}</ul></div>
+    </div>`;
+}
+
+function start(url, body, render) {
+  const trace = $("trace");
+  trace.innerHTML = "";
+  $("briefing-slot").innerHTML = "";
+  const btns = document.querySelectorAll(".btn");
+  btns.forEach(b => b.disabled = true);
+  return streamSSE(url, body,
+    (line) => { trace.insertAdjacentHTML("beforeend", `<div class="step">${line}</div>`); },
+    (b) => { $("briefing-slot").innerHTML = render(b); }
+  ).catch(e => {
+    trace.insertAdjacentHTML("beforeend", `<div class="step" style="color:var(--bad)">error: ${e.message}</div>`);
+  }).finally(() => btns.forEach(b => b.disabled = false));
+}
+
+$("brief-aurora").addEventListener("click", () => {
+  start("/api/brief/aurora", {
+    lat: parseFloat($("lat").value),
+    lon: parseFloat($("lon").value),
+    location: $("city").value,
+  }, renderAurora);
+});
+
+$("brief-satellite").addEventListener("click", () => {
+  const fleet = [
+    { name: "bus-A", altitude_km: 350, orbit_class: "LEO_low" },
+    { name: "bus-B", altitude_km: 550, orbit_class: "LEO_mid" },
+    { name: "geo-comms", altitude_km: 35786, orbit_class: "GEO" },
+  ];
+  start("/api/brief/satellite", { fleet_label: $("fleet-label").value, fleet }, renderSatellite);
+});
+
+loadSnapshot();
+setInterval(loadSnapshot, 5 * 60 * 1000);
+</script>
+</body>
+</html>
