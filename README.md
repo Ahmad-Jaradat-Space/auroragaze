@@ -4,6 +4,8 @@
 
 [![ci](https://github.com/Ahmad-Jaradat-Space/auroragaze/actions/workflows/ci.yml/badge.svg)](https://github.com/Ahmad-Jaradat-Space/auroragaze/actions/workflows/ci.yml)
 
+**Live demo:** https://auroragaze.fly.dev
+
 AuroraGaze reads real-time solar-wind data at L1 (NOAA DSCOVR) and
 translates it into two kinds of briefing:
 
@@ -54,6 +56,14 @@ NOAA SWPC archives and `auroraaustralis.org.au` reports. Each briefing
 is scored on three booleans: `cited`, `grounded` (no fabricated numbers),
 `correct` (matches expected outcome). Calibration in
 [`eval/calibration.md`](eval/calibration.md).
+
+Latest run on `main` (DeepSeek V3, 20 events):
+
+| | cited | grounded | correct | overall |
+|---|---|---|---|---|
+| aurora (n=10) | 1.00 | 0.70 | 1.00 | |
+| satellite (n=10) | 1.00 | 0.80 | 0.70 | |
+| **overall** | **1.00** | **0.75** | **0.85** | **0.867** |
 
 CI eval gate fails below 0.80 overall precision. Run locally:
 

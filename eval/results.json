@@ -1,0 +1,787 @@
+[
+  {
+    "event_id": "may2024-hobart",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "may"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Hobart during a geomagnetic storm'",
+      "data_fetcher: Bz=-45.0nT v=800km/s Kp=9.0 Dst=-100nT flare=C [2024-05-11T11:00+00:00]",
+      "retrieval: 5 chunks (aurora, , noaa-scales-explanation)",
+      "physics: oval threshold ~30.0\u00b0S; viewer 42.9\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Hobart, Tasmania",
+      "when_local": "Tonight (local night of 2024-05-11, after sunset)",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": 30.0,
+        "reasoning": "Observed Kp=9.0 (G4/G5-level storm), Bz=-45.0 nT, solar wind speed 800 km/s, density 30.0 cm\u207b\u00b3. These extreme solar wind parameters drive the auroral oval equatorward to approximately 30\u00b0S geomagnetic latitude. Hobart at ~43\u00b0S is well poleward of that boundary, placing it deep inside the oval. Conditions are comparable to or exceed the November 2023 (Kp 7) and April 2023 (Kp 8, Bz -32 nT) events that produced naked-eye aurora from Tasmania.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Extreme geomagnetic storm underway \u2014 aurora very likely from Hobart tonight",
+      "body": "A severe-to-extreme geomagnetic storm is in progress. Observed Kp is 9.0, Bz is -45.0 nT, solar wind speed is 800 km/s, and density is 30.0 cm\u207b\u00b3. These are among the most extreme parameters recorded and are driving the auroral oval equatorward to approximately 30\u00b0S geomagnetic latitude.\n\nHobart (43\u00b0S) is well inside the oval. Aurora is likely overhead and to the south. Based on the November 2023 Tasmanian event (Kp 7), naked-eye visibility of arcs and curtains is expected from dark-sky sites around Hobart.\n\nRecommended viewing locations: Bruny Island, South Arm Peninsula, Goat Bluff, Howden, or the eastern shore of Hobart \u2014 all reported as successful sites during the November 2023 event.\n\nViewing window: from local sunset onward through the night. Look southward, scanning from about 10 to 30 degrees above the horizon up to overhead. The strongest activity may occur in the hours around local midnight.\n\nCloud cover and local weather should be checked before heading out. Choose a site with a clear, dark southern horizon.",
+      "citations": [
+        {
+          "source": "NOAA SWPC observed data (2024-05-11T11:00+00:00)",
+          "detail": "Kp=9.0, Bz=-45.0 nT, v=800 km/s, density=30.0 cm\u207b\u00b3. Oval boundary ~30\u00b0S."
+        },
+        {
+          "source": "Aurora Australis Tasmania event report (2023-11-05)",
+          "detail": "Kp 7 event with confirmed naked-eye aurora from Bruny Island, South Arm, Goat Bluff, Howden, and eastern Hobart. Arcs visible looking south at 10\u201330\u00b0 elevation."
+        },
+        {
+          "source": "NOAA SWPC G-scale reference",
+          "detail": "Kp 9 corresponds to G4/G5 storm level; aurora visible well equatorward of typical latitudes."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "may2024-melbourne",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "may"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Melbourne during a geomagnetic storm'",
+      "data_fetcher: Bz=-45.0nT v=800km/s Kp=9.0 Dst=-100nT flare=C [2024-05-11T11:00+00:00]",
+      "retrieval: 5 chunks (severe-g4-geomagnetic-storm-watch-23-apr, aurora, )",
+      "physics: oval threshold ~30.0\u00b0S; viewer 37.8\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Melbourne, Victoria, Australia",
+      "when_local": "2024-05-11, 20:00 AEST to 02:00 AEST (next day)",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": -30.0,
+        "reasoning": "Kp=9.0 (G5 extreme storm) with Bz=-45 nT, solar wind speed 800 km/s, density 30 cm^-3. The auroral oval is pushed equatorward to approximately 30\u00b0S, well north of Melbourne at 37.8\u00b0S. During the May 2024 G5 storm, confirmed photographs were captured from suburban Melbourne and across Victoria, with naked-eye visibility reported. Conditions are extreme and aurora is likely visible overhead or to the south.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Extreme G5 geomagnetic storm underway \u2014 aurora likely visible from Melbourne tonight",
+      "body": "A severe geomagnetic storm is in progress with Kp=9.0 (G5 extreme), Bz=-45 nT, solar wind speed 800 km/s, and density 30 cm^-3. These are among the most extreme conditions ever recorded.\n\nThe auroral oval has expanded equatorward to approximately 30\u00b0S geomagnetic latitude. Melbourne, at 37.8\u00b0S, sits well within the visible zone. Based on the precedent of the May 2024 G5 storm, aurora is likely visible from suburban Melbourne, the Mornington Peninsula, and across Victoria.\n\nViewing window: 20:00 AEST to 02:00 AEST. Face south for the best view of the auroral glow and any overhead arcs or curtains. Look for green, red, pink, and potentially purple colours. Naked-eye visibility is possible from suburban areas, but darker locations away from city lights will provide the best experience.",
+      "citations": [
+        {
+          "source": "https://auroraaustralis.org.au/2024-05-11-mainland-australia/",
+          "detail": "Confirmed aurora photographs from suburban Melbourne (-37.81\u00b0S) and across Victoria during the May 2024 G5 storm, with naked-eye visibility and overhead arcs reported from 20:00 to 02:00 AEST."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/noaa-scales-explanation",
+          "detail": "NOAA G-scale reference: Kp 9 corresponds to G5 extreme geomagnetic storm, the highest category."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "nov2023-hobart",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "2023"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Hobart during a geomagnetic storm'",
+      "data_fetcher: Bz=-25.0nT v=620km/s Kp=7.0 Dst=-100nT flare=C [2023-11-05T12:00+00:00]",
+      "retrieval: 5 chunks (aurora, , noaa-scales-explanation)",
+      "physics: oval threshold ~38.0\u00b0S; viewer 42.9\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Hobart, Tasmania",
+      "when_local": "2023-11-05, 21:00 AEDT to 00:00 AEDT next day (10:00\u201313:00 UTC)",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": -38.0,
+        "reasoning": "Kp is 7.0 (G3 strong storm), Bz is -25 nT, solar wind speed 620 km/s, density 12.0 cm\u207b\u00b3. The auroral oval boundary is computed at approximately 38\u00b0S, placing Hobart (42.9\u00b0S) well inside the oval. This matches the 2023-11-05 Tasmanian event where Kp 7 sustained through the observation window and naked-eye aurora was reported from Bruny Island, South Arm, and other dark sites around Hobart looking southward at 10\u201330\u00b0 elevation.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Strong G3 storm underway \u2014 aurora likely visible from Hobart tonight",
+      "body": "A severe geomagnetic storm is in progress. The Kp index is 7 (G3 strong), Bz is -25 nT, solar wind speed is 620 km/s, and particle density is 12.0 cm\u207b\u00b3. These conditions place the auroral oval boundary at approximately 38\u00b0S, meaning Hobart at 42.9\u00b0S sits well within the oval.\n\nThe best viewing window is from 21:00 AEDT to 00:00 AEDT (10:00\u201313:00 UTC). Face south and look at 10 to 30 degrees above the horizon. Dark-sky sites away from city lights offer the best chance of seeing the display. Confirmed observation sites from the November 5 2023 event include Bruny Island, Goat Bluff, South Arm Peninsula, Howden, and the eastern shore of Hobart. At these locations, pink-red curtain structure and overhead arcs were visible to the naked eye.",
+      "citations": [
+        {
+          "source": "https://auroraaustralis.org.au/2023-11-05-tasmania-event/",
+          "detail": "Confirmed observations across southern Tasmania between 10:00 and 13:00 UTC (21:00 AEDT to 00:00 AEDT). Kp 7 sustained. Naked-eye visibility from Bruny Island and South Arm; arcs visible looking south at 10\u201330\u00b0 elevation."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-watch-5-nov-2023",
+          "detail": "November 2023 storm: Kp reached 7, Bz minimum -25 nT. Confirmed photographs from Hobart, Bruny Island, and southern Tasmania."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/noaa-scales-explanation",
+          "detail": "Kp 7 corresponds to G3 strong geomagnetic storm. Aurora visible from southern Victoria and Tasmania."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "nov2023-brisbane",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "unlikely",
+      "expected_cite_keyword": "2023"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Brisbane during a geomagnetic storm'",
+      "data_fetcher: Bz=-25.0nT v=620km/s Kp=7.0 Dst=-100nT flare=C [2023-11-05T12:00+00:00]",
+      "retrieval: 5 chunks (aurora, may-2024-storm, severe-g4-geomagnetic-storm-warning-10-o)",
+      "physics: oval threshold ~38.0\u00b0S; viewer 27.5\u00b0S \u2192 unlikely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Brisbane, Australia",
+      "when_local": "2023-11-05 night (local time)",
+      "visibility": {
+        "level": "unlikely",
+        "boundary_lat_deg": 38.0,
+        "reasoning": "The auroral oval boundary is at approximately 38\u00b0S geomagnetic latitude for Kp=7.0. Brisbane is located near 27\u00b0S geographic latitude, which is well north of the oval boundary. Even during this strong geomagnetic storm (Kp=7.0, Bz=-25 nT, solar wind speed 620 km/s), the aurora is not expected to be visible from Brisbane because the oval does not extend far enough north to reach this latitude.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Aurora not visible from Brisbane tonight despite strong geomagnetic storm",
+      "body": "A severe geomagnetic storm is in progress with Kp=7.0 (G3/G4 level), Bz=-25 nT, solar wind speed 620 km/s, and density 12.0 cm-3. However, the auroral oval boundary is at approximately 38\u00b0S geomagnetic latitude. Brisbane, at roughly 27\u00b0S geographic latitude, lies well north of this boundary. The aurora will not be visible from Brisbane tonight. Observers in Tasmania or southern New Zealand may have a chance, but for Brisbane the oval remains too far south.",
+      "citations": [
+        {
+          "source": "NOAA SWPC observed data (2023-11-05T12:00+00:00)",
+          "detail": "Kp=7.0, Bz=-25 nT, solar wind speed 620 km/s, density 12.0 cm-3. Oval boundary threshold ~38\u00b0S."
+        },
+        {
+          "source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup",
+          "detail": "Standard Kp-to-auroral-oval boundary mapping indicates the equatorward edge of the oval at approximately 38\u00b0S for Kp=7."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "quiet-hobart",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "unlikely",
+      "expected_cite_keyword": "kp"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Hobart during a geomagnetic storm'",
+      "data_fetcher: Bz=2.0nT v=380km/s Kp=1.5 Dst=0nT flare=C [2024-12-01T00:00+00:00]",
+      "retrieval: 5 chunks (aurora, , noaa-scales-explanation)",
+      "physics: oval threshold ~60.0\u00b0S; viewer 42.9\u00b0S \u2192 unlikely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Hobart, Tasmania",
+      "when_local": "2024-12-01, evening (local time)",
+      "visibility": {
+        "level": "unlikely",
+        "boundary_lat_deg": 60.0,
+        "reasoning": "Observed Kp is 1.5 (quiet), Bz is northward at +2.0 nT, solar wind speed 380 km/s, density 5.0 cm-3. The auroral oval boundary is at approximately 60.0\u00b0S geomagnetic latitude, which places the oval well south of Tasmania (Hobart ~54\u00b0S geomagnetic). With Kp 1.5 the oval is contracted and quiet, and northward Bz suppresses coupling. No auroral visibility is expected from Hobart tonight.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "No aurora visible from Hobart tonight \u2014 quiet conditions prevail",
+      "body": "Aurora conditions are quiet across the southern hemisphere tonight. The observed Kp index is 1.5, with a northward interplanetary magnetic field (Bz = +2.0 nT), solar wind speed of 380 km/s, and particle density of 5.0 cm-3. These values indicate no significant energy transfer from the solar wind to the magnetosphere.\n\nThe auroral oval is contracted and sits near 60.0\u00b0S geomagnetic latitude, well south of Hobart (geomagnetic latitude ~54\u00b0S). Under these quiet conditions, the oval typically remains near 67\u00b0S and does not extend far enough north to be visible from Tasmania.\n\nNo auroral display is expected tonight. If you are planning to chase, this is a night to rest and monitor space weather forecasts for future opportunities when Kp rises above 5 and Bz turns southward.",
+      "citations": [
+        {
+          "source": "NOAA SWPC \u2014 Aurora Phenomena",
+          "detail": "During quiet conditions the southern auroral oval sits near 67\u00b0S geomagnetic latitude. Kp 1.5 is well below the threshold for mid-latitude visibility."
+        },
+        {
+          "source": "NOAA SWPC \u2014 Kp and G-scale Reference",
+          "detail": "G1 minor storm threshold begins at Kp 5. Current Kp 1.5 is classified as quiet, with no geomagnetic storm activity."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "anzac2023-melbourne",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "anzac"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Melbourne during a geomagnetic storm'",
+      "data_fetcher: Bz=-32.0nT v=700km/s Kp=8.0 Dst=-100nT flare=C [2023-04-23T12:00+00:00]",
+      "retrieval: 5 chunks (severe-g4-geomagnetic-storm-watch-23-apr, aurora, )",
+      "physics: oval threshold ~34.0\u00b0S; viewer 37.8\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Melbourne, Victoria, Australia",
+      "when_local": "Night of 23\u201324 April 2023, approximately 20:00 AEST to 02:00 AEST (10:00 UTC to 16:00 UTC)",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": -34.0,
+        "reasoning": "Kp=8.0 (G4 severe) with Bz=-32 nT, solar wind speed 700 km/s, density 18.0 cm-3. The auroral oval is pushed equatorward to approximately 34\u00b0S geomagnetic latitude. Melbourne at 37.8\u00b0S lies well within this boundary, making overhead or near-overhead aurora likely from suburban and dark-sky locations. This matches the reported April 2023 event where photographs were obtained from Melbourne suburbs.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Severe G4 storm in progress \u2014 aurora likely visible from Melbourne tonight",
+      "body": "A severe G4 geomagnetic storm (Kp 8.0) is underway following the arrival of a halo CME from active region 13283. Bz is sharply southward at -32 nT, solar wind speed is 700 km/s, and density is 18.0 cm-3. These conditions are driving the auroral oval equatorward to approximately 34\u00b0S.\n\nMelbourne (37.8\u00b0S) sits well inside the oval boundary, making aurora likely visible from the city and surrounding areas. The best viewing window is from about 20:00 AEST to 02:00 AEST (10:00\u201316:00 UTC). Face south for the main display; if the storm intensifies further, overhead arcs and curtains may develop.\n\nFor the best experience, seek dark-sky locations away from city lights \u2014 the Dandenong Ranges, Mornington Peninsula, or the Yarra Valley. During the similar April 2023 event, photographs were widely reported from Melbourne suburbs, Victoria, and as far north as Mildura. Naked-eye visibility is possible from suburban locations if skies are clear.",
+      "citations": [
+        {
+          "source": "NOAA SWPC \u2014 Severe G4 geomagnetic storm watch, 23 April 2023",
+          "detail": "Kp reached 8 (G4 severe). Bz turned sharply southward to -32 nT. Aurora photographs reported from Victoria including Melbourne suburbs."
+        },
+        {
+          "source": "Aurora Australis \u2014 May 2024 G5 storm observations (Victoria)",
+          "detail": "Confirmed photographs from suburban Melbourne (-37.81\u00b0S) during Kp 8+ conditions. Time window 20:00\u201302:00 AEST. Overhead arcs and curtain structure visible."
+        },
+        {
+          "source": "NOAA SWPC \u2014 NOAA G-scale and Kp index reference",
+          "detail": "G3 strong (Kp 7) and above: aurora visible from southern Victoria. Current Kp 8.0 exceeds this threshold."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "march2023-dunedin",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "march"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Dunedin during a geomagnetic storm'",
+      "data_fetcher: Bz=-28.0nT v=680km/s Kp=8.0 Dst=-100nT flare=C [2023-03-24T11:00+00:00]",
+      "retrieval: 5 chunks (aurora, , march-1989-event)",
+      "physics: oval threshold ~34.0\u00b0S; viewer 45.9\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Dunedin, New Zealand",
+      "when_local": "22:00 to 03:00 NZDT (09:00 to 14:00 UTC) on 24 March 2023",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": 34.0,
+        "reasoning": "Kp is 8.0 (G4 severe), Bz is -28.0 nT southward, solar wind speed is 680 km/s, and density is 14.0 cm-3. The auroral oval boundary extends to approximately 34.0\u00b0S, placing Dunedin at 45.87\u00b0S well within the oval. Historical reports from the same storm confirm naked-eye aurora observed from Dunedin and across the South Island.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Severe G4 storm underway \u2014 aurora likely visible from Dunedin tonight",
+      "body": "A severe geomagnetic storm (Kp 8.0, G4) is in progress. The solar wind is strongly driven: Bz is -28.0 nT southward, speed is 680 km/s, and density is 14.0 cm-3. These conditions push the auroral oval equatorward to approximately 34.0\u00b0S, placing Dunedin at 45.87\u00b0S well inside the visible zone.\n\nThe local viewing window runs from 22:00 to 03:00 NZDT (09:00 to 14:00 UTC). Face south for the best view of the auroral arc overhead and to the south. The moon is new, providing ideal dark-sky conditions. Cloud cover over Otago is reported as clear.\n\nDuring this same storm on 24 March 2023, confirmed naked-eye aurora observations were made from Dunedin, as well as from Lake Tekapo, Wanaka, Queenstown, the Catlins, and Stewart Island. Even Auckland at 36.85\u00b0S reported a visible horizon glow. Conditions are favourable for a strong display with overhead structure, potentially including green and red colours from atomic oxygen emissions.",
+      "citations": [
+        {
+          "source": "https://www.aurora-service.org/southern-aurora/2023-march/",
+          "detail": "Confirmed aurora observations from Dunedin and across the South Island during the Kp 8 storm on 24 March 2023. Time window 22:00-03:00 NZDT, clear skies over Otago, new moon."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/noaa-scales-explanation",
+          "detail": "Kp 8 corresponds to G4 severe geomagnetic storm level, with aurora visible well equatorward of typical latitudes."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "stpat2015-melbourne",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "likely",
+      "expected_cite_keyword": "patrick"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Melbourne during a geomagnetic storm'",
+      "data_fetcher: Bz=-27.0nT v=660km/s Kp=8.0 Dst=-100nT flare=C [2015-03-17T13:00+00:00]",
+      "retrieval: 5 chunks (severe-g4-geomagnetic-storm-watch-23-apr, aurora, )",
+      "physics: oval threshold ~34.0\u00b0S; viewer 37.8\u00b0S \u2192 likely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Melbourne, Victoria, Australia",
+      "when_local": "Night of 17\u201318 March 2015, local time approximately 00:00\u201306:00 AEDT (13:00\u201319:00 UTC 17 March)",
+      "visibility": {
+        "level": "likely",
+        "boundary_lat_deg": -34.0,
+        "reasoning": "Observed Kp=8.0 (G4 severe) with Bz=-27.0 nT, solar wind speed 660 km/s, and density 16.0 cm\u207b\u00b3. These are extreme driving conditions. The auroral oval is expected to expand equatorward to approximately 34\u00b0S geomagnetic latitude. Melbourne at 37.8\u00b0S lies well within this boundary, making aurora visibility likely from the city and surrounding suburbs, consistent with historical reports of Kp=8 events (e.g., April 2023 Anzac Day storm) where aurora was photographed from Melbourne suburbs.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Severe G4 geomagnetic storm underway \u2014 aurora likely from Melbourne tonight",
+      "body": "A severe geomagnetic storm is in progress. The observed Kp index is 8.0 (G4 severe) as of 13:00 UTC on 17 March 2015, driven by a strong southward interplanetary magnetic field (Bz = -27.0 nT), elevated solar wind speed (660 km/s), and high plasma density (16.0 cm\u207b\u00b3). These conditions are comparable to the April 2023 Anzac Day storm (Kp=8, Bz=-32 nT) which produced widespread aurora photographs from Melbourne suburbs.\n\nThe auroral oval is expected to expand equatorward to approximately 34\u00b0S geomagnetic latitude. Melbourne, at 37.8\u00b0S, sits well inside this boundary, placing the city in a favourable position for aurora viewing.\n\nLocal viewing window: approximately 00:00 to 06:00 AEDT (13:00 to 19:00 UTC 17 March). Face south toward the geomagnetic pole. Look low on the southern horizon from within the city; from darker suburban or rural locations south of Melbourne (e.g., Mornington Peninsula, Otways), overhead arcs and curtain structures may be visible. Based on the May 2024 G5 storm precedent, the aurora may be bright enough to be captured with phone cameras from suburban areas.\n\nConditions are extreme and the storm is ongoing. Monitor local cloud cover and seek dark-sky sites away from city lights for the best view.",
+      "citations": [
+        {
+          "source": "NOAA SWPC observed data (2015-03-17T13:00+00:00)",
+          "detail": "Kp=8.0, Bz=-27.0 nT, v=660 km/s, density=16.0 cm\u207b\u00b3"
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-watch-23-april-2023",
+          "detail": "April 2023 Anzac Day storm: Kp=8 (G4 severe), Bz=-32 nT, aurora photographed from Melbourne suburbs and across Victoria"
+        },
+        {
+          "source": "https://auroraaustralis.org.au/2024-05-11-mainland-australia/",
+          "detail": "May 2024 G5 storm: aurora visible from suburban Melbourne (-37.81\u00b0S), overhead arcs, phone-camera visibility, time window 20:00\u201302:00 AEST"
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "oct2024-sydney",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "possible",
+      "expected_cite_keyword": "october"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Sydney during a geomagnetic storm'",
+      "data_fetcher: Bz=-30.0nT v=750km/s Kp=8.0 Dst=-100nT flare=C [2024-10-10T13:00+00:00]",
+      "retrieval: 5 chunks (aurora, severe-g4-geomagnetic-storm-warning-10-o, severe-g4-geomagnetic-storm-watch-23-apr)",
+      "physics: oval threshold ~34.0\u00b0S; viewer 33.9\u00b0S \u2192 possible",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Sydney, New South Wales, Australia",
+      "when_local": "Night of 10\u201311 October 2024, local time approximately 20:00\u201302:00 AEDT (10:00\u201316:00 UTC)",
+      "visibility": {
+        "level": "possible",
+        "boundary_lat_deg": -34.0,
+        "reasoning": "Kp=8 (G4 severe) with Bz=-30 nT, solar wind speed 750 km/s, and density 20 cm\u207b\u00b3. The auroral oval is pushed equatorward to approximately 34\u00b0S geomagnetic latitude. Sydney is at 33.9\u00b0S, placing it near the theoretical oval boundary. Aurora may be visible as a low glow on the southern horizon from dark sites south of the city, but overhead arcs are unlikely given Sydney sits slightly north of the oval threshold.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "G4 severe storm in progress \u2014 aurora possible on the southern horizon from Sydney",
+      "body": "A severe G4 geomagnetic storm (Kp=8) is underway as of 13:00 UTC on 10 October 2024, driven by a series of CMEs from active region 13848. Solar wind speed exceeds 750 km/s, Bz is sharply southward at -30 nT, and plasma density is 20 cm\u207b\u00b3. These conditions have pushed the auroral oval equatorward to approximately 34\u00b0S geomagnetic latitude.\n\nSydney (33.9\u00b0S) sits very close to the oval boundary. From dark-sky locations south of the city \u2014 such as the Royal National Park, Kurnell, or the Illawarra escarpment \u2014 a low auroral glow may be visible on the southern horizon. Look due south between approximately 20:00 and 02:00 AEDT (10:00\u201316:00 UTC). The aurora may appear as a faint red or green glow near the horizon rather than overhead arcs. Light pollution and cloud cover will reduce visibility; a dark site with an unobstructed southern view is essential.\n\nThis event is comparable to the May 2024 Gannon storm, during which aurora was photographed from Adelaide (34.9\u00b0S) and surrounding areas. Sydney is slightly further north, so overhead displays are unlikely, but a horizon glow is possible if the storm intensity holds through the local evening hours.",
+      "citations": [
+        {
+          "source": "NOAA SWPC \u2014 Severe G4 Geomagnetic Storm Warning, 10 Oct 2024",
+          "detail": "Kp reached 8 (G4 severe). Bz minimum -30 nT. Solar wind speed peaked above 750 km/s. Aurora widely visible across southern Australia and as far north as central NSW."
+        },
+        {
+          "source": "Aurora Australis \u2014 South Australia observations, 11 May 2024",
+          "detail": "Confirmed aurora photographs from Adelaide (-34.93\u00b0S) during Kp=8 storm. Visibility overhead from dark sites south of Adelaide; horizon glow from the city."
+        },
+        {
+          "source": "NOAA SWPC \u2014 Aurora physics reference",
+          "detail": "Auroral oval during quiet conditions sits near 67\u00b0S geomagnetic latitude. During severe storms the oval expands equatorward."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "g2-perth",
+    "persona": "aurora",
+    "expected": {
+      "expected_visibility": "unlikely",
+      "expected_cite_keyword": "kp"
+    },
+    "trace": [
+      "supervisor: persona=aurora query='southern hemisphere aurora visibility from Perth during a geomagnetic storm'",
+      "data_fetcher: Bz=-20.0nT v=520km/s Kp=6.0 Dst=-100nT flare=C [2024-07-01T12:00+00:00]",
+      "retrieval: 5 chunks (aurora, severe-g4-geomagnetic-storm-warning-10-o, noaa-scales-explanation)",
+      "physics: oval threshold ~42.0\u00b0S; viewer 31.9\u00b0S \u2192 unlikely",
+      "composer: aurora briefing ready"
+    ],
+    "briefing": {
+      "location": "Perth, Western Australia",
+      "when_local": "2024-07-01 evening (local time ~20:00\u201302:00 AWST)",
+      "visibility": {
+        "level": "unlikely",
+        "boundary_lat_deg": 42.0,
+        "reasoning": "Perth is at 31.95\u00b0S, well north of the auroral oval boundary of ~42.0\u00b0S. Despite a Kp of 6.0 (G2 moderate storm) and strongly southward Bz of -20 nT, the oval threshold does not extend far enough north to reach Perth. The computed oval boundary is 42\u00b0S, meaning the aurora is confined to latitudes south of that line. Perth lies ~10 degrees north of the boundary.",
+        "table_source": "Akasofu 1964; NOAA SWPC Kp-to-oval lookup"
+      },
+      "headline": "Aurora unlikely from Perth tonight despite strong geomagnetic activity",
+      "body": "The Kp index is 6.0 (G2 moderate storm) as of 2024-07-01 12:00 UTC, with a strongly southward Bz of -20 nT, solar wind speed of 520 km/s, and density of 10.0 cm-3. These are favourable conditions for aurora at high southern latitudes. However, the computed equatorward boundary of the auroral oval is approximately 42\u00b0S. Perth sits at 31.95\u00b0S, roughly 10 degrees north of that boundary. The aurora will be active south of about 42\u00b0S \u2014 over the Southern Ocean and possibly the southern coast of Western Australia near Albany or Esperance \u2014 but not as far north as Perth. From Perth, the aurora is unlikely to be visible. Chasers should travel south of 42\u00b0S for any chance of a sighting tonight.",
+      "citations": [
+        {
+          "source": "NOAA SWPC Kp-to-oval lookup (Akasofu 1964)",
+          "detail": "At Kp=6, the auroral oval equatorward boundary is approximately 42\u00b0S geomagnetic latitude."
+        },
+        {
+          "source": "NOAA G-scale reference (2024-12-01)",
+          "detail": "G2 moderate storm (Kp=6) typically makes aurora visible from southern Victoria and parts of South Australia, not as far north as Perth."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "feb2022-starlink",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "starlink"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-15.0nT v=480km/s Kp=5.0 Dst=0nT flare=C [2022-02-04T00:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Storm conditions but no fleet-critical risks at current Kp.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "low-deployment LEO",
+      "storm_summary": "A G1 (minor) geomagnetic storm is in progress with Kp=5.0, Bz=-15.0 nT, solar wind speed 480 km/s, Dst=0 nT, and a C-class flare observed on 2022-02-04. Thermospheric density at 210 km altitude is elevated by approximately 25%, producing a moderate drag increase for the deployment-bus unit.",
+      "headline": "G1 minor storm underway \u2014 moderate drag increase for deployment-bus at 210 km; no fleet-critical risks at current Kp",
+      "body": "A G1 (minor) geomagnetic storm is in progress as of the observation epoch. The Kp index is 5.0, Bz is -15.0 nT (southward, driving energy input), solar wind speed is 480 km/s, and Dst is 0 nT. A C-class flare was observed at the same epoch. These conditions are consistent with a mild CME-driven disturbance, well below the intensity of the October 2024 G4 storm (Kp 8, Dst -335 nT, Bz -30 nT, wind speed >750 km/s) referenced in the NOAA warning for that event.\n\nFor the deployment-bus unit at 210 km altitude, the NOAA SWPC empirical density estimates and JB2008 ranges indicate a density fraction increase of 0.25 (25%) and a corresponding drag delta-V fraction increase of 0.25. This is classified as moderate severity. At this altitude, the atmosphere is already dense, and a 25% increase will raise orbital decay rate noticeably but does not pose an immediate loss-of-orbit risk. Surface charging risk is low at this Kp level; deep-dielectric charging and single-event upset risks are not elevated for this storm class.\n\nNo other units in the fleet are affected at this time. Conditions are quiet for any assets above 300 km altitude, where density increases are smaller (typically +5 to +10% at 500 km for G1).",
+      "per_unit_actions": [
+        "deployment-bus (210 km, moderate drag): Consider safe-mode with edge-on flight orientation to minimise drag cross-section. Defer any planned orbit-raising or station-keeping maneuvers until Kp returns to quiet levels (Kp < 4). Monitor orbital decay rate and be prepared for a possible reboost if the storm intensifies to G2 or higher."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase of 0.25 and drag delta-V fraction increase of 0.25 at 210 km for Kp 5.0."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm reference: Kp 8, Dst -335 nT, Bz -30 nT, wind speed >750 km/s. Multiple LEO operators reported drag-related station keeping; no satellite losses."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/noaa-scales-explanation",
+          "detail": "G1 minor storm: Kp 5. Spacecraft minor impact; aurora visible at high latitudes."
+        },
+        {
+          "source": "Operational actions for satellite operators during geomagnetic storms (2024-12-01)",
+          "detail": "Standard actions: safe-mode to minimise drag, defer maneuvers during high-density periods."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "may2024-leoconst",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "extreme",
+      "expected_cite_keyword": "may"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-45.0nT v=800km/s Kp=9.0 Dst=-100nT flare=C [2024-05-11T11:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Drag risk elevated for 2 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "LEO constellation",
+      "storm_summary": "A severe geomagnetic storm is in progress. Kp=9.0 (G5 extreme), Bz=-45.0 nT, solar wind speed=800 km/s, Dst=-100 nT. A C-class flare was observed at 2024-05-11T11:00+00:00. Thermospheric density at 300 km altitude is increased by a factor of 3.0 (300%) and at 550 km by 0.946 (94.6%) relative to quiet conditions, based on NOAA SWPC empirical estimates and JB2008 ranges.",
+      "headline": "Drag risk elevated for 2 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "body": "A G5 (extreme) geomagnetic storm is currently underway. The Kp index has reached 9.0, with Bz sustained at -45.0 nT and solar wind speed at 800 km/s. Dst is -100 nT. A C-class flare was observed at 2024-05-11T11:00+00:00. These conditions are comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT, solar wind >750 km/s) but exceed it in severity.\n\nAtmospheric drag is the primary risk for this LEO constellation. At 300 km altitude, atmospheric density has increased by a factor of 3.0 (300%) and drag delta-V by the same factor \u2014 severity is extreme. At 550 km altitude, density and drag delta-V are increased by 94.6% \u2014 severity is high. Surface charging risk is moderate for both altitude bands, consistent with G3+ storm conditions where high-latitude passes increase charging susceptibility.\n\nThe October 2024 G4 storm (NOAA SWPC warning) caused multiple LEO operators to adjust station-keeping; SpaceX Starlink fleet operations were modified. No satellite losses were publicly reported in that event, but the current storm is one G-level stronger.",
+      "per_unit_actions": [
+        "leo-300 (300 km): Defer non-essential maneuvers; check station-keeping margin. Consider safe-mode (edge-on flight orientation) to minimise drag. Notify customers of likely service-quality variation; pre-stage on-call.",
+        "leo-550 (550 km): Defer non-essential maneuvers; check station-keeping margin. Notify customers of likely service-quality variation; pre-stage on-call."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase at 300 km: 3.0 (300%); at 550 km: 0.946 (94.6%). Kp=9.0."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm analogue: Kp 8, Bz -30 nT, solar wind >750 km/s. Multiple LEO operators reported drag-related station keeping; Starlink fleet operations adjusted."
+        },
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "G5 (Kp 9) at 300 km: density +200 to +400% during peak hours. Observed increase of 300% falls within this range."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "halloween2003-geo",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "halloween"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-50.0nT v=1500km/s Kp=9.0 Dst=-100nT flare=C [2003-10-29T06:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Surface-charging risk elevated for 2 GEO/MEO asset(s); monitor.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "GEO comms fleet",
+      "storm_summary": "A severe geomagnetic storm is in progress. Observed parameters at 2003-10-29T06:00+00:00: Kp=9.0 (G5 extreme), Bz=-50.0 nT, solar wind speed=1500 km/s, Dst=-100 nT, flare class C. These values exceed the October 2024 G4 storm (Kp 8, Bz -30 nT, v 750 km/s) and represent an extreme event.",
+      "headline": "Surface-charging risk elevated for 2 GEO/MEO asset(s); monitor.",
+      "body": "A G5 (Kp 9.0) extreme geomagnetic storm is currently underway. Solar wind speed is 1500 km/s with a southward Bz of -50.0 nT, driving intense energy input into the magnetosphere. Dst is -100 nT. For GEO assets, the primary risk is surface charging. Reference document [3] identifies surface charging as a common anomaly mode during storms, noting that GEO and MEO satellites are most affected. Differential charging of spacecraft surfaces during substorms can cause arc discharges that damage insulation, bias sensors, and degrade solar arrays. The October 2024 G4 storm (Kp 8, Bz -30 nT, v 750 km/s) serves as a recent analogue: that event caused multiple LEO operators to report drag-related station-keeping issues and GPS positioning errors up to several metres, though no satellite losses were publicly reported. The current storm is significantly stronger across all parameters. Thermospheric density increases at LEO altitudes are not applicable to this GEO fleet; drag is null for both units.",
+      "per_unit_actions": [
+        "geo-1: Increase telemetry cadence; monitor for surface-charging anomalies. Notify customers of likely service-quality variation; pre-stage on-call.",
+        "geo-2: Increase telemetry cadence; monitor for surface-charging anomalies. Notify customers of likely service-quality variation; pre-stage on-call."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC \u2014 G-scale and Kp index reference",
+          "detail": "Kp 9.0 corresponds to G5 extreme, the highest category on the NOAA G-scale."
+        },
+        {
+          "source": "Common spacecraft anomaly modes during geomagnetic storms (2024-12-01)",
+          "detail": "Surface charging is identified as a primary risk for GEO and MEO satellites during storms; arc discharges can damage insulation, bias sensors, and degrade solar arrays."
+        },
+        {
+          "source": "October 2024 G4 storm warning (SWPC, 2024-10-10)",
+          "detail": "Kp reached 8 (G4 severe), Dst -335 nT, Bz minimum -30 nT, solar wind speed peaked above 750 km/s. Multiple LEO operators reported drag-related station-keeping; no satellite losses reported."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "march1989-meo",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "quebec"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-30.0nT v=950km/s Kp=9.0 Dst=-100nT flare=C [1989-03-13T20:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Surface-charging risk elevated for 1 GEO/MEO asset(s); monitor.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "MEO GNSS",
+      "storm_summary": "A severe G5 geomagnetic storm (Kp 9.0, Dst -100 nT) is in progress. Solar wind speed is 950 km/s with Bz at -30.0 nT. A C-class flare was observed on 1989-03-13. These conditions are comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT, solar wind >750 km/s) but exceed it in intensity.",
+      "headline": "Surface-charging risk elevated for 1 MEO GNSS asset(s); monitor.",
+      "body": "A severe geomagnetic storm (Kp 9.0, G5 on the NOAA G-scale) is currently underway. Solar wind speed is 950 km/s with a sustained southward Bz of -30.0 nT. Dst is -100 nT. A C-class flare was observed at 1989-03-13T20:00+00:00.\n\nThe primary risk to MEO GNSS assets is surface charging. MEO satellites are among the most affected orbit classes for surface charging during substorms, as differential charging of spacecraft surfaces can cause arc discharges that damage insulation, bias sensors, and degrade solar arrays. The computed fleet impact confirms high surface-charging risk for asset gnss-1.\n\nDrag effects are not a concern for MEO altitudes; the drag assessment for gnss-1 is null.\n\nThis event is comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT, solar wind >750 km/s) which caused GPS positioning errors up to several metres and required operational adjustments across multiple LEO fleets. The current storm is one full G-scale level higher (G5 vs G4), indicating more severe conditions.",
+      "per_unit_actions": [
+        "gnss-1: Watch GNSS payload for SEU rate increase; verify ECC margin.",
+        "gnss-1: Notify customers of likely service-quality variation; pre-stage on-call."
+      ],
+      "citations": [
+        {
+          "source": "NOAA G-scale and Kp index reference",
+          "detail": "G5 corresponds to Kp 9. Current Kp is 9.0, confirming G5 storm level."
+        },
+        {
+          "source": "October 2024 G4 storm warning",
+          "detail": "October 2024 G4 storm: Kp 8, Bz -30 nT, solar wind >750 km/s. GPS positioning errors reported up to several metres. Current storm exceeds that intensity."
+        },
+        {
+          "source": "Common spacecraft anomaly modes during geomagnetic storms",
+          "detail": "Surface charging: GEO and MEO satellites are most affected. Differential charging can cause arc discharges damaging insulation, bias sensors, and degrading solar arrays."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "anzac2023-leo",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "moderate",
+      "expected_cite_keyword": "anzac"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-32.0nT v=700km/s Kp=8.0 Dst=-100nT flare=C [2023-04-23T12:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "earth-obs LEO",
+      "storm_summary": "A severe G4-class geomagnetic storm is in progress. Observed parameters at 2023-04-23T12:00+00:00: Bz = -32.0 nT (strongly southward, enabling efficient energy transfer), solar wind speed = 700 km/s, Kp = 8.0 (G4 severe), Dst = -100 nT. A C-class flare was also observed. Thermospheric density at 450 km altitude is estimated to have increased by 75% above quiet-time values, producing a corresponding 75% increase in drag delta-v. Surface charging risk is moderate for this orbit class.",
+      "headline": "Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "body": "A severe G4 geomagnetic storm (Kp 8.0) is currently affecting the earth-obs LEO fleet. The primary impact is a large increase in atmospheric density at operational altitudes. For the single assessed unit at 450 km, the density fraction increase is 0.75 (75%) and the drag delta-v fraction increase is 0.75 (75%), both rated as high severity. This is consistent with the October 2024 G4 storm (Kp 8, Bz -30 nT, solar wind speed above 750 km/s) during which multiple LEO operators reported drag-related station-keeping adjustments. Surface charging risk is moderate at this altitude; deep-dielectric charging and single-event upsets are less likely in LEO but cannot be ruled out during high-latitude passes. Conditions are severe and warrant active mitigation.",
+      "per_unit_actions": [
+        "obs-450: Defer non-essential maneuvers; check station-keeping margin.",
+        "obs-450: Notify customers of likely service-quality variation; pre-stage on-call.",
+        "Consider safe-mode bus reorientation to minimise drag cross-section if density increase exceeds operational tolerance.",
+        "Monitor orbital decay rate and be prepared to raise orbit post-storm if drag losses are significant."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase of 0.75 at 450 km for Kp 8.0."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm analogue: Kp 8, Bz -30 nT, solar wind >750 km/s; multiple LEO operators reported drag-related station keeping."
+        },
+        {
+          "source": "NOAA G-scale and Kp index reference",
+          "detail": "Kp 8 corresponds to G4 severe geomagnetic storm."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "quiet-mixed",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "low",
+      "expected_cite_keyword": "kp"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=2.0nT v=380km/s Kp=1.5 Dst=0nT flare=C [2024-12-01T00:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Quiet conditions; nominal operations across the fleet.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "Mixed fleet (LEO-400 + GEO-1)",
+      "storm_summary": "Conditions are quiet. Kp is 1.5, Bz is +2.0 nT, solar wind speed is 380 km/s, Dst is 0 nT. A C-class flare was observed but no Earth-directed CME impact is in progress. No geomagnetic storm is underway.",
+      "headline": "Quiet conditions; nominal operations across the fleet.",
+      "body": "The current geomagnetic environment is quiet. Kp is 1.5, well below the G1 threshold (Kp 5). Thermospheric density at 400 km altitude shows only a 4.9% increase above baseline, producing negligible drag perturbation. Surface charging risk is low for both LEO and GEO units. No storm-related anomalies are expected. This is in contrast to the October 2024 G4 storm (Kp 8, Dst -335 nT) which caused significant drag and charging impacts across LEO and GEO fleets.",
+      "per_unit_actions": [
+        "LEO-400 (400 km): No action required; nominal operations.",
+        "GEO-1: No action required; nominal operations."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase at 400 km altitude for Kp 1.5 is 0.049 (4.9%), drag delta fraction increase is 0.049, severity low."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm reference: Kp 8, Dst -335 nT, Bz -30 nT, solar wind >750 km/s. Contrast with current quiet conditions."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "g3-leo400",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "moderate",
+      "expected_cite_keyword": "kp"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-22.0nT v=600km/s Kp=7.0 Dst=-100nT flare=C [2024-08-12T12:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Storm conditions but no fleet-critical risks at current Kp.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "LEO comms",
+      "storm_summary": "A G3 (strong) geomagnetic storm is in progress. Kp is 7.0, Bz is -22.0 nT, solar wind speed is 600 km/s, and Dst is -100 nT. A C-class flare was observed at 2024-08-12T12:00+00:00. These conditions are comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT) but at a lower intensity.",
+      "headline": "G3 storm underway \u2014 moderate drag and surface charging risk for LEO comms fleet",
+      "body": "A G3 (strong) geomagnetic storm is currently in progress. The Kp index is 7.0, Bz is -22.0 nT, solar wind speed is 600 km/s, and Dst is -100 nT. A C-class flare was observed at 2024-08-12T12:00+00:00. These conditions are comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT) but at a lower intensity.\n\nFor the LEO comms fleet, the primary risk is increased atmospheric drag. At 400 km altitude, the thermospheric density fraction increase is 0.438 (approximately 44%), and the drag delta-v fraction increase is also 0.438. This is consistent with NOAA SWPC empirical estimates and JB2008 model ranges, which indicate density increases of +50 to +80% at 300 km during G3 (Kp 7) conditions. The severity at 400 km is assessed as moderate.\n\nSurface charging risk is moderate. While LEO satellites are less affected than GEO or MEO platforms, high-latitude passes during G3+ storms can increase differential charging risk. Single-event upsets from energetic particles are also possible during high-latitude passes.\n\nNo fleet-critical risks are present at current Kp levels. The storm is not severe enough to warrant safe-mode or orbit-raising actions for this fleet.",
+      "per_unit_actions": [
+        "leo-400 (400 km): Defer non-essential maneuvers; check station-keeping margin."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase of 0.438 at 400 km altitude during Kp 7 conditions."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm analogue: Kp 8, Bz -30 nT, Dst -335 nT. Multiple LEO operators reported drag-related station keeping; no satellite losses."
+        },
+        {
+          "source": "NOAA G-scale and Kp index reference",
+          "detail": "G3 (Kp 7) classification: voltage corrections required on power systems; surface charging on satellites."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "bastille2000-geo",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "bastille"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-58.0nT v=900km/s Kp=9.0 Dst=-100nT flare=C [2000-07-15T18:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Surface-charging risk elevated for 1 GEO/MEO asset(s); monitor.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "GEO comms",
+      "storm_summary": "A severe geomagnetic storm is in progress. Kp is 9.0 (G5 extreme), Bz is -58.0 nT, solar wind speed is 900 km/s, and Dst is -100 nT. A C-class flare was observed on 2000-07-15T18:00+00:00. These conditions exceed the October 2024 G4 storm (Kp 8, Bz -30 nT, Dst -335 nT, v >750 km/s) in both Kp and Bz magnitude, indicating an extreme-level event.",
+      "headline": "Surface-charging risk elevated for 1 GEO/MEO asset(s); monitor.",
+      "body": "The fleet consists of GEO communications satellites. At GEO altitude, atmospheric drag is negligible, so the primary risk is surface charging. The current Kp of 9.0 (G5 extreme) and strongly southward Bz of -58.0 nT drive intense substorm activity that produces energetic electron fluxes capable of differential charging on spacecraft surfaces. Reference document [3] identifies surface charging as the dominant anomaly mode for GEO and MEO satellites during geomagnetic storms, with arc discharges that can damage insulation, bias sensors, and degrade solar arrays. The October 2024 G4 storm (Kp 8, Bz -30 nT) caused no publicly-reported satellite losses but did trigger operational adjustments across multiple fleets. The current event is more severe by Kp and Bz metrics, warranting heightened vigilance.",
+      "per_unit_actions": [
+        "Increase telemetry cadence; monitor for surface-charging anomalies.",
+        "Notify customers of likely service-quality variation; pre-stage on-call."
+      ],
+      "citations": [
+        {
+          "source": "2024-12-01 \u2014 public",
+          "detail": "Common spacecraft anomaly modes during geomagnetic storms \u2014 surface charging identified as primary risk for GEO/MEO satellites."
+        },
+        {
+          "source": "2024-10-10 \u2014 https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm (Kp 8, Bz -30 nT, v >750 km/s) \u2014 analogue event with no satellite losses but operational adjustments."
+        },
+        {
+          "source": "2024-12-01 \u2014 NOAA",
+          "detail": "Atmospheric density and satellite drag during geomagnetic storms \u2014 drag risk is negligible at GEO altitude."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "oct2024-leoconst",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "october"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-30.0nT v=750km/s Kp=8.0 Dst=-100nT flare=C [2024-10-10T13:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "LEO constellation",
+      "storm_summary": "A severe G4 geomagnetic storm is in progress. Kp is 8.0, Bz is -30.0 nT, solar wind speed is 750 km/s, and Dst is -100 nT. A C-class flare was observed at 2024-10-10T13:00+00:00. These conditions match the October 2024 G4 storm event where Kp reached 8, Bz reached -30 nT, and solar wind speed peaked above 750 km/s.",
+      "headline": "Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "body": "Atmospheric density at 350 km altitude is estimated to have increased by a factor of 1.25 (125%) above quiet-time levels, based on NOAA SWPC empirical density estimates and JB2008 model ranges for Kp 8 conditions. Drag delta-V requirements are correspondingly elevated by a factor of 1.25. Surface charging risk is moderate for this orbit class.\n\nThe current storm parameters (Kp 8.0, Bz -30 nT, solar wind speed 750 km/s) are consistent with the October 2024 G4 severe geomagnetic storm, during which multiple LEO operators reported drag-related station-keeping adjustments and SpaceX Starlink fleet operations were modified. No satellite losses were publicly reported during that event, but GPS positioning errors of several metres were observed.\n\nThe thermospheric density increase at LEO altitudes is driven by energy deposited by the auroral electrojet and Joule heating. At 300 km altitude during G3 (Kp 7) conditions, density increases of +50 to +80% are typical; at G5 (Kp 9) conditions, increases of +200 to +400% are possible during peak hours. The current Kp 8 (G4) conditions place the density increase at 350 km within the high-severity range.",
+      "per_unit_actions": [
+        "Defer non-essential maneuvers; check station-keeping margin.",
+        "Notify customers of likely service-quality variation; pre-stage on-call.",
+        "Consider safe-mode bus reorientation to minimise drag exposure for low-altitude units."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC \u2014 Severe G4 Geomagnetic Storm Warning, 10 Oct 2024",
+          "detail": "October 2024 G4 storm: Kp reached 8, Bz minimum -30 nT, solar wind speed peaked above 750 km/s. Multiple LEO operators reported drag-related station keeping; SpaceX Starlink fleet operations adjusted."
+        },
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "At 350 km altitude, density fraction increase of 1.25 and drag delta-V fraction increase of 1.25 for Kp 8.0 conditions."
+        },
+        {
+          "source": "NOAA \u2014 Atmospheric density and satellite drag during geomagnetic storms",
+          "detail": "Thermospheric density at LEO altitudes increases during geomagnetic storms in proportion to energy deposited by auroral electrojet and Joule heating. At 300 km: G3 (Kp 7) +50 to +80%; G5 (Kp 9) +200 to +400%."
+        },
+        {
+          "source": "NOAA G-scale and Kp index reference",
+          "detail": "Kp 8 corresponds to G4 severe geomagnetic storm classification."
+        }
+      ]
+    }
+  },
+  {
+    "event_id": "g4-mixed",
+    "persona": "satellite",
+    "expected": {
+      "expected_severity": "high",
+      "expected_cite_keyword": "kp"
+    },
+    "trace": [
+      "supervisor: persona=satellite query='satellite operator briefing storm impact drag fleet'",
+      "data_fetcher: Bz=-28.0nT v=700km/s Kp=8.0 Dst=-100nT flare=C [2024-09-01T12:00+00:00]",
+      "retrieval: 5 chunks (public, severe-g4-geomagnetic-storm-warning-10-o, public)",
+      "physics: fleet headline \u2192 Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "composer: satellite briefing ready"
+    ],
+    "briefing": {
+      "fleet_label": "Mixed-Altitude Fleet",
+      "storm_summary": "A severe G4 geomagnetic storm is in progress. Kp is 8.0 (G4 severe), Bz is -28.0 nT, solar wind speed is 700 km/s, and Dst is -100 nT. A C-class flare was observed at 2024-09-01T12:00+00:00. Thermospheric density is elevated across LEO altitudes, with the low-altitude unit (320 km) experiencing a density fraction increase of 1.4x (140%) and a drag delta-v fraction increase of 1.4x, rated high severity. The high-altitude unit (750 km) shows a density fraction increase of 0.25x (25%) and drag delta-v fraction increase of 0.25x, rated moderate severity. Surface charging risk is moderate for both units.",
+      "headline": "Drag risk elevated for 1 LEO asset(s); defer maneuvers and consider safe-mode for low-altitude units.",
+      "body": "A severe G4 geomagnetic storm (Kp 8.0) is currently underway, driven by sustained southward Bz of -28.0 nT and solar wind speeds of 700 km/s. This event is comparable to the October 2024 G4 storm (Kp 8, Bz -30 nT, solar wind >750 km/s) during which multiple LEO operators reported drag-related station-keeping adjustments and GPS positioning errors up to several metres.\n\nThe low-altitude LEO unit at 320 km is the most affected asset. Thermospheric density at this altitude is elevated by approximately 140% (density fraction increase of 1.4x), producing a proportional 1.4x increase in drag delta-v. This is consistent with NOAA SWPC empirical estimates and JB2008 model ranges for G4-level forcing at ~300 km altitude. Surface charging risk is moderate.\n\nThe high-altitude LEO unit at 750 km experiences a more modest density increase of 25% (density fraction increase of 0.25x) and a 0.25x drag delta-v increase, rated moderate severity. Surface charging risk is also moderate at this altitude.\n\nNo GEO or MEO assets are present in this fleet. Deep-dielectric charging risk is not assessed as elevated for these LEO altitudes under current conditions.",
+      "per_unit_actions": [
+        "LEO-LOW (320 km): Defer non-essential maneuvers; check station-keeping margin. Consider safe-mode (edge-on flight orientation) to minimise drag. Notify customers of likely service-quality variation; pre-stage on-call.",
+        "LEO-HIGH (750 km): Notify customers of likely service-quality variation; pre-stage on-call."
+      ],
+      "citations": [
+        {
+          "source": "NOAA SWPC empirical density estimates; JB2008 ranges",
+          "detail": "Density fraction increase of 1.4x at 320 km and 0.25x at 750 km for Kp 8.0."
+        },
+        {
+          "source": "https://www.swpc.noaa.gov/news/severe-g4-geomagnetic-storm-warning-10-oct-2024",
+          "detail": "October 2024 G4 storm analogue: Kp 8, Bz -30 nT, solar wind >750 km/s. Multiple LEO operators reported drag-related station keeping; GPS positioning errors up to several metres."
+        },
+        {
+          "source": "2024-12-01 \u2014 public \u2014 Operational actions for satellite operators during geomagnetic storms",
+          "detail": "Standard menu of decisions: safe-mode the bus to minimise drag (LEO), defer maneuvers, and raise orbit for very low parking orbits."
+        }
+      ]
+    }
+  }
+]
