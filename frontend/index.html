@@ -4,6 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>AuroraGaze</title>
+<link rel="icon" type="image/svg+xml" href="auroragaze-favicon.svg">
+<link rel="apple-touch-icon" href="auroragaze-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -306,16 +308,16 @@ const $ = (id) => document.getElementById(id);
 
 // --- presets ---
 const CITIES = [
-  { label: "Hobart, TAS",        lat: -42.88, lon: 147.32 },
-  { label: "Melbourne, VIC",     lat: -37.81, lon: 144.96 },
-  { label: "Adelaide, SA",       lat: -34.93, lon: 138.60 },
-  { label: "Sydney, NSW",        lat: -33.87, lon: 151.21 },
-  { label: "Brisbane, QLD",      lat: -27.47, lon: 153.03 },
-  { label: "Perth, WA",          lat: -31.95, lon: 115.86 },
-  { label: "Dunedin, NZ",        lat: -45.87, lon: 170.50 },
-  { label: "Wellington, NZ",     lat: -41.29, lon: 174.78 },
-  { label: "Auckland, NZ",       lat: -36.85, lon: 174.76 },
-  { label: "Custom…",            lat: null,   lon: null },
+  { label: "Hobart, TAS",        lat: -42.88, lon: 147.32, gaze: { lat: -43.40, lon: 147.30, name: "Bruny Island (south of Hobart)" } },
+  { label: "Melbourne, VIC",     lat: -37.81, lon: 144.96, gaze: { lat: -38.50, lon: 144.91, name: "Cape Schanck, Mornington Peninsula" } },
+  { label: "Adelaide, SA",       lat: -34.93, lon: 138.60, gaze: { lat: -35.55, lon: 138.62, name: "Fleurieu Peninsula (south of Adelaide)" } },
+  { label: "Sydney, NSW",        lat: -33.87, lon: 151.21, gaze: { lat: -34.18, lon: 151.05, name: "Royal NP / Garie Beach (south coast)" } },
+  { label: "Brisbane, QLD",      lat: -27.47, lon: 153.03, gaze: { lat: -27.55, lon: 153.43, name: "North Stradbroke Island" } },
+  { label: "Perth, WA",          lat: -31.95, lon: 115.86, gaze: { lat: -33.95, lon: 115.07, name: "Cape Naturaliste / Margaret River" } },
+  { label: "Dunedin, NZ",        lat: -45.87, lon: 170.50, gaze: { lat: -45.93, lon: 170.62, name: "Allans Beach, Otago Peninsula" } },
+  { label: "Wellington, NZ",     lat: -41.29, lon: 174.78, gaze: { lat: -41.61, lon: 175.29, name: "Cape Palliser, Wairarapa coast" } },
+  { label: "Auckland, NZ",       lat: -36.85, lon: 174.76, gaze: { lat: -36.91, lon: 174.42, name: "Bethells Beach, west coast" } },
+  { label: "Custom…",            lat: null,   lon: null, gaze: null },
 ];
 
 const FLEETS = [
@@ -365,6 +367,7 @@ citySel.addEventListener("change", () => {
     $("lon").classList.add("hidden");
     $("lat").value = c.lat;
     $("lon").value = c.lon;
+    drawCityPin(c.lat, c.lon, c.label);
   }
 });
 
@@ -374,13 +377,28 @@ fleetSel.addEventListener("change", () => {
   else $("fleet-json").classList.add("hidden");
 });
 
-// --- persona toggle (clears trace + briefing on switch) ---
+// --- persona toggle: cache per-persona state, restore on switch ---
+const EMPTY_TRACE = '<span style="color:var(--muted)">No briefing yet — pick and click <em>Get briefing</em>.</span>';
+const cache = { aurora: { trace: EMPTY_TRACE, briefing: "" }, satellite: { trace: EMPTY_TRACE, briefing: "" } };
 let mode = "aurora";
 const toggle = $("persona-toggle");
+
+function snapshotMode(prev) {
+  cache[prev].trace = $("trace").innerHTML;
+  cache[prev].briefing = $("briefing-slot").innerHTML;
+}
+function restoreMode(next) {
+  $("trace").innerHTML = cache[next].trace || EMPTY_TRACE;
+  $("briefing-slot").innerHTML = cache[next].briefing || "";
+}
+
 toggle.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (!btn) return;
-  mode = btn.dataset.mode;
+  const next = btn.dataset.mode;
+  if (next === mode) return;
+  snapshotMode(mode);
+  mode = next;
   document.body.classList.toggle("satellite-mode", mode === "satellite");
   for (const b of toggle.querySelectorAll("button")) {
     b.classList.toggle("active", b.dataset.mode === mode);
@@ -389,16 +407,8 @@ toggle.addEventListener("click", (e) => {
   }
   $("aurora-panel").classList.toggle("hidden", mode !== "aurora");
   $("satellite-panel").classList.toggle("hidden", mode !== "satellite");
-  // clear previous run state
-  resetRun();
+  restoreMode(mode);
 });
-
-function resetRun() {
-  $("trace").innerHTML = '<span style="color:var(--muted)">No briefing yet — pick and click <em>Get briefing</em>.</span>';
-  $("briefing-slot").innerHTML = "";
-  if (cityMarker) { cityMarker.remove(); cityMarker = null; }
-  if (bandLayer) { bandLayer.remove(); bandLayer = null; }
-}
 
 // --- snapshot ---
 function gscale(kp) {
@@ -445,11 +455,13 @@ function refreshImagery() {
 }
 
 // --- map ---
-const map = L.map("map", { zoomControl: false, attributionControl: false, scrollWheelZoom: false }).setView([-40, 150], 3);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 8 }).addTo(map);
+const map = L.map("map", { zoomControl: true, attributionControl: false, scrollWheelZoom: false }).setView([-40, 150], 3);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 10 }).addTo(map);
 L.control.attribution({ position: "bottomright", prefix: "" }).addTo(map).addAttribution("CARTO · OSM");
 let cityMarker = null;
 let bandLayer = null;
+let gazeMarker = null;
+let gazeLine = null;
 
 const LEVEL_COLOUR = {
   likely:    "#2f6f4d",
@@ -457,20 +469,53 @@ const LEVEL_COLOUR = {
   unlikely:  "#a23a3a",
 };
 
-function drawMap(lat, lon, label, visibility) {
+function clearOverlays() {
+  if (bandLayer) { bandLayer.remove(); bandLayer = null; }
+  if (gazeMarker) { gazeMarker.remove(); gazeMarker = null; }
+  if (gazeLine) { gazeLine.remove(); gazeLine = null; }
+}
+
+function drawCityPin(lat, lon, label) {
   if (cityMarker) cityMarker.remove();
-  if (bandLayer) bandLayer.remove();
-  const colour = LEVEL_COLOUR[visibility.level] || "#5b6178";
+  clearOverlays();
   cityMarker = L.circleMarker([lat, lon], {
-    radius: 8, color: colour, fillColor: colour, fillOpacity: 0.6, weight: 2,
+    radius: 8, color: "#5b6178", fillColor: "#a9d0f5", fillOpacity: 0.7, weight: 2,
   }).addTo(map);
-  cityMarker.bindTooltip(`${label} — ${visibility.level}`, { permanent: true, direction: "top", offset: [0, -10] }).openTooltip();
-  // Visibility band: south of the boundary latitude is the oval region.
+  cityMarker.bindTooltip(label.split(",")[0], { permanent: true, direction: "top", offset: [0, -10] }).openTooltip();
+  map.flyTo([lat, lon], 7, { duration: 0.8 });
+}
+
+function drawBriefingOverlay(cityIdx, visibility) {
+  const c = CITIES[cityIdx];
+  const colour = LEVEL_COLOUR[visibility.level] || "#5b6178";
+  // Recolour the city marker based on visibility.
+  if (cityMarker) {
+    cityMarker.setStyle({ color: colour, fillColor: colour, fillOpacity: 0.65 });
+    cityMarker.unbindTooltip();
+    cityMarker.bindTooltip(`${c.label.split(",")[0]} — ${visibility.level}`, { permanent: true, direction: "top", offset: [0, -10] }).openTooltip();
+  }
+  // Translucent band from boundary southward.
   const boundaryLat = -Math.abs(visibility.boundary_lat_deg);
   bandLayer = L.polygon([
-    [boundaryLat, 100], [boundaryLat, 180], [-90, 180], [-90, 100],
+    [boundaryLat, c.lon - 40], [boundaryLat, c.lon + 40], [-90, c.lon + 40], [-90, c.lon - 40],
   ], { color: colour, fillColor: colour, fillOpacity: 0.10, weight: 1, dashArray: "4 4" }).addTo(map);
-  map.flyTo([lat, lon], Math.max(3, 5 - Math.abs(lat) / 20));
+  // If visibility is likely/possible, place a "gaze" pin at the dark-sky site.
+  if (c.gaze && (visibility.level === "likely" || visibility.level === "possible")) {
+    gazeMarker = L.marker([c.gaze.lat, c.gaze.lon], {
+      icon: L.divIcon({
+        className: "gaze-pin",
+        html: `<div style="background:${colour};color:white;font-size:11px;padding:4px 8px;border-radius:8px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.2);font-family:Inter,sans-serif">★ ${c.gaze.name}</div>`,
+        iconSize: null, iconAnchor: [0, 0],
+      }),
+    }).addTo(map);
+    gazeLine = L.polyline([[c.lat, c.lon], [c.gaze.lat, c.gaze.lon]], {
+      color: colour, weight: 2, opacity: 0.6, dashArray: "4 4",
+    }).addTo(map);
+    // zoom to fit both points
+    map.flyToBounds([[c.lat, c.lon], [c.gaze.lat, c.gaze.lon]], { padding: [60, 60], duration: 0.8, maxZoom: 8 });
+  } else {
+    map.flyTo([c.lat, c.lon], 7, { duration: 0.6 });
+  }
 }
 
 // --- streaming ---
@@ -534,11 +579,18 @@ function renderSatellite(b) {
     </div>`;
 }
 
+let streamingInFlight = false;
+function setLockedUI(locked) {
+  streamingInFlight = locked;
+  document.querySelectorAll(".btn").forEach(b => b.disabled = locked);
+  toggle.querySelectorAll("button").forEach(b => b.disabled = locked);
+}
+
 function start(url, body, render, mapHook) {
   const trace = $("trace");
   trace.innerHTML = "";
   $("briefing-slot").innerHTML = "";
-  document.querySelectorAll(".btn").forEach(b => b.disabled = true);
+  setLockedUI(true);
   return streamSSE(url, body,
     (line) => { trace.insertAdjacentHTML("beforeend", `<div class="step">${line}</div>`); },
     (b) => {
@@ -547,16 +599,22 @@ function start(url, body, render, mapHook) {
     }
   ).catch(e => {
     trace.insertAdjacentHTML("beforeend", `<div class="step" style="color:var(--bad)">error: ${e.message}</div>`);
-  }).finally(() => document.querySelectorAll(".btn").forEach(b => b.disabled = false));
+  }).finally(() => setLockedUI(false));
 }
 
 $("brief-aurora").addEventListener("click", () => {
-  const c = CITIES[citySel.value];
+  const idx = parseInt(citySel.value);
+  const c = CITIES[idx];
   const lat = c.lat !== null ? c.lat : parseFloat($("lat").value);
   const lon = c.lon !== null ? c.lon : parseFloat($("lon").value);
-  const label = c.label === "Custom…" ? `(${lat},${lon})` : c.label;
+  const label = c.label === "Custom…" ? `(${lat.toFixed(2)},${lon.toFixed(2)})` : c.label;
+  // Ensure the city pin exists (needed for Custom… and to refresh after re-toggle).
+  drawCityPin(lat, lon, label);
+  // For Custom… with no preset gaze, fabricate one ~50 km south.
+  const cityRecord = c.lat !== null ? c : { ...c, lat, lon, label, gaze: { lat: lat - 0.5, lon: lon, name: "~50 km south of pinned location" } };
+  CITIES[idx] = cityRecord;
   start("/api/brief/aurora", { lat, lon, location: label }, renderAurora, (b) => {
-    if (b.visibility) drawMap(lat, lon, label.split(",")[0], b.visibility);
+    if (b.visibility) drawBriefingOverlay(idx, b.visibility);
   });
 });
 
