@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
   :root {
     --bg: #fafaf7;
@@ -21,8 +22,11 @@
     --sky-2: #a9d0f5;
     --sky-ink: #1a4378;
     --good: #2f6f4d;
+    --good-bg: #d6efdf;
     --warn: #b27a00;
+    --warn-bg: #faecc8;
     --bad: #a23a3a;
+    --bad-bg: #f3d9d9;
     --shadow: 0 1px 2px rgba(26,26,46,0.04), 0 8px 24px rgba(26,26,46,0.06);
   }
   * { box-sizing: border-box; }
@@ -42,16 +46,8 @@
     align-items: baseline;
     border-bottom: 1px solid var(--line);
   }
-  .brand {
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: -0.01em;
-  }
-  .brand-sub {
-    color: var(--muted);
-    font-size: 14px;
-    margin-left: 12px;
-  }
+  .brand { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .brand-sub { color: var(--muted); font-size: 14px; margin-left: 12px; }
   .toggle {
     display: inline-flex;
     background: white;
@@ -75,12 +71,38 @@
   .toggle button.active.aurora { background: var(--aurora-2); color: var(--aurora-ink); }
   .toggle button.active.satellite { background: var(--sky-2); color: var(--sky-ink); }
 
-  main { padding: 32px 40px 80px; max-width: 1100px; margin: 0 auto; }
+  main { padding: 28px 40px 80px; max-width: 1100px; margin: 0 auto; }
+
+  .imagery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .img-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .img-card .frame {
+    aspect-ratio: 1 / 1;
+    background: #f4f3ee;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .img-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-card .cap { padding: 9px 12px; font-size: 11.5px; color: var(--muted); display:flex; justify-content: space-between; }
+  .img-card .cap strong { color: var(--ink); font-weight: 500; }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 14px;
+    margin-bottom: 22px;
   }
   .card {
     background: var(--card);
@@ -90,7 +112,7 @@
     box-shadow: var(--shadow);
   }
   .card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .card .value { font-size: 28px; font-weight: 500; margin-top: 8px; letter-spacing: -0.02em; }
+  .card .value { font-size: 26px; font-weight: 500; margin-top: 8px; letter-spacing: -0.02em; }
   .card .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
   .card .stamp { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 12px; }
 
@@ -98,41 +120,48 @@
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 20px;
-    padding: 28px;
+    padding: 24px;
     box-shadow: var(--shadow);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
-  .panel h2 { margin: 0 0 16px; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel h2 { margin: 0 0 14px; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
 
-  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .input {
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .input, select {
     flex: 1;
-    min-width: 200px;
+    min-width: 180px;
     border: 1px solid var(--line);
     border-radius: 10px;
-    padding: 12px 14px;
+    padding: 11px 13px;
     font-family: inherit;
     font-size: 14px;
     background: white;
+    color: var(--ink);
   }
-  .input:focus { outline: 2px solid var(--aurora-2); outline-offset: -1px; }
-  .satellite-mode .input:focus { outline-color: var(--sky-2); }
+  select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='%235b6178' d='M0 0l5 6 5-6z'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px; }
+  .input:focus, select:focus { outline: 2px solid var(--aurora-2); outline-offset: -1px; }
+  .satellite-mode .input:focus, .satellite-mode select:focus { outline-color: var(--sky-2); }
+  textarea.input { font-family: 'JetBrains Mono', monospace; font-size: 12px; min-height: 110px; resize: vertical; line-height: 1.4; }
 
   .btn {
     border: 0;
     border-radius: 10px;
-    padding: 12px 24px;
+    padding: 11px 22px;
     font-family: inherit;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.15s ease;
+    white-space: nowrap;
   }
   .btn-aurora { background: var(--aurora-2); color: var(--aurora-ink); }
   .btn-aurora:hover { background: var(--aurora-1); }
   .btn-satellite { background: var(--sky-2); color: var(--sky-ink); }
   .btn-satellite:hover { background: var(--sky-1); }
   .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  #map { height: 280px; border-radius: 14px; overflow: hidden; margin-top: 14px; border: 1px solid var(--line); }
+  .leaflet-container { background: #f6f6f1; }
 
   .trace {
     font-family: 'JetBrains Mono', monospace;
@@ -163,7 +192,7 @@
     background: linear-gradient(135deg, var(--aurora-1) 0%, #f2eaff 100%);
     border: 1px solid var(--aurora-2);
     border-radius: 16px;
-    padding: 24px;
+    padding: 22px 24px;
     color: var(--aurora-ink);
     animation: slidein 0.4s ease;
   }
@@ -172,19 +201,20 @@
     border-color: var(--sky-2);
     color: var(--sky-ink);
   }
-  .briefing h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
-  .briefing .body { font-size: 15px; line-height: 1.6; }
+  .briefing .summary { font-size: 18px; font-weight: 500; line-height: 1.45; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .briefing h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
+  .briefing .body { font-size: 14.5px; line-height: 1.6; }
   .briefing .meta { font-size: 13px; opacity: 0.85; margin-top: 12px; }
-  .briefing ul { margin: 8px 0; padding-left: 20px; font-size: 14px; }
-  .briefing .citations { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 12.5px; }
+  .briefing ul { margin: 6px 0; padding-left: 18px; font-size: 13.5px; }
+  .briefing .citations { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 12.5px; }
   .briefing .citations .src { font-family: 'JetBrains Mono', monospace; }
 
-  .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; }
-  .level.likely { background: rgba(47,111,77,0.15); color: var(--good); }
-  .level.possible { background: rgba(178,122,0,0.15); color: var(--warn); }
-  .level.unlikely { background: rgba(162,58,58,0.12); color: var(--bad); }
+  .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; vertical-align: middle; }
+  .level.likely { background: var(--good-bg); color: var(--good); }
+  .level.possible { background: var(--warn-bg); color: var(--warn); }
+  .level.unlikely { background: var(--bad-bg); color: var(--bad); }
 
-  .hidden { display: none; }
+  .hidden { display: none !important; }
 
   footer { padding: 24px 40px; color: var(--muted); font-size: 13px; text-align: center; border-top: 1px solid var(--line); }
   footer a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); }
@@ -204,6 +234,12 @@
 </header>
 
 <main id="app">
+
+  <div class="imagery">
+    <div class="img-card"><div class="frame"><img id="img-sun" alt="Sun in EUV 193Å (SDO)" /></div><div class="cap"><strong>Sun</strong><span>SDO AIA 193 Å</span></div></div>
+    <div class="img-card"><div class="frame"><img id="img-corona" alt="Coronagraph (LASCO C3)" /></div><div class="cap"><strong>Corona</strong><span>LASCO C3</span></div></div>
+    <div class="img-card"><div class="frame"><img id="img-oval" alt="Southern auroral oval (NOAA OVATION)" /></div><div class="cap"><strong>Southern oval</strong><span>NOAA OVATION</span></div></div>
+  </div>
 
   <div class="grid">
     <div class="card">
@@ -229,22 +265,21 @@
   <div class="panel" id="aurora-panel">
     <h2>Where can I see the aurora tonight?</h2>
     <div class="row">
-      <input class="input" id="city" placeholder="Hobart, Melbourne, Dunedin..." value="Hobart" />
-      <input class="input" id="lat" placeholder="lat" value="-42.88" style="max-width:110px" />
-      <input class="input" id="lon" placeholder="lon" value="147.32" style="max-width:110px" />
+      <select id="city-select"></select>
+      <input class="input hidden" id="lat" placeholder="lat" value="-42.88" style="max-width:110px" />
+      <input class="input hidden" id="lon" placeholder="lon" value="147.32" style="max-width:110px" />
       <button class="btn btn-aurora" id="brief-aurora">Get briefing →</button>
     </div>
+    <div id="map"></div>
   </div>
 
   <div class="panel hidden" id="satellite-panel">
     <h2>Brief my fleet</h2>
     <div class="row">
-      <input class="input" id="fleet-label" placeholder="fleet name" value="example LEO constellation" />
+      <select id="fleet-select"></select>
       <button class="btn btn-satellite" id="brief-satellite">Get briefing →</button>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5">
-      Default fleet: bus-A 350 km LEO_low, bus-B 550 km LEO_mid, geo-comms 35 786 km GEO. Edit in JSON form (coming).
-    </p>
+    <textarea id="fleet-json" class="input hidden" rows="6"></textarea>
   </div>
 
   <div class="panel">
@@ -259,12 +294,84 @@
 
 <footer>
   Open source on <a href="https://github.com/Ahmad-Jaradat-Space/auroragaze" target="_blank">GitHub</a>.
-  Data: NOAA SWPC, DSCOVR, GOES, Kyoto WDC. Aurora reports: <a href="https://auroraaustralis.org.au" target="_blank">auroraaustralis.org.au</a>.
+  Imagery: NASA SDO, NOAA SWPC LASCO, NOAA OVATION. Data: NOAA SWPC, DSCOVR, GOES, Kyoto WDC. Aurora reports: <a href="https://auroraaustralis.org.au" target="_blank">auroraaustralis.org.au</a>.
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const $ = (id) => document.getElementById(id);
 
+// --- presets ---
+const CITIES = [
+  { label: "Hobart, TAS",        lat: -42.88, lon: 147.32 },
+  { label: "Melbourne, VIC",     lat: -37.81, lon: 144.96 },
+  { label: "Adelaide, SA",       lat: -34.93, lon: 138.60 },
+  { label: "Sydney, NSW",        lat: -33.87, lon: 151.21 },
+  { label: "Brisbane, QLD",      lat: -27.47, lon: 153.03 },
+  { label: "Perth, WA",          lat: -31.95, lon: 115.86 },
+  { label: "Dunedin, NZ",        lat: -45.87, lon: 170.50 },
+  { label: "Wellington, NZ",     lat: -41.29, lon: 174.78 },
+  { label: "Auckland, NZ",       lat: -36.85, lon: 174.76 },
+  { label: "Custom…",            lat: null,   lon: null },
+];
+
+const FLEETS = [
+  { label: "Starlink-class (LEO low, 350 km)",
+    fleet: [{ name: "leo-low", altitude_km: 350, orbit_class: "LEO_low" }] },
+  { label: "Earth-observation (LEO mid, 500 km)",
+    fleet: [{ name: "leo-mid", altitude_km: 500, orbit_class: "LEO_mid" }] },
+  { label: "GEO comms (35 786 km)",
+    fleet: [{ name: "geo-1",   altitude_km: 35786, orbit_class: "GEO" }] },
+  { label: "GNSS (MEO, 20 200 km)",
+    fleet: [{ name: "gnss-1",  altitude_km: 20200, orbit_class: "MEO" }] },
+  { label: "Mixed constellation (LEO + LEO + GEO)",
+    fleet: [
+      { name: "leo-low",  altitude_km: 350,   orbit_class: "LEO_low" },
+      { name: "leo-mid",  altitude_km: 550,   orbit_class: "LEO_mid" },
+      { name: "geo-1",    altitude_km: 35786, orbit_class: "GEO" },
+    ] },
+  { label: "Custom JSON…", fleet: null },
+];
+
+// populate dropdowns
+const citySel = $("city-select");
+CITIES.forEach((c, i) => {
+  const opt = document.createElement("option");
+  opt.value = i; opt.textContent = c.label;
+  citySel.appendChild(opt);
+});
+const fleetSel = $("fleet-select");
+FLEETS.forEach((f, i) => {
+  const opt = document.createElement("option");
+  opt.value = i; opt.textContent = f.label;
+  fleetSel.appendChild(opt);
+});
+$("fleet-json").value = JSON.stringify([
+  { name: "leo-low",  altitude_km: 350,   orbit_class: "LEO_low" },
+  { name: "leo-mid",  altitude_km: 550,   orbit_class: "LEO_mid" },
+  { name: "geo-1",    altitude_km: 35786, orbit_class: "GEO" },
+], null, 2);
+
+citySel.addEventListener("change", () => {
+  const c = CITIES[citySel.value];
+  if (c.lat === null) {
+    $("lat").classList.remove("hidden");
+    $("lon").classList.remove("hidden");
+  } else {
+    $("lat").classList.add("hidden");
+    $("lon").classList.add("hidden");
+    $("lat").value = c.lat;
+    $("lon").value = c.lon;
+  }
+});
+
+fleetSel.addEventListener("change", () => {
+  const f = FLEETS[fleetSel.value];
+  if (f.fleet === null) $("fleet-json").classList.remove("hidden");
+  else $("fleet-json").classList.add("hidden");
+});
+
+// --- persona toggle (clears trace + briefing on switch) ---
 let mode = "aurora";
 const toggle = $("persona-toggle");
 toggle.addEventListener("click", (e) => {
@@ -279,8 +386,18 @@ toggle.addEventListener("click", (e) => {
   }
   $("aurora-panel").classList.toggle("hidden", mode !== "aurora");
   $("satellite-panel").classList.toggle("hidden", mode !== "satellite");
+  // clear previous run state
+  resetRun();
 });
 
+function resetRun() {
+  $("trace").innerHTML = '<span style="color:var(--muted)">No briefing yet — pick and click <em>Get briefing</em>.</span>';
+  $("briefing-slot").innerHTML = "";
+  if (cityMarker) { cityMarker.remove(); cityMarker = null; }
+  if (bandLayer) { bandLayer.remove(); bandLayer = null; }
+}
+
+// --- snapshot ---
 function gscale(kp) {
   if (kp < 5) return "quiet";
   if (kp < 6) return "G1 minor";
@@ -289,15 +406,13 @@ function gscale(kp) {
   if (kp < 9) return "G4 severe";
   return "G5 extreme";
 }
-
 function fmtAge(iso) {
   if (!iso) return "—";
   const d = new Date(iso);
   const mins = Math.round((Date.now() - d.getTime()) / 60000);
   if (mins < 1) return "just now";
   if (mins < 60) return mins + " min ago";
-  const h = Math.round(mins / 60);
-  return h + " h ago";
+  return Math.round(mins / 60) + " h ago";
 }
 
 async function loadSnapshot() {
@@ -318,33 +433,68 @@ async function loadSnapshot() {
   }
 }
 
+// --- imagery (refresh URLs with cache-bust query every 5 min) ---
+function refreshImagery() {
+  const t = Date.now();
+  $("img-sun").src    = `https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg?t=${t}`;
+  $("img-corona").src = `https://services.swpc.noaa.gov/images/animations/lasco-c3/latest.jpg?t=${t}`;
+  $("img-oval").src   = `https://services.swpc.noaa.gov/images/animations/ovation/south/latest.jpg?t=${t}`;
+}
+
+// --- map ---
+const map = L.map("map", { zoomControl: false, attributionControl: false, scrollWheelZoom: false }).setView([-40, 150], 3);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 8 }).addTo(map);
+L.control.attribution({ position: "bottomright", prefix: "" }).addTo(map).addAttribution("CARTO · OSM");
+let cityMarker = null;
+let bandLayer = null;
+
+const LEVEL_COLOUR = {
+  likely:    "#2f6f4d",
+  possible:  "#b27a00",
+  unlikely:  "#a23a3a",
+};
+
+function drawMap(lat, lon, label, visibility) {
+  if (cityMarker) cityMarker.remove();
+  if (bandLayer) bandLayer.remove();
+  const colour = LEVEL_COLOUR[visibility.level] || "#5b6178";
+  cityMarker = L.circleMarker([lat, lon], {
+    radius: 8, color: colour, fillColor: colour, fillOpacity: 0.6, weight: 2,
+  }).addTo(map);
+  cityMarker.bindTooltip(`${label} — ${visibility.level}`, { permanent: true, direction: "top", offset: [0, -10] }).openTooltip();
+  // Visibility band: south of the boundary latitude is the oval region.
+  const boundaryLat = -Math.abs(visibility.boundary_lat_deg);
+  bandLayer = L.polygon([
+    [boundaryLat, 100], [boundaryLat, 180], [-90, 180], [-90, 100],
+  ], { color: colour, fillColor: colour, fillOpacity: 0.10, weight: 1, dashArray: "4 4" }).addTo(map);
+  map.flyTo([lat, lon], Math.max(3, 5 - Math.abs(lat) / 20));
+}
+
+// --- streaming ---
 function streamSSE(url, body, onStep, onBriefing) {
   return new Promise((resolve, reject) => {
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then(async (resp) => {
-      if (!resp.ok) { reject(new Error("HTTP " + resp.status)); return; }
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += decoder.decode(value, { stream: true });
-        const parts = buf.split("\n\n");
-        buf = parts.pop();
-        for (const part of parts) {
-          if (!part.startsWith("data: ")) continue;
-          const payload = JSON.parse(part.slice(6));
-          if (payload.type === "step") onStep(payload.line);
-          else if (payload.type === "briefing") onBriefing(payload.briefing);
-          else if (payload.type === "done") resolve();
+    fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(async (resp) => {
+        if (!resp.ok) { reject(new Error("HTTP " + resp.status)); return; }
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const parts = buf.split("\n\n");
+          buf = parts.pop();
+          for (const part of parts) {
+            if (!part.startsWith("data: ")) continue;
+            const payload = JSON.parse(part.slice(6));
+            if (payload.type === "step") onStep(payload.line);
+            else if (payload.type === "briefing") onBriefing(payload.briefing);
+            else if (payload.type === "done") resolve();
+          }
         }
-      }
-      resolve();
-    }).catch(reject);
+        resolve();
+      }).catch(reject);
   });
 }
 
@@ -353,61 +503,79 @@ function renderAurora(b) {
   const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
   return `
     <div class="briefing">
-      <h3>${b.headline} <span class="level ${v.level || ''}">${v.level || ''}</span></h3>
+      <div class="summary">${b.summary || ""}</div>
+      <h3>Headline <span class="level ${v.level || ''}">${v.level || ''}</span></h3>
+      <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
+      <h3>Detail</h3>
       <div class="body">${b.body}</div>
       <div class="meta"><strong>${b.location}</strong> · ${b.when_local}</div>
       <div class="meta">${v.reasoning || ''}</div>
       <div class="citations"><strong>Cited sources</strong><ul>${cites}</ul></div>
     </div>`;
 }
-
 function renderSatellite(b) {
   const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
   const actions = (b.per_unit_actions || []).map(a => `<li>${a}</li>`).join("");
   return `
     <div class="briefing">
-      <h3>${b.headline}</h3>
+      <div class="summary">${b.summary || ""}</div>
+      <h3>Headline</h3>
+      <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
+      <h3>Storm summary</h3>
+      <div class="body">${b.storm_summary}</div>
+      <h3>Detail</h3>
       <div class="body">${b.body}</div>
       <div class="meta"><strong>${b.fleet_label}</strong></div>
-      <div class="meta">${b.storm_summary}</div>
       <div class="meta"><strong>Recommended actions</strong><ul>${actions}</ul></div>
       <div class="citations"><strong>Cited sources</strong><ul>${cites}</ul></div>
     </div>`;
 }
 
-function start(url, body, render) {
+function start(url, body, render, mapHook) {
   const trace = $("trace");
   trace.innerHTML = "";
   $("briefing-slot").innerHTML = "";
-  const btns = document.querySelectorAll(".btn");
-  btns.forEach(b => b.disabled = true);
+  document.querySelectorAll(".btn").forEach(b => b.disabled = true);
   return streamSSE(url, body,
     (line) => { trace.insertAdjacentHTML("beforeend", `<div class="step">${line}</div>`); },
-    (b) => { $("briefing-slot").innerHTML = render(b); }
+    (b) => {
+      $("briefing-slot").innerHTML = render(b);
+      if (mapHook) mapHook(b);
+    }
   ).catch(e => {
     trace.insertAdjacentHTML("beforeend", `<div class="step" style="color:var(--bad)">error: ${e.message}</div>`);
-  }).finally(() => btns.forEach(b => b.disabled = false));
+  }).finally(() => document.querySelectorAll(".btn").forEach(b => b.disabled = false));
 }
 
 $("brief-aurora").addEventListener("click", () => {
-  start("/api/brief/aurora", {
-    lat: parseFloat($("lat").value),
-    lon: parseFloat($("lon").value),
-    location: $("city").value,
-  }, renderAurora);
+  const c = CITIES[citySel.value];
+  const lat = c.lat !== null ? c.lat : parseFloat($("lat").value);
+  const lon = c.lon !== null ? c.lon : parseFloat($("lon").value);
+  const label = c.label === "Custom…" ? `(${lat},${lon})` : c.label;
+  start("/api/brief/aurora", { lat, lon, location: label }, renderAurora, (b) => {
+    if (b.visibility) drawMap(lat, lon, label.split(",")[0], b.visibility);
+  });
 });
 
 $("brief-satellite").addEventListener("click", () => {
-  const fleet = [
-    { name: "bus-A", altitude_km: 350, orbit_class: "LEO_low" },
-    { name: "bus-B", altitude_km: 550, orbit_class: "LEO_mid" },
-    { name: "geo-comms", altitude_km: 35786, orbit_class: "GEO" },
-  ];
-  start("/api/brief/satellite", { fleet_label: $("fleet-label").value, fleet }, renderSatellite);
+  const f = FLEETS[fleetSel.value];
+  let fleet;
+  if (f.fleet === null) {
+    try { fleet = JSON.parse($("fleet-json").value); } catch (e) {
+      alert("Invalid JSON in custom fleet"); return;
+    }
+  } else { fleet = f.fleet; }
+  start("/api/brief/satellite", { fleet_label: f.label, fleet }, renderSatellite, null);
 });
 
+// init
 loadSnapshot();
+refreshImagery();
 setInterval(loadSnapshot, 5 * 60 * 1000);
+setInterval(refreshImagery, 5 * 60 * 1000);
+// trigger initial city/fleet selection (sets default lat/lon, hides custom)
+citySel.dispatchEvent(new Event("change"));
+fleetSel.dispatchEvent(new Event("change"));
 </script>
 </body>
 </html>

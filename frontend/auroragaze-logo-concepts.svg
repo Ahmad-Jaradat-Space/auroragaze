@@ -1,0 +1,104 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1200" fill="#FAFAF7"/>
+
+  <style>
+    .title { font: 600 42px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #1A1A2E; letter-spacing: -0.03em; }
+    .subtitle { font: 400 18px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #5B6178; letter-spacing: -0.01em; }
+    .card-title { font: 600 18px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #1A1A2E; letter-spacing: -0.02em; }
+    .label { font: 500 13px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #5B6178; letter-spacing: 0.08em; text-transform: uppercase; }
+    .wordmark { font: 600 50px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #1A1A2E; letter-spacing: -0.04em; }
+    .mono-wordmark { font: 600 44px 'Inter', 'Avenir Next', 'Segoe UI', sans-serif; fill: #1A1A2E; letter-spacing: -0.04em; }
+  </style>
+
+  <text x="96" y="104" class="title">AuroraGaze Logo Concepts</text>
+  <text x="96" y="138" class="subtitle">Minimal scientific identity on an off-white dashboard surface</text>
+
+  <rect x="72" y="188" width="1456" height="296" rx="28" fill="#FFFFFF" stroke="rgba(26,26,46,0.08)"/>
+  <rect x="72" y="512" width="1456" height="296" rx="28" fill="#FFFFFF" stroke="rgba(26,26,46,0.08)"/>
+  <rect x="72" y="836" width="1456" height="296" rx="28" fill="#FFFFFF" stroke="rgba(26,26,46,0.08)"/>
+
+  <text x="112" y="234" class="label">Concept 01</text>
+  <text x="112" y="262" class="card-title">Aurora ribbon over observing lens</text>
+
+  <g transform="translate(124 326)">
+    <path d="M30 10C78 -8 134 0 170 28C188 42 204 60 225 70" stroke="#C8B4FF" stroke-width="20" stroke-linecap="round"/>
+    <path d="M48 40C92 22 134 24 168 44" stroke="#A9D0F5" stroke-width="8" stroke-linecap="round" opacity="0.95"/>
+    <circle cx="102" cy="94" r="34" stroke="#1A1A2E" stroke-width="10"/>
+    <circle cx="102" cy="94" r="9" fill="#1A1A2E"/>
+    <path d="M137 94H200" stroke="#1A1A2E" stroke-width="10" stroke-linecap="round" opacity="0.22"/>
+    <text x="246" y="108" class="wordmark">AuroraGaze</text>
+  </g>
+
+  <text x="1088" y="234" class="label">Icon Only</text>
+  <g transform="translate(1120 282)">
+    <rect x="0" y="0" width="140" height="140" rx="28" fill="#FAFAF7" stroke="rgba(26,26,46,0.08)"/>
+    <path d="M26 50C58 34 95 38 120 58" stroke="#C8B4FF" stroke-width="16" stroke-linecap="round"/>
+    <path d="M36 72C64 58 92 59 112 73" stroke="#A9D0F5" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="72" cy="92" r="22" stroke="#1A1A2E" stroke-width="8"/>
+    <circle cx="72" cy="92" r="6" fill="#1A1A2E"/>
+  </g>
+
+  <text x="1292" y="234" class="label">Monochrome</text>
+  <g transform="translate(1298 312)">
+    <path d="M22 18C58 3 101 10 127 35" stroke="#1A1A2E" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="64" cy="76" r="20" stroke="#1A1A2E" stroke-width="8"/>
+    <circle cx="64" cy="76" r="5" fill="#1A1A2E"/>
+    <text x="0" y="154" class="mono-wordmark">AuroraGaze</text>
+  </g>
+
+  <text x="112" y="558" class="label">Concept 02</text>
+  <text x="112" y="586" class="card-title">Twin-field sweep with precise gaze point</text>
+
+  <g transform="translate(124 650)">
+    <circle cx="102" cy="86" r="10" fill="#1A1A2E"/>
+    <path d="M18 86C52 30 111 10 182 24C206 29 224 38 240 48" stroke="#C8B4FF" stroke-width="18" stroke-linecap="round"/>
+    <path d="M32 118C74 76 125 62 185 71C206 74 223 80 238 88" stroke="#A9D0F5" stroke-width="8" stroke-linecap="round"/>
+    <path d="M80 26C99 18 120 18 141 26" stroke="#1A1A2E" stroke-width="8" stroke-linecap="round" opacity="0.18"/>
+    <text x="278" y="102" class="wordmark">AuroraGaze</text>
+  </g>
+
+  <text x="1088" y="558" class="label">Icon Only</text>
+  <g transform="translate(1120 606)">
+    <rect x="0" y="0" width="140" height="140" rx="28" fill="#FAFAF7" stroke="rgba(26,26,46,0.08)"/>
+    <circle cx="72" cy="84" r="8" fill="#1A1A2E"/>
+    <path d="M20 82C42 44 85 30 125 44" stroke="#C8B4FF" stroke-width="16" stroke-linecap="round"/>
+    <path d="M30 106C59 77 91 69 123 78" stroke="#A9D0F5" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <text x="1292" y="558" class="label">Monochrome</text>
+  <g transform="translate(1298 636)">
+    <circle cx="58" cy="68" r="6" fill="#1A1A2E"/>
+    <path d="M12 66C35 26 79 12 120 26" stroke="#1A1A2E" stroke-width="14" stroke-linecap="round"/>
+    <path d="M22 88C49 61 83 53 118 62" stroke="#1A1A2E" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+    <text x="0" y="154" class="mono-wordmark">AuroraGaze</text>
+  </g>
+
+  <text x="112" y="882" class="label">Concept 03</text>
+  <text x="112" y="910" class="card-title">Telemetry halo with directional aurora arc</text>
+
+  <g transform="translate(124 974)">
+    <circle cx="102" cy="78" r="36" stroke="#1A1A2E" stroke-width="10"/>
+    <circle cx="102" cy="78" r="8" fill="#1A1A2E"/>
+    <path d="M40 38C67 11 109 1 151 12C170 17 190 28 208 42" stroke="#C8B4FF" stroke-width="18" stroke-linecap="round"/>
+    <path d="M43 118C61 132 80 139 104 141" stroke="#A9D0F5" stroke-width="8" stroke-linecap="round"/>
+    <path d="M171 108C155 127 136 138 113 143" stroke="#1A1A2E" stroke-width="8" stroke-linecap="round" opacity="0.18"/>
+    <text x="248" y="94" class="wordmark">AuroraGaze</text>
+  </g>
+
+  <text x="1088" y="882" class="label">Icon Only</text>
+  <g transform="translate(1120 930)">
+    <rect x="0" y="0" width="140" height="140" rx="28" fill="#FAFAF7" stroke="rgba(26,26,46,0.08)"/>
+    <circle cx="72" cy="76" r="24" stroke="#1A1A2E" stroke-width="8"/>
+    <circle cx="72" cy="76" r="5.5" fill="#1A1A2E"/>
+    <path d="M26 44C49 23 84 16 117 28" stroke="#C8B4FF" stroke-width="16" stroke-linecap="round"/>
+    <path d="M34 108C48 119 59 124 73 127" stroke="#A9D0F5" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <text x="1292" y="882" class="label">Monochrome</text>
+  <g transform="translate(1298 960)">
+    <circle cx="60" cy="64" r="22" stroke="#1A1A2E" stroke-width="8"/>
+    <circle cx="60" cy="64" r="5" fill="#1A1A2E"/>
+    <path d="M16 34C38 14 70 8 102 19" stroke="#1A1A2E" stroke-width="14" stroke-linecap="round"/>
+    <text x="0" y="154" class="mono-wordmark">AuroraGaze</text>
+  </g>
+</svg>

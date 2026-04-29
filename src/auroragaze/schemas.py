@@ -41,6 +41,7 @@ class Citation(BaseModel):
 
 
 class AuroraBriefing(BaseModel):
+    summary: str = Field(description="1-2 plain-English sentences, no jargon")
     location: str
     when_local: str
     visibility: Visibility
@@ -50,6 +51,7 @@ class AuroraBriefing(BaseModel):
 
 
 class SatelliteBriefing(BaseModel):
+    summary: str = Field(description="1-2 plain-English sentences, no jargon")
     fleet_label: str
     storm_summary: str
     headline: str
