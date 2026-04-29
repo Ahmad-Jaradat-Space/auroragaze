@@ -1,0 +1,17 @@
+# date=2025-08-14 kp_peak=6 bz_min=-15 dst_min=-72 source=https://www.swpc.noaa.gov/news/august-2025-chhss event_type=storm persona=both
+
+August 2025 coronal-hole high-speed-stream storm. A persistent equatorial
+coronal hole drove a sustained high-speed solar-wind stream from August
+14. Kp peaked 6, sustained Kp 4-5 for over 30 hours. Dst minimum -72 nT.
+No CME, just stream interaction.
+
+Satellite impact: minimal — drag delta within nominal envelope. Useful
+case for "long-duration moderate stream" rather than impulsive storms.
+
+Aurora visibility: faint horizon glow from southern Tasmania
+photographable but not visible to the naked eye; no Victorian reports.
+
+Reference frame: the classic CIR (corotating interaction region) signature.
+Differs operationally from CME-driven storms — duration matters more than
+peak. Useful for distinguishing "small CME storm" from "small CIR storm"
+in briefings.

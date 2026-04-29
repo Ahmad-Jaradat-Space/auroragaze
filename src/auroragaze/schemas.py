@@ -76,4 +76,6 @@ class BriefingState(TypedDict, total=False):
     visibility: Visibility
     fleet_impact: dict[str, object]
     briefing: AuroraBriefing | SatelliteBriefing
+    retry_hint: str
+    retry_count: int
     trace: Annotated[list[str], add]

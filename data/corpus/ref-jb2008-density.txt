@@ -1,0 +1,27 @@
+# date=2024-12-01 reference=true source=Bowman+Tobiska+Marcos+Huang+Lin+Burke 2008 (JB2008 atmospheric model) event_type=reference persona=satellite
+
+JB2008 atmospheric density model (reference).
+
+JB2008 (Jacchia-Bowman 2008) is the operational atmospheric-density
+model used by US Space Force's 18 SDS for orbit determination and
+prediction at LEO altitudes. It supersedes JB2006 and the earlier
+Jacchia-71 model.
+
+Inputs:
+- F10.7 (10.7 cm solar radio flux) — proxy for EUV heating, daily.
+- Geomagnetic indices (Kp/ap, Dst) — drive storm-time perturbations.
+- Solar EUV proxy (S10, M10, Y10) — capture different EUV bands.
+
+Storm response: density at LEO altitudes increases roughly with
+ap-integrated heating; for the same Kp peak a storm with a long
+recovery (sustained ap) will deposit more energy than an impulsive
+peak. This is why the Feb 2022 Starlink case (Kp 5) caused more
+operational damage than some Kp 6 storms — the timing relative to a
+210 km parking orbit was the key factor.
+
+Density-fraction increases as a function of Kp at indicative LEO
+altitudes are tabulated in `ref-drag-table.txt` for operational use.
+
+Reference frame: the engineering authority for "what does drag do"
+quantitatively. The JB2008 reference is the underlying source for the
+empirical drag table AuroraGaze uses in `compute_drag_delta()`.

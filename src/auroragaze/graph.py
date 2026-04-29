@@ -12,7 +12,8 @@ from typing import Any
 import httpx
 from langgraph.graph import END, START, StateGraph
 
-from auroragaze.agents.prompts import AURORA_SYSTEM, SATELLITE_SYSTEM
+from auroragaze.agents.prompts import AURORA_SYSTEM, SATELLITE_SYSTEM, VERIFIER_RETRY_HINT
+from auroragaze.agents.verifier import verify_briefing
 from auroragaze.llm import make_llm
 from auroragaze.retrieval.retriever import retrieve
 from auroragaze.schemas import (
@@ -75,9 +76,51 @@ async def data_fetcher_node(state: BriefingState) -> dict[str, Any]:
     }
 
 
+_ORBIT_QUERY = {
+    "LEO_low":  "atmospheric drag thermospheric density at low LEO {alt}km during geomagnetic storm",
+    "LEO_mid":  "atmospheric drag at LEO {alt}km during geomagnetic storm fleet operations",
+    "LEO_high": "high-LEO operations and surface charging during geomagnetic storm",
+    "MEO":      "MEO GNSS single-event upset surface charging during geomagnetic storm",
+    "GEO":      "geosynchronous satellite surface charging deep dielectric storm anomaly",
+}
+
+
+def _satellite_subqueries(state: BriefingState) -> list[str]:
+    fleet_raw = state.get("fleet", []) or []
+    classes_seen: list[str] = []
+    queries: list[str] = []
+    for u in fleet_raw:
+        cls = str(u.get("orbit_class", ""))
+        if cls in _ORBIT_QUERY and cls not in classes_seen:
+            classes_seen.append(cls)
+            alt = u.get("altitude_km", 0)
+            queries.append(_ORBIT_QUERY[cls].format(alt=int(alt) if alt else ""))
+    if not queries:
+        queries = [state.get("query", "satellite operator briefing storm impact")]
+    return queries
+
+
 def retrieval_node(state: BriefingState) -> dict[str, Any]:
-    query = state.get("query", "")
     persona = state.get("persona", "aurora")
+    if persona == "satellite":
+        seen: dict[str, Any] = {}
+        for q in _satellite_subqueries(state):
+            for c in retrieve(query=q, k=4, persona=persona):
+                if c.source not in seen:
+                    seen[c.source] = c
+                if len(seen) >= 6:
+                    break
+            if len(seen) >= 6:
+                break
+        chunks = list(seen.values())[:6]
+        summary = ", ".join(c.source.split("/")[-1][:40] for c in chunks[:3])
+        return {
+            "chunks": chunks,
+            "trace": _trace(
+                state, f"retrieval: {len(chunks)} chunks via {len(_satellite_subqueries(state))} sub-queries ({summary})"
+            ),
+        }
+    query = state.get("query", "")
     chunks = retrieve(query=query, k=5, persona=persona)
     summary = ", ".join(c.source.split("/")[-1][:40] for c in chunks[:3])
     return {
@@ -129,6 +172,7 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
     visibility: Visibility = state["visibility"]
     chunks = state.get("chunks", [])
     location = state.get("location_label", f"({state.get('lat')}, {state.get('lon')})")
+    retry_hint = state.get("retry_hint", "")
     user_msg = (
         f"Location: {location}\n"
         f"Now: Bz={sw.bz:.1f}nT, v={sw.speed_kms:.0f}km/s, "
@@ -138,8 +182,9 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
         f"oval threshold ~{visibility.boundary_lat_deg:.1f}°S.\n\n"
         f"Reference chunks:\n{_format_chunks(chunks)}\n\n"
         "Write the AuroraBriefing as JSON matching this schema: "
-        "{location, when_local, visibility:{level,boundary_lat_deg,reasoning,table_source}, "
+        "{summary, location, when_local, visibility:{level,boundary_lat_deg,reasoning,table_source}, "
         "headline, body, citations:[{source,detail}]}."
+        + (f"\n\n{retry_hint}" if retry_hint else "")
     )
     llm = make_llm()
     structured = llm.with_structured_output(AuroraBriefing)
@@ -168,6 +213,7 @@ async def satellite_composer_node(state: BriefingState) -> dict[str, Any]:
     chunks = state.get("chunks", [])
     fleet_impact = state.get("fleet_impact", {})
     fleet_label = state.get("fleet_label", "fleet")
+    retry_hint = state.get("retry_hint", "")
     user_msg = (
         f"Fleet: {fleet_label}\n"
         f"Now: Bz={sw.bz:.1f}nT, v={sw.speed_kms:.0f}km/s, "
@@ -177,8 +223,9 @@ async def satellite_composer_node(state: BriefingState) -> dict[str, Any]:
         f"Computed fleet impact: {json.dumps(fleet_impact)[:1500]}\n\n"
         f"Reference chunks:\n{_format_chunks(chunks)}\n\n"
         "Write the SatelliteBriefing as JSON: "
-        "{fleet_label, storm_summary, headline, body, per_unit_actions:[...], "
+        "{summary, fleet_label, storm_summary, headline, body, per_unit_actions:[...], "
         "citations:[{source,detail}]}."
+        + (f"\n\n{retry_hint}" if retry_hint else "")
     )
     llm = make_llm()
     structured = llm.with_structured_output(SatelliteBriefing)
@@ -201,8 +248,55 @@ async def satellite_composer_node(state: BriefingState) -> dict[str, Any]:
     return {"briefing": briefing, "trace": _trace(state, "composer: satellite briefing ready")}
 
 
+def verifier_node(state: BriefingState) -> dict[str, Any]:
+    """Reject the briefing if any number is unsupported by tools or chunks.
+
+    On rejection, builds a retry hint and clears the briefing so the
+    conditional edge sends control back to the matching composer once.
+    """
+    briefing = state.get("briefing")
+    if briefing is None:
+        return {"trace": _trace(state, "verifier: no briefing to check")}
+    text = " ".join(
+        [
+            getattr(briefing, "summary", "") or "",
+            getattr(briefing, "headline", "") or "",
+            getattr(briefing, "body", "") or "",
+            getattr(briefing, "storm_summary", "") or "",
+        ]
+    )
+    unsupported = verify_briefing(text, dict(state))
+    retry_count = int(state.get("retry_count", 0))
+    if not unsupported:
+        return {"trace": _trace(state, "verifier: grounded ✓")}
+    if retry_count >= 1:
+        return {
+            "trace": _trace(
+                state,
+                f"verifier: {len(unsupported)} unsupported number(s) "
+                f"({unsupported[:3]}) — retry exhausted, accepting",
+            )
+        }
+    hint = VERIFIER_RETRY_HINT.format(unsupported=", ".join(str(n) for n in unsupported))
+    return {
+        "briefing": None,
+        "retry_hint": hint,
+        "retry_count": retry_count + 1,
+        "trace": _trace(
+            state, f"verifier: rejected — {len(unsupported)} unsupported, retrying composer"
+        ),
+    }
+
+
 def _route_composer(state: BriefingState) -> str:
     return "aurora_composer" if state.get("persona", "aurora") == "aurora" else "satellite_composer"
+
+
+def _route_after_verifier(state: BriefingState) -> str:
+    if state.get("briefing") is not None:
+        return "end"
+    persona = state.get("persona", "aurora")
+    return "aurora_composer" if persona == "aurora" else "satellite_composer"
 
 
 def build_graph() -> Any:
@@ -213,6 +307,7 @@ def build_graph() -> Any:
     g.add_node("physics", physics_node)
     g.add_node("aurora_composer", aurora_composer_node)
     g.add_node("satellite_composer", satellite_composer_node)
+    g.add_node("verifier", verifier_node)
 
     g.add_edge(START, "supervisor")
     g.add_edge("supervisor", "data_fetcher")
@@ -224,8 +319,17 @@ def build_graph() -> Any:
         _route_composer,
         {"aurora_composer": "aurora_composer", "satellite_composer": "satellite_composer"},
     )
-    g.add_edge("aurora_composer", END)
-    g.add_edge("satellite_composer", END)
+    g.add_edge("aurora_composer", "verifier")
+    g.add_edge("satellite_composer", "verifier")
+    g.add_conditional_edges(
+        "verifier",
+        _route_after_verifier,
+        {
+            "aurora_composer": "aurora_composer",
+            "satellite_composer": "satellite_composer",
+            "end": END,
+        },
+    )
     return g.compile()
 
 

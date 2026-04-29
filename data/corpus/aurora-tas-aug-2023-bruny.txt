@@ -1,0 +1,11 @@
+# date=2023-08-05 location=Bruny Island, TAS kp_at_observation=6 source=https://auroraaustralis.org.au/2023-08-05-bruny/ event_type=aurora_observation persona=aurora
+
+Bruny Island aurora event, August 5 2023. Kp 6 sustained for about
+four hours over the local night. Photographs from Cloudy Bay, Adventure
+Bay, and the Lighthouse track showed pink-red curtain and arc structure
+visible to the naked eye looking south, with photographable colour out
+to 40 degrees above the horizon during peak.
+
+Reference frame: confirms Kp 6 with clear conditions gives reliable
+visible aurora from southern Tasmania. Useful as a Kp 6 calibration
+point distinct from the more common Kp 7+ examples.

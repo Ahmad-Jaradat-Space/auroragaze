@@ -1,0 +1,16 @@
+# date=2025-03-23 kp_peak=7 bz_min=-22 dst_min=-145 source=https://www.swpc.noaa.gov/news/march-2025-storm event_type=storm persona=both
+
+March 2025 G3 storm. Solar cycle 25 ramp continues. CME arrival
+March 23. Kp peaked 7, sustained Kp 6 for ~6 hours. Dst -145 nT.
+Bz minimum -22 nT.
+
+Satellite impact: nominal LEO drag increase reported (~15-25% at
+400 km); minor station-keeping reported by major operators. No
+publicly reported losses.
+
+Aurora visibility: confirmed observations across southern Tasmania
+and parts of southern Victoria; New Zealand reports across both
+islands.
+
+Reference frame: a routine Kp 7 cycle-25 event. Useful as a "modern
+G3" calibration point distinct from the more dramatic May 2024 case.

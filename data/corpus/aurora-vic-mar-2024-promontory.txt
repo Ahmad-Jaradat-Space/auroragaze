@@ -1,0 +1,12 @@
+# date=2024-03-24 location=Wilsons Promontory, VIC kp_at_observation=7 source=https://auroraaustralis.org.au/2024-03-24-promontory/ event_type=aurora_observation persona=aurora
+
+Wilsons Promontory aurora event, March 24 2024. Kp 7 conditions for
+the local-night window. Photographs from Squeaky Beach, Tidal River,
+and Mount Oberon showed naked-eye colour with horizon glow extending
+into northern Victoria observation reports (Bendigo, Castlemaine).
+
+Cloud cover variable; moon phase first quarter, set before midnight.
+
+Reference frame: a Kp 7 calibration point for southern Victoria;
+visible aurora from Wilsons Promontory and southern Gippsland but
+edge-case visibility from inner Melbourne.

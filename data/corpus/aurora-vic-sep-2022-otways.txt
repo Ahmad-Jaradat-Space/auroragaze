@@ -1,0 +1,10 @@
+# date=2022-09-04 location=Otways, VIC kp_at_observation=5 source=https://auroraaustralis.org.au/2022-09-04-otways/ event_type=aurora_observation persona=aurora
+
+Otways aurora observation, September 4 2022. Sub-G3 conditions —
+Kp peaked at 5 with a brief excursion to Kp 6 at 12:30 UTC. Limited
+photographs from Aireys Inlet and Cape Otway lighthouse area showed
+faint horizon glow; no naked-eye visibility from urban Geelong.
+
+Reference frame: a calibration point for Kp 5–6 conditions giving
+photographable but not naked-eye aurora at -38.7°S. Useful boundary
+case in the eval set.

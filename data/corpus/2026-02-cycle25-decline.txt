@@ -1,0 +1,14 @@
+# date=2026-02-08 kp_peak=7 bz_min=-25 dst_min=-160 source=https://www.swpc.noaa.gov/news/february-2026 event_type=storm persona=both
+
+February 2026 G3 storm. Solar cycle 25 in early decline phase but still
+producing strong storms. CME from active region 14112 arrived Feb 8.
+Kp 7, Dst -160 nT, Bz -25 nT minimum. Solar wind speed 720 km/s peak.
+
+Satellite impact: drag delta moderate; routine LEO station-keeping.
+
+Aurora visibility: confirmed sightings across Tasmania and southern
+Victoria; New Zealand South Island. Photographs from Cape Schanck
+and Bruny Island.
+
+Reference frame: a recent G3 reference for cycle-25-decline conditions.
+Useful "current epoch" calibration alongside the 2024 G5 outliers.

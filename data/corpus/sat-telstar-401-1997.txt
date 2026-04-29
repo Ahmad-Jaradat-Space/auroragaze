@@ -1,0 +1,17 @@
+# date=1997-01-11 kp_peak=6 bz_min=-12 source=https://www.swpc.noaa.gov/news/telstar-401 event_type=storm persona=satellite
+
+January 1997 Telstar 401 loss. AT&T's Telstar 401 GEO comms satellite
+suffered a complete failure during a moderate (G2) geomagnetic storm.
+The proximate cause was a power-supply electrical-system failure
+attributed to electrostatic discharge from differential surface charging.
+
+The storm was small in magnitude but the satellite was old and the
+spacecraft's surface materials had degraded over its operational life.
+The loss took down major US east-coast broadcast and data services for
+several days; replacement coverage was patched together from Galaxy
+satellites.
+
+Reference frame: a "small storm, expensive outage" case showing that
+end-of-life satellite vulnerability is the operationally relevant
+factor, not just storm magnitude. Useful for any aging-fleet operator
+brief.

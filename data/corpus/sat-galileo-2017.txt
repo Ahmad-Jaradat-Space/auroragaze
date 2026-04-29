@@ -1,0 +1,15 @@
+# date=2017-09-08 kp_peak=8 bz_min=-31 source=https://www.gsa.europa.eu/news event_type=storm persona=satellite
+
+September 2017 Galileo MEO upset event. During the X9-flare-driven G4
+storm of 7-8 September 2017, multiple Galileo satellites saw single-
+event-upset rates rise sharply. The European GNSS Agency reported a
+brief degradation of the navigation message integrity for ~6 hours
+across several satellites; clock drift rates increased temporarily.
+
+Anomaly mode: solar-particle-event proton flux penetrating to MEO
+(~23 200 km) altitudes, dominantly affecting onboard timing and
+ranging payloads.
+
+Reference frame: a recent MEO calibration case at Kp 8. Useful
+alongside the 1989 GPS-IIA event for "what does a strong storm do to
+GNSS today" briefings.

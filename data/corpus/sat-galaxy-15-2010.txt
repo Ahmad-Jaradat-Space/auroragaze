@@ -1,0 +1,17 @@
+# date=2010-04-05 kp_peak=7 bz_min=-18 source=https://www.swpc.noaa.gov/news/galaxy-15-event event_type=storm persona=satellite
+
+April 2010 Galaxy 15 anomaly. Intelsat's Galaxy 15 GEO comms satellite
+lost contact with ground control on April 5 during a G3 geomagnetic
+storm and continued operating its transponders without commands —
+becoming a "zombie satellite" that drifted east through the GEO arc
+for several months interfering with neighbouring spacecraft.
+
+Anomaly mode: surface charging caused a failure in the Earth-sensor
+and command-receiver path; the spacecraft computer continued executing
+its last-loaded command sequence. Recovery required waiting for the
+batteries to deplete and a controlled reset months later.
+
+Reference frame: the operationally most-cited GEO surface-charging
+event of the 2010s; useful analogue for any GEO operator briefing
+where command-and-control vulnerability under sustained MeV-electron
+flux is a concern.

@@ -1,0 +1,28 @@
+# date=2024-12-01 reference=true source=Akasofu+Chapman+Meng substorm/oval literature event_type=reference persona=aurora
+
+Akasofu auroral-oval boundary table (reference).
+
+The classical empirical mapping from Kp to the equatorward boundary of
+the auroral oval, in geomagnetic latitude (degrees, southern hemisphere
+expressed as positive numbers):
+
+| Kp | equatorward boundary (°S geomagnetic) |
+|----|---------------------------------------|
+| 0  | ~67                                   |
+| 2  | ~64                                   |
+| 4  | ~58                                   |
+| 5  | ~56                                   |
+| 6  | ~54                                   |
+| 7  | ~52                                   |
+| 8  | ~50                                   |
+| 9  | ~48                                   |
+
+Geographic-vs-magnetic-latitude offset for Australian/NZ longitudes:
+add ~2-4° equatorward (geographic) to convert from geomagnetic. NOAA
+SWPC and the Bureau of Meteorology use slightly different conversions;
+AuroraGaze's `assess_visibility` table uses a calibrated lookup against
+recent observation reports rather than this academic table directly.
+
+Reference frame: this is the canonical Akasofu/Chapman/Meng formulation
+that underlies most modern visibility tables. Useful for explanatory
+text in briefings.

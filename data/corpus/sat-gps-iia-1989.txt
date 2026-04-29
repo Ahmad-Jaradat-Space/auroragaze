@@ -1,0 +1,16 @@
+# date=1989-03-13 kp_peak=9 bz_min=-30 source=https://www.swpc.noaa.gov/news/march-1989-gps event_type=storm persona=satellite
+
+March 1989 GPS Block IIA upset event. During the same storm that
+collapsed the Hydro-Québec grid, the GPS Block IIA constellation
+suffered a sharp rise in single-event upset rates. Multiple satellites
+saw memory-bit-flip rates 10× nominal during the storm's main phase.
+No satellites were lost, but positioning solutions degraded over a
+24-hour period; civilian GPS users saw errors of tens of metres.
+
+Anomaly mode: high-energy proton flux at MEO altitudes (~20 200 km),
+particularly during the storm-time particle-injection phase. Block-IIA
+hardening was post-Vela but pre-Block-IIR; ECC and watchdog timers
+contained the upsets but did not eliminate the positioning errors.
+
+Reference frame: the canonical MEO/GNSS upset analogue. Useful for any
+operator brief on GPS, Galileo, GLONASS, or BeiDou under G4+ conditions.

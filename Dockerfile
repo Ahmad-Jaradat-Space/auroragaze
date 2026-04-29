@@ -40,7 +40,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     HF_HOME=/app/.cache/huggingface \
     SENTENCE_TRANSFORMERS_HOME=/app/.cache/st \
-    USE_RERANKER=0
+    USE_RERANKER=1
 
 WORKDIR /app
 

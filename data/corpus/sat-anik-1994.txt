@@ -1,0 +1,16 @@
+# date=1994-01-20 kp_peak=7 bz_min=-15 source=https://www.swpc.noaa.gov/news/january-1994-anik-event event_type=storm persona=satellite
+
+January 1994 Anik-E1 and Anik-E2 anomalies. A G3 geomagnetic storm
+combined with sustained energetic-electron flux drove differential
+charging on Telesat Canada's Anik-E1 (lost momentum-wheel control on
+20 January) and Anik-E2 (lost both primary and backup attitude-control
+units within hours, knocking out CBC and other Canadian broadcasts for
+several months while ground-control workarounds were developed).
+
+Anomaly mode: deep-dielectric charging on insulating panels followed
+by arc discharge into avionics. Both buses were old (launched 1991/
+1991) and the differential-charging hardening was below modern spec.
+
+Reference frame: the canonical case for "sustained MeV-electron flux
+during a moderate storm caused two GEO satellite outages." Useful
+analogue for any GEO operator brief during multi-day storm conditions.

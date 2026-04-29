@@ -1,0 +1,17 @@
+# date=2024-05-12 location=Fleurieu Peninsula, SA kp_at_observation=8 source=https://auroraaustralis.org.au/2024-05-12-fleurieu/ event_type=aurora_observation persona=aurora
+
+Fleurieu Peninsula aurora event, May 12 2024 (second night of the
+Gannon storm). Confirmed photographs from Cape Jervis, Yankalilla,
+Victor Harbor, Goolwa, and Hindmarsh Valley. Time window 11:00 to
+14:00 UTC. Local 20:30 to 23:30 ACST.
+
+The display included naked-eye pillars and arcs to the south, with
+strong red-pink colour and overhead structure from darker sites
+toward Cape Jervis. Visibility was rated as "exceptional" by local
+observers — comparable to Hobart's typical Kp 8 displays.
+
+Cloud cover was largely clear; moonset before peak.
+
+Reference frame: a strong calibration point at -35.5°S during a Kp 8
+sustained storm. Useful comparison case alongside Tasmanian and
+Victorian reports for the same event.
