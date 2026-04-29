@@ -46,6 +46,8 @@
     align-items: baseline;
     border-bottom: 1px solid var(--line);
   }
+  .brand-lockup { display: inline-flex; align-items: center; gap: 12px; }
+  .brand-mark { width: 36px; height: auto; display: block; flex-shrink: 0; }
   .brand { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
   .brand-sub { color: var(--muted); font-size: 14px; margin-left: 12px; }
   .toggle {
@@ -223,7 +225,8 @@
 <body>
 
 <header>
-  <div>
+  <div class="brand-lockup">
+    <img class="brand-mark" src="auroragaze-mark.svg" alt="" aria-hidden="true">
     <span class="brand">AuroraGaze</span>
     <span class="brand-sub">live solar-wind briefings</span>
   </div>
