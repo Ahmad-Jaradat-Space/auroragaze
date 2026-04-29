@@ -220,6 +220,77 @@
 
   .hidden { display: none !important; }
 
+  /* Tooltips — accessible, hover on desktop, tap on mobile. */
+  .tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted currentColor;
+    outline: none;
+  }
+  .tip:focus-visible { outline: 2px solid var(--aurora-2); outline-offset: 2px; border-radius: 3px; }
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: white;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 12.5px;
+    font-weight: 400;
+    font-family: 'Inter', system-ui, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: 1.5;
+    width: 280px;
+    max-width: calc(100vw - 40px);
+    white-space: normal;
+    box-shadow: 0 4px 16px rgba(26,26,46,0.12), 0 1px 3px rgba(26,26,46,0.06);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+  .tip::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: white;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.16s ease;
+  }
+  .tip:hover::after, .tip:focus::after, .tip.shown::after,
+  .tip:hover::before, .tip:focus::before, .tip.shown::before {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .tip:hover::after, .tip:focus::after, .tip.shown::after {
+    transform: translateX(-50%) translateY(0);
+  }
+  .tip-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px;
+    margin-left: 4px; vertical-align: middle;
+    border-radius: 50%; background: var(--line); color: var(--muted);
+    font-size: 9px; font-weight: 600; cursor: help;
+    border: 0;
+  }
+  .tip-icon:hover { background: var(--aurora-1); color: var(--aurora-ink); }
+  .satellite-mode .tip-icon:hover { background: var(--sky-1); color: var(--sky-ink); }
+  /* Inside the briefing card, the dotted underline blends with the gradient bg */
+  .briefing .tip { border-bottom-color: rgba(0,0,0,0.25); }
+  /* Tooltips that anchor near the right edge — flip to the left */
+  .tip.tip-right::after { left: auto; right: 0; transform: translateX(0) translateY(4px); }
+  .tip.tip-right:hover::after, .tip.tip-right:focus::after, .tip.tip-right.shown::after { transform: translateX(0) translateY(0); }
+  .tip.tip-right::before { left: auto; right: 12px; transform: none; }
+
   footer { padding: 24px 40px; color: var(--muted); font-size: 13px; text-align: center; border-top: 1px solid var(--line); }
   footer a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); }
 </style>
@@ -233,34 +304,34 @@
     <span class="brand-sub">live solar-wind briefings</span>
   </div>
   <div class="toggle" id="persona-toggle">
-    <button class="active aurora" data-mode="aurora">Aurora</button>
-    <button data-mode="satellite">Satellite</button>
+    <button class="active aurora" data-mode="aurora" title="Aurora chaser mode — where, when, facing where, for southern Australia and New Zealand.">Aurora</button>
+    <button data-mode="satellite" title="Satellite operator mode — storm impact on your fleet (LEO drag, GEO surface charging, recommended actions).">Satellite</button>
   </div>
 </header>
 
 <main id="app">
 
   <div class="imagery">
-    <div class="img-card"><div class="frame"><img id="img-sun" alt="Sun in EUV 193Å (SDO)" /></div><div class="cap"><strong>Sun</strong><span>SDO AIA 193 Å</span></div></div>
-    <div class="img-card"><div class="frame"><img id="img-corona" alt="Coronagraph (LASCO C3)" /></div><div class="cap"><strong>Corona</strong><span>LASCO C3</span></div></div>
-    <div class="img-card"><div class="frame"><img id="img-oval" alt="Southern auroral oval (NOAA OVATION)" /></div><div class="cap"><strong>Southern oval</strong><span>NOAA OVATION</span></div></div>
+    <div class="img-card"><div class="frame"><img id="img-sun" alt="Sun in EUV 193Å (SDO)" /></div><div class="cap"><strong><span class="tip" tabindex="0" data-tip="Live image of the Sun in the 193 Ångström extreme ultraviolet band, from NASA's Solar Dynamics Observatory. Bright loops are active regions; dark patches are coronal holes that send out fast solar-wind streams.">Sun</span></strong><span>SDO AIA 193 Å</span></div></div>
+    <div class="img-card"><div class="frame"><img id="img-corona" alt="Coronagraph (LASCO C3)" /></div><div class="cap"><strong><span class="tip" tabindex="0" data-tip="LASCO C3 coronagraph: the Sun's bright disk is blocked so the much fainter corona becomes visible. Coronal mass ejections (CMEs) — clouds of plasma heading toward Earth — show up here first.">Corona</span></strong><span>LASCO C3</span></div></div>
+    <div class="img-card"><div class="frame"><img id="img-oval" alt="Southern auroral oval (NOAA OVATION)" /></div><div class="cap"><strong><span class="tip tip-right" tabindex="0" data-tip="NOAA OVATION near-real-time forecast of the southern auroral oval — the ring around the magnetic south pole where aurora is currently most likely. The brighter the oval, the stronger the activity.">Southern oval</span></strong><span>NOAA OVATION</span></div></div>
   </div>
 
   <div class="grid">
     <div class="card">
-      <div class="label">Solar wind (DSCOVR)</div>
-      <div class="value" id="sw-bz">—</div>
+      <div class="label">Solar wind (<span class="tip" tabindex="0" data-tip="DSCOVR is NOAA's spacecraft at Lagrange point L1, about 1.5 million km upstream of Earth. It measures the solar wind ~30–60 minutes before it reaches us.">DSCOVR</span>)</div>
+      <div class="value"><span class="tip" tabindex="0" data-tip="Bz: the north-south part of the magnetic field carried by the solar wind, measured in nanotesla (nT). Negative = southward; that's when energy can couple into Earth's magnetosphere and trigger storms.">Bz</span> <span id="sw-bz">—</span></div>
       <div class="sub" id="sw-extra">—</div>
       <div class="stamp" id="sw-time">—</div>
     </div>
     <div class="card">
-      <div class="label">Kp index</div>
+      <div class="label"><span class="tip" tabindex="0" data-tip="Kp: the planetary K-index. Quasi-logarithmic 0–9 measure of geomagnetic activity, sampled every 3 hours. NOAA G-scale: Kp 5 = G1 (minor) → Kp 9 = G5 (extreme).">Kp index</span></div>
       <div class="value" id="kp-val">—</div>
       <div class="sub" id="kp-cat">—</div>
       <div class="stamp" id="kp-time">—</div>
     </div>
     <div class="card">
-      <div class="label">Updated</div>
+      <div class="label tip-right">Updated</div>
       <div class="value" id="age">—</div>
       <div class="sub">refreshes every 5 minutes</div>
       <div class="stamp" id="now-stamp">—</div>
@@ -268,7 +339,7 @@
   </div>
 
   <div class="panel" id="aurora-panel">
-    <h2>Where can I see the aurora tonight?</h2>
+    <h2>Where can I see the aurora tonight? <button class="tip-icon tip" tabindex="0" data-tip="Pick a viewing location from the dropdown. AuroraGaze takes the current Kp index and your latitude, computes whether the auroral oval reaches you tonight, and points to a nearby dark-sky site." aria-label="Help">?</button></h2>
     <div class="row">
       <select id="city-select"></select>
       <input class="input hidden" id="lat" placeholder="lat" value="-42.88" style="max-width:110px" />
@@ -279,7 +350,7 @@
   </div>
 
   <div class="panel hidden" id="satellite-panel">
-    <h2>Brief my fleet</h2>
+    <h2>Brief my fleet <button class="tip-icon tip" tabindex="0" data-tip="A 'fleet' is a list of satellites with orbit class, altitude and mission. AuroraGaze runs the same physics tools as the aurora persona but routes them to drag (LEO) and surface-charging (GEO/MEO) calculations, then writes per-asset recommendations." aria-label="Help">?</button></h2>
     <div class="row">
       <select id="fleet-select"></select>
       <button class="btn btn-satellite" id="brief-satellite">Get briefing →</button>
@@ -288,7 +359,7 @@
   </div>
 
   <div class="panel">
-    <h2>Agent trace</h2>
+    <h2>Agent trace <button class="tip-icon tip" tabindex="0" data-tip="Live view of the multi-agent system at work. Each line is one node of the LangGraph: supervisor, data_fetcher (NOAA), retrieval (RAG over the event corpus), physics (oval boundary or fleet drag), and composer (writes the briefing)." aria-label="Help">?</button></h2>
     <div class="trace" id="trace">
       <span style="color:var(--muted)">No briefing yet — pick a location and click <em>Get briefing</em>.</span>
     </div>
@@ -434,10 +505,13 @@ async function loadSnapshot() {
     const d = await r.json();
     const sw = d.solar_wind, kp = d.kp;
     $("sw-bz").textContent = sw.bz.toFixed(1) + " nT";
-    $("sw-extra").textContent = `v ${sw.speed_kms.toFixed(0)} km/s · n ${sw.density_cm3.toFixed(1)} cm⁻³`;
+    $("sw-extra").innerHTML =
+      `<span class="tip" tabindex="0" data-tip="Solar-wind bulk speed in kilometres per second. Quiet ≈ 350 km/s; storm-driven wind exceeds 600 km/s and can pass 1000 km/s in extreme events.">v</span> ${sw.speed_kms.toFixed(0)} km/s · `
+      + `<span class="tip" tabindex="0" data-tip="Solar-wind proton density: protons per cubic centimetre. Typical 5–10; storm-time can exceed 30; CME passages spike higher.">n</span> ${sw.density_cm3.toFixed(1)} cm⁻³`;
     $("sw-time").textContent = sw.timestamp;
     $("kp-val").textContent = kp.kp.toFixed(1);
-    $("kp-cat").textContent = gscale(kp.kp);
+    const cat = gscale(kp.kp);
+    $("kp-cat").innerHTML = `<span class="tip" tabindex="0" data-tip="NOAA's storm category derived from Kp. Quiet (Kp&lt;5) → no storm. G1 minor → G5 extreme. Read like a hurricane scale.">${cat}</span>`;
     $("kp-time").textContent = kp.timestamp;
     $("age").textContent = fmtAge(sw.timestamp);
     $("now-stamp").textContent = new Date().toISOString().slice(0, 16) + "Z";
@@ -546,13 +620,21 @@ function streamSSE(url, body, onStep, onBriefing) {
   });
 }
 
+const VISIBILITY_TIP = {
+  likely:   "Likely: aurora visible to the naked eye from a dark site looking south. Worth driving for.",
+  possible: "Possible: faint glow on the south horizon. Photographable with a long exposure; naked-eye is borderline.",
+  unlikely: "Unlikely: too quiet, or the auroral oval is too far south, for visible aurora at this latitude.",
+};
+
 function renderAurora(b) {
   const v = b.visibility || {};
   const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
+  const lvl = v.level || "";
+  const lvlTip = VISIBILITY_TIP[lvl] || "";
   return `
     <div class="briefing">
       <div class="summary">${b.summary || ""}</div>
-      <h3>Headline <span class="level ${v.level || ''}">${v.level || ''}</span></h3>
+      <h3>Headline <span class="level ${lvl} tip" tabindex="0" data-tip="${lvlTip}">${lvl}</span></h3>
       <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
       <h3>Detail</h3>
       <div class="body">${b.body}</div>
@@ -627,6 +709,24 @@ $("brief-satellite").addEventListener("click", () => {
     }
   } else { fleet = f.fleet; }
   start("/api/brief/satellite", { fleet_label: f.label, fleet }, renderSatellite, null);
+});
+
+// --- tooltips: tap-to-toggle on touch devices, keyboard Esc to dismiss ---
+const isTouch = matchMedia("(hover: none)").matches;
+document.addEventListener("click", (e) => {
+  const tip = e.target.closest(".tip");
+  if (!tip) {
+    document.querySelectorAll(".tip.shown").forEach(t => t.classList.remove("shown"));
+    return;
+  }
+  if (isTouch) {
+    document.querySelectorAll(".tip.shown").forEach(t => { if (t !== tip) t.classList.remove("shown"); });
+    tip.classList.toggle("shown");
+    e.stopPropagation();
+  }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.querySelectorAll(".tip.shown").forEach(t => t.classList.remove("shown"));
 });
 
 // init
