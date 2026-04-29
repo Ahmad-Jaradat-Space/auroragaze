@@ -60,7 +60,7 @@ Live imagery from NASA SDO and NOAA SWPC sits above the data widgets so the syst
   ┌──────────────┐               ┌──────────────────────┐
   │ data_fetcher │               │      retrieval       │
   │ 4 NOAA tools │               │ dense + BM25 → RRF   │
-  └──────┬───────┘               │  → reranker → top-5  │
+  └──────┬───────┘               │  → top-5             │
          │                       └──────────┬───────────┘
          └──────────────┬───────────────────┘
                         ▼
@@ -91,24 +91,24 @@ Seven nodes, **one LLM call** per briefing (two if the verifier rejects and retr
 
 - **DeepSeek V3** (`deepseek-chat`) via `langchain-deepseek` — provider-agnostic factory, swap with one env var.
 - **LangGraph** — seven-node graph, parallel `data_fetcher` ‖ `retrieval`, conditional persona routing, verifier with one-retry.
-- **Hybrid retrieval** — ChromaDB + `bge-small-en-v1.5` dense + `rank-bm25` lexical, fused via Reciprocal Rank Fusion (k=60), then `bge-reranker-v2-m3` cross-encoder for top-5 precision. Multi-query expansion for satellite (per orbit class).
+- **Hybrid retrieval** — ChromaDB + `bge-small-en-v1.5` dense + `rank-bm25` lexical, fused via Reciprocal Rank Fusion (k=60). Multi-query expansion for satellite (per orbit class). The cross-encoder reranker was tested and dropped — on a 35-doc curated corpus it added image bloat and a 4 GB RAM requirement without earning eval points.
 - **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend with public-facing tooltips and live SDO/LASCO/OVATION imagery.
 - **MCP server** (FastMCP) exposing six primitives to Claude Desktop and any MCP client.
-- **Docker** multi-stage build, **Fly.io** Sydney region (4 GB shared-cpu-2x, auto-stop on idle).
+- **Docker** multi-stage build, **Fly.io** Sydney region (2 GB shared-cpu-2x, one machine always warm).
 
 ---
 
 ## Eval
 
-40-event golden set, 21 aurora and 19 satellite, hand-curated against NOAA SWPC archives and `auroraaustralis.org.au` reports. Latest run on `main` (v1.3):
+40-event golden set, 20 aurora and 19 satellite, hand-curated against NOAA SWPC archives and `auroraaustralis.org.au` reports. Latest run on `main`:
 
 | | cited | grounded | correct |
 |---|---|---|---|
-| aurora (n=21) | 1.00 | **1.00** | 0.90 |
-| satellite (n=19) | 1.00 | 0.89 | **0.95** |
-| **overall (n=40)** | **1.00** | **0.95** | **0.93** |
+| aurora (n=20) | 1.00 | **1.00** | 0.95 |
+| satellite (n=19) | 1.00 | **1.00** | **1.00** |
+| **overall (n=40)** | **0.98** | **0.98** | **0.95** |
 
-**Overall precision 0.958** — CI gate at 0.80, calibration in [`eval/calibration.md`](eval/calibration.md). `grounded` is checked by the same deterministic verifier that runs in production (every number in the briefing must trace to a tool output or a corpus chunk within ±5% relative or ±0.5 absolute, sign-insensitive). `cited` and `correct` use deterministic checks combined with an LLM judge cross-vote.
+**Overall precision 0.967** — CI gate at 0.80, calibration in [`eval/calibration.md`](eval/calibration.md). `grounded` is checked by the same deterministic verifier that runs in production (every number in the briefing must trace to a tool output or a corpus chunk within ±5% relative or ±0.5 absolute, sign-insensitive). `cited` and `correct` use deterministic checks combined with an LLM judge cross-vote.
 
 Reproduce locally:
 
