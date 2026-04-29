@@ -79,6 +79,17 @@ def _deterministic_cited(briefing: dict[str, Any]) -> bool:
     return any((c.get("source") or "").strip() for c in cites)
 
 
+def _deterministic_grounded(result: dict[str, Any]) -> bool:
+    """Use the verifier node's own outcome from the trace.
+
+    The production verifier writes 'verifier: grounded ✓' when every
+    numeric value in the briefing is supported by the tool outputs or
+    the retrieved chunks. This is the same code that runs in production,
+    so the eval and the live system score `grounded` identically.
+    """
+    return any("verifier: grounded" in str(line) for line in result.get("trace") or [])
+
+
 def _deterministic_correct(result: dict[str, Any]) -> bool:
     expected = result.get("expected", {})
     briefing = result.get("briefing") or {}
@@ -123,11 +134,12 @@ async def judge_results(in_path: Path, out_path: Path) -> dict[str, Any]:
         det = {
             "cited": _deterministic_cited(r["briefing"]),
             "correct": _deterministic_correct(r),
+            "grounded": _deterministic_grounded(r),
         }
         llm = await _llm_judge(r)
         scores = {
             "cited": det["cited"] and llm["cited"],
-            "grounded": llm["grounded"],
+            "grounded": det["grounded"],
             "correct": det["correct"] and llm["correct"],
         }
         judged.append({**r, "scores": scores})

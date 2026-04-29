@@ -333,7 +333,7 @@
     <div class="card">
       <div class="label tip-right">Updated</div>
       <div class="value" id="age">—</div>
-      <div class="sub">refreshes every 5 minutes</div>
+      <div class="sub">refreshes every hour</div>
       <div class="stamp" id="now-stamp">—</div>
     </div>
   </div>
@@ -751,8 +751,8 @@ document.addEventListener("keydown", (e) => {
 // init
 loadSnapshot();
 refreshImagery();
-setInterval(loadSnapshot, 5 * 60 * 1000);
-setInterval(refreshImagery, 5 * 60 * 1000);
+setInterval(loadSnapshot, 60 * 60 * 1000);
+setInterval(refreshImagery, 60 * 60 * 1000);
 // trigger initial city/fleet selection (sets default lat/lon, hides custom)
 citySel.dispatchEvent(new Event("change"));
 fleetSel.dispatchEvent(new Event("change"));

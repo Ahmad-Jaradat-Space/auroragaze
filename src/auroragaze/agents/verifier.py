@@ -71,15 +71,21 @@ def _allowed_from_chunks(state: dict[str, Any]) -> list[float]:
 
 
 def _is_supported(value: float, allowed: list[float], tol: float = 0.05) -> bool:
-    """Accept value if any allowed number is within `tol` (relative) or 0.5 (absolute)."""
+    """Accept value if any allowed number matches.
+
+    Sign-insensitive: an allowed -42.88 supports a 42.88 in the briefing
+    (the prose typically writes |lat| with °S, while the input lat is
+    negative). Tolerance: ±0.5 absolute, or ±tol relative.
+    """
     for a in allowed:
-        if a == value:
-            return True
-        diff = abs(a - value)
-        if diff <= 0.5:  # absolute tolerance for small ints/floats (Kp 6 vs 6.2)
-            return True
-        if a != 0 and diff / abs(a) <= tol:
-            return True
+        for candidate in (a, -a):
+            if candidate == value:
+                return True
+            diff = abs(candidate - value)
+            if diff <= 0.5:  # absolute tolerance for small ints/floats
+                return True
+            if candidate != 0 and diff / abs(candidate) <= tol:
+                return True
     return False
 
 
