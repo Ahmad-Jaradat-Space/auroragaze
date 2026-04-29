@@ -36,7 +36,7 @@ Same physics. Two translations to action. **One product.**
 
 ## What it is
 
-AuroraGaze polls live solar-wind data at L1 (NOAA DSCOVR), runs it through a six-node multi-agent system, and produces grounded briefings with citations. Open the live demo, pick a city or a fleet, click *Get briefing*, and watch the agent trace stream live as it works.
+AuroraGaze polls live solar-wind data at L1 (NOAA DSCOVR), runs it through a multi-agent system, and produces grounded briefings with citations. For aurora chasers the briefing is **scoped to TONIGHT's local viewing window** — evening, astronomical night, and dawn — using NOAA's 3-day Kp forecast and a pure-Python solar-position computation, not "right now." Open the live demo, pick a city or a fleet, click *Get briefing*, and watch the agent trace stream live as it works.
 
 ![agent trace streaming](docs/img/agent-trace.png)
 
@@ -91,8 +91,9 @@ Seven nodes, **one LLM call** per briefing (two if the verifier rejects and retr
 
 - **DeepSeek V3** (`deepseek-chat`) via `langchain-deepseek` — provider-agnostic factory, swap with one env var.
 - **LangGraph** — seven-node graph, parallel `data_fetcher` ‖ `retrieval`, conditional persona routing, verifier with one-retry.
+- **Time-aware visibility** — `tools/night.py` runs the NOAA solar-position algorithm (Julian day → declination → hour angle) in pure Python to compute sunset / civil dusk / astronomical night / sunrise per latitude+longitude+date. `tools/kp_forecast.py` reads NOAA SWPC's 3-hour Kp forecast and `physics.visibility_for_window` picks the peak Kp inside local night, returning a per-sub-window verdict (evening / night / dawn).
 - **Hybrid retrieval** — ChromaDB + `bge-small-en-v1.5` dense + `rank-bm25` lexical, fused via Reciprocal Rank Fusion (k=60). Multi-query expansion for satellite (per orbit class). The cross-encoder reranker was tested and dropped — on a 35-doc curated corpus it added image bloat and a 4 GB RAM requirement without earning eval points.
-- **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend with public-facing tooltips and live SDO/LASCO/OVATION imagery.
+- **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend with public-facing tooltips, live SDO/LASCO/OVATION imagery, and a three-segment evening/night/dawn viewing-window bar.
 - **MCP server** (FastMCP) exposing six primitives to Claude Desktop and any MCP client.
 - **Docker** multi-stage build, **Fly.io** Sydney region (2 GB shared-cpu-2x, one machine always warm).
 
@@ -185,7 +186,7 @@ The five load-bearing choices, each as its own ADR:
 
 ## Out of scope
 
-- Forecasting. AuroraGaze monitors and translates; it does not forecast.
+- Forecasting geomagnetic activity. AuroraGaze *consumes* NOAA SWPC's 3-day Kp forecast and translates it; it does not produce its own. Solar geometry (sunset, twilight) is the only nontrivial math we run.
 - Northern-hemisphere aurora.
 - Vendor-specific safe-mode procedures.
 - Authoritative regulatory advice. Briefings are decision-support.
