@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="frontend/auroragaze-mark.svg" width="140" alt="AuroraGaze logo">
+</p>
+
 # AuroraGaze
 
 > Live solar-wind briefings for southern-hemisphere aurora chasers and satellite operators. Real DSCOVR data, multi-agent reasoning, grounded citations.
@@ -185,3 +189,14 @@ The five load-bearing choices, each as its own ADR:
 Geodesy and space-weather sit close to each other — both watch the same solar wind, both need it translated into action. The February 2022 Starlink loss is the case where storm-time density forecasts existed but weren't translated into ops actions in time. Australia has one of the world's most active southern-hemisphere aurora communities, but operational tools are northern-hemisphere-centric or bare indices. Same physics, two translations to action — one product.
 
 Sources: NOAA SWPC, DSCOVR, GOES, Kyoto World Data Center, NASA SDO, `auroraaustralis.org.au`, Bureau of Meteorology Space Weather Services.
+
+---
+
+## Brand assets
+
+| Asset | Path | Use |
+|---|---|---|
+| Header lockup | `frontend/auroragaze-mark.svg` | site header, README |
+| Favicon | `frontend/auroragaze-favicon.svg` | browser tab |
+| Social preview | `docs/img/auroragaze-social.png` | upload via repo Settings → Social preview |
+| Avatar | `docs/img/auroragaze-avatar.png` | upload via GitHub profile / org settings |
