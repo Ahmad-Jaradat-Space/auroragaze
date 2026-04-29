@@ -57,12 +57,12 @@ Live imagery from NASA SDO and NOAA SWPC sits above the data widgets so the syst
                         │
         ┌───────────────┴───────────────┐
         ▼ (parallel)                    ▼ (parallel)
-  ┌──────────────┐               ┌──────────────┐
-  │ data_fetcher │               │  retrieval   │
-  │ 4 NOAA tools │               │ dense+rerank │
-  └──────┬───────┘               └──────┬───────┘
-         │                              │
-         └──────────────┬───────────────┘
+  ┌──────────────┐               ┌──────────────────────┐
+  │ data_fetcher │               │      retrieval       │
+  │ 4 NOAA tools │               │ dense + BM25 → RRF   │
+  └──────┬───────┘               │  → reranker → top-5  │
+         │                       └──────────┬───────────┘
+         └──────────────┬───────────────────┘
                         ▼
                  ┌─────────────┐
                  │   physics   │  pure functions
@@ -74,35 +74,43 @@ Live imagery from NASA SDO and NOAA SWPC sits above the data widgets so the syst
        ┌─────────────────┐  ┌──────────────────────┐
        │ aurora_composer │  │ satellite_composer   │
        │   LLM call      │  │     LLM call         │
-       └─────────────────┘  └──────────────────────┘
+       └────────┬────────┘  └──────────┬───────────┘
+                └──────────┬───────────┘
+                           ▼
+                  ┌─────────────────┐
+                  │    verifier     │  every number must trace
+                  │ pure-Python check│ to a tool or chunk
+                  └────────┬────────┘
+                           ▼ (one retry on rejection)
+                          END
 ```
 
-Six nodes, **one LLM call** per briefing. The intelligence lives in the retrieval and physics layers, not in token sampling. The composer's only job is to write a cited paragraph from typed state — it never invents a number. ADRs in [`docs/decisions/`](docs/decisions/) carry the full rationale.
+Seven nodes, **one LLM call** per briefing (two if the verifier rejects and retries — happens on ~10% of runs). The intelligence lives in the retrieval and physics layers, not in token sampling. The composer's only job is to write a cited paragraph from typed state — it never invents a number, and the verifier enforces this deterministically. ADRs in [`docs/decisions/`](docs/decisions/) carry the full rationale.
 
 ### Stack
 
 - **DeepSeek V3** (`deepseek-chat`) via `langchain-deepseek` — provider-agnostic factory, swap with one env var.
-- **LangGraph** — six-node graph, parallel `data_fetcher` ‖ `retrieval`, conditional persona routing.
-- **ChromaDB + bge-small-en-v1.5** dense retrieval, **bge-reranker-v2-m3** cross-encoder for top-5 precision.
-- **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend.
+- **LangGraph** — seven-node graph, parallel `data_fetcher` ‖ `retrieval`, conditional persona routing, verifier with one-retry.
+- **Hybrid retrieval** — ChromaDB + `bge-small-en-v1.5` dense + `rank-bm25` lexical, fused via Reciprocal Rank Fusion (k=60), then `bge-reranker-v2-m3` cross-encoder for top-5 precision. Multi-query expansion for satellite (per orbit class).
+- **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend with public-facing tooltips and live SDO/LASCO/OVATION imagery.
 - **MCP server** (FastMCP) exposing six primitives to Claude Desktop and any MCP client.
-- **Docker** multi-stage build, **Fly.io** Sydney region, auto-stop on idle.
+- **Docker** multi-stage build, **Fly.io** Sydney region (4 GB shared-cpu-2x, auto-stop on idle).
 
 ---
 
 ## Eval
 
-20-event golden set, 10 aurora and 10 satellite, hand-curated against NOAA SWPC archives and `auroraaustralis.org.au` reports. Latest run on `main`:
+40-event golden set, 21 aurora and 19 satellite, hand-curated against NOAA SWPC archives and `auroraaustralis.org.au` reports. Latest run on `main` (v1.3):
 
 | | cited | grounded | correct |
 |---|---|---|---|
-| aurora (n=10) | 1.00 | 0.70 | **1.00** |
-| satellite (n=10) | 1.00 | 0.80 | 0.70 |
-| **overall** | **1.00** | **0.75** | **0.85** |
+| aurora (n=21) | 1.00 | **1.00** | 0.90 |
+| satellite (n=19) | 1.00 | 0.89 | **0.95** |
+| **overall (n=40)** | **1.00** | **0.95** | **0.93** |
 
-**Overall precision 0.867** — CI gate at 0.80, calibration in [`eval/calibration.md`](eval/calibration.md).
+**Overall precision 0.958** — CI gate at 0.80, calibration in [`eval/calibration.md`](eval/calibration.md). `grounded` is checked by the same deterministic verifier that runs in production (every number in the briefing must trace to a tool output or a corpus chunk within ±5% relative or ±0.5 absolute, sign-insensitive). `cited` and `correct` use deterministic checks combined with an LLM judge cross-vote.
 
-The judge is hybrid: deterministic checks for `cited` and `correct`, LLM judge for `grounded`. Both must agree where deterministic checks apply. Reproduce locally:
+Reproduce locally:
 
 ```
 python eval/run_eval.py --out eval/results.json
