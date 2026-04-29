@@ -196,7 +196,7 @@ Sources: NOAA SWPC, DSCOVR, GOES, Kyoto World Data Center, NASA SDO, `auroraaust
 
 **Ahmad Jaradat** — PhD scientist with a background in geodesy and space weather, building production-grade AI systems. AuroraGaze applies that background end-to-end: real solar-wind data, a multi-agent LLM system, grounded physics, and a UI for both technical and non-technical readers.
 
-- LinkedIn: [linkedin.com/in/ahmad-jaradat](https://www.linkedin.com/in/ahmad-jaradat/)
+- LinkedIn: [linkedin.com/in/ahmad-jaradat-vlbi](https://www.linkedin.com/in/ahmad-jaradat-vlbi/)
 - GitHub: [@Ahmad-Jaradat-Space](https://github.com/Ahmad-Jaradat-Space)
 - Email: jaradat08@gmail.com
 
