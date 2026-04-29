@@ -22,7 +22,7 @@ _NUM = re.compile(r"(?<![\w.-])(-?\d+(?:\.\d+)?)(?![\w.])")
 _DATE_PATTERNS = [
     re.compile(r"\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b"),  # 2024-05-11
     re.compile(r"\b\d{1,2}[-/]\d{1,2}[-/]\d{4}\b"),  # 11-05-2024
-    re.compile(r"\b(19|20)\d{2}\b"),                 # bare year 2024
+    re.compile(r"\b(19|20)\d{2}\b"),  # bare year 2024
 ]
 
 
@@ -31,6 +31,22 @@ def _extract_numbers(text: str) -> list[float]:
     for p in _DATE_PATTERNS:
         cleaned = p.sub(" ", cleaned)
     return [float(m) for m in _NUM.findall(cleaned)]
+
+
+def _hhmm_to_floats(value: str | None) -> list[float]:
+    """Treat a "HH:MM" local time as supporting both the hour and the minute.
+
+    The composer typically writes things like "around 21:30" or "after 22"
+    or "between 21 and 03". Allowing the components covers most prose."""
+    import contextlib
+
+    if not value:
+        return []
+    out: list[float] = []
+    for p in value.split(":"):
+        with contextlib.suppress(ValueError):
+            out.append(float(p))
+    return out
 
 
 def _allowed_from_tools(state: dict[str, Any]) -> list[float]:
@@ -60,6 +76,23 @@ def _allowed_from_tools(state: dict[str, Any]) -> list[float]:
         out.append(float(state["lat"]))
     if "lon" in state:
         out.append(float(state["lon"]))
+    # Night window times — sunset, twilight, sunrise — feed both HH and MM
+    nw = state.get("night_window")
+    if nw is not None:
+        for attr in (
+            "sunset_local",
+            "civil_dusk_local",
+            "astro_night_start_local",
+            "astro_night_end_local",
+            "civil_dawn_local",
+            "sunrise_local",
+        ):
+            out.extend(_hhmm_to_floats(getattr(nw, attr, None)))
+    # Forecast peak Kp + peak local time
+    vw = state.get("visibility_window")
+    if vw is not None:
+        out.append(float(vw.peak_kp))
+        out.extend(_hhmm_to_floats(vw.peak_local))
     return out
 
 
@@ -91,10 +124,25 @@ def _is_supported(value: float, allowed: list[float], tol: float = 0.05) -> bool
 
 # Unit/category tokens that frequently surface as numbers but should not be flagged.
 _BENIGN_VALUES = {
-    0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0,
-    11.0, 12.0, 13.0, 14.0, 15.0,
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0,
+    11.0,
+    12.0,
+    13.0,
+    14.0,
+    15.0,
     24.0,  # hours in a day
-    100.0, 1000.0,  # round multipliers
+    100.0,
+    1000.0,  # round multipliers
 }
 
 

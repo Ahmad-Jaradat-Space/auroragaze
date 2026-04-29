@@ -213,6 +213,16 @@
   .briefing .citations { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 12.5px; }
   .briefing .citations .src { font-family: 'JetBrains Mono', monospace; }
 
+  .vw-bar { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 6px; margin: 8px 0 6px; }
+  .vw-seg { border-radius: 10px; padding: 10px 12px; cursor: help; transition: transform 0.15s ease; }
+  .vw-seg:hover { transform: translateY(-1px); }
+  .vw-seg .vw-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
+  .vw-seg .vw-level { font-size: 14px; font-weight: 500; margin-top: 3px; }
+  .vw-likely    { background: var(--good-bg);  color: var(--good); }
+  .vw-possible  { background: var(--warn-bg);  color: var(--warn); }
+  .vw-unlikely  { background: var(--bad-bg);   color: var(--bad);  }
+  .vw-meta { font-size: 13px; opacity: 0.85; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+
   .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; vertical-align: middle; }
   .level.likely { background: var(--good-bg); color: var(--good); }
   .level.possible { background: var(--warn-bg); color: var(--warn); }
@@ -1039,6 +1049,24 @@ const VISIBILITY_TIP = {
   unlikely: "Unlikely: too quiet, or the auroral oval is too far south, for visible aurora at this latitude.",
 };
 
+function renderViewingWindow(vw) {
+  if (!vw) return "";
+  const seg = (label, vis, hint) => {
+    const lvl = (vis && vis.level) || "unlikely";
+    return `<div class="vw-seg vw-${lvl}" tabindex="0" title="${hint}"><div class="vw-label">${label}</div><div class="vw-level">${lvl}</div></div>`;
+  };
+  return `
+    <h3>Tonight's window</h3>
+    <div class="vw-bar">
+      ${seg("evening", vw.evening, "Civil dusk → astronomical night")}
+      ${seg("night",   vw.night,   "Astronomical night — best viewing")}
+      ${seg("dawn",    vw.dawn,    "Astronomical end → civil dawn")}
+    </div>
+    <div class="vw-meta">
+      <strong>${vw.summary_window || ""}</strong> · peak forecast Kp <strong>${(vw.peak_kp ?? 0).toFixed(1)}</strong> at <strong>${vw.peak_local || ""}</strong>
+    </div>`;
+}
+
 function renderAurora(b) {
   const v = b.visibility || {};
   const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
@@ -1049,6 +1077,7 @@ function renderAurora(b) {
       <div class="summary">${b.summary || ""}</div>
       <h3>Headline <span class="level ${lvl} tip" tabindex="0" data-tip="${lvlTip}">${lvl}</span></h3>
       <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
+      ${renderViewingWindow(b.viewing_window)}
       <h3>Detail</h3>
       <div class="body">${b.body}</div>
       <div class="meta"><strong>${b.location}</strong> · ${b.when_local}</div>

@@ -7,6 +7,7 @@ Each node is a plain function that returns a partial state update.
 """
 
 import json
+from datetime import UTC, datetime
 from typing import Any
 
 import httpx
@@ -20,13 +21,17 @@ from auroragaze.schemas import (
     AuroraBriefing,
     BriefingState,
     Citation,
+    NightWindow,
     SatelliteBriefing,
     Visibility,
+    VisibilityWindow,
 )
 from auroragaze.tools.dst import get_dst_now
 from auroragaze.tools.fleet import FleetUnit, assess_fleet_impact
 from auroragaze.tools.kp import get_kp_now
-from auroragaze.tools.physics import assess_visibility
+from auroragaze.tools.kp_forecast import forecast_from_current, get_kp_forecast
+from auroragaze.tools.night import local_night
+from auroragaze.tools.physics import assess_visibility, visibility_for_window
 from auroragaze.tools.solar_wind import get_solar_wind
 from auroragaze.tools.xray import get_goes_xray
 
@@ -37,15 +42,30 @@ def _trace(state: BriefingState, line: str) -> list[str]:
 
 def supervisor_node(state: BriefingState) -> dict[str, Any]:
     persona = state.get("persona", "aurora")
+    request_utc = datetime.now(UTC)
+    update: dict[str, Any] = {"request_time_utc": request_utc}
     if persona == "aurora":
         loc = state.get("location_label", f"({state.get('lat')}, {state.get('lon')})")
         query = f"southern hemisphere aurora visibility from {loc} during a geomagnetic storm"
+        # Compute the local night window for the upcoming evening at this location.
+        nw = local_night(
+            lat=state.get("lat", -42.88),
+            lon=state.get("lon", 147.32),
+            request_utc=request_utc,
+            location_label=loc,
+        )
+        update["night_window"] = nw
+        update["query"] = query
+        line = (
+            f"supervisor: persona=aurora location={loc!r} "
+            f"night={nw.astro_night_start_local or nw.sunset_local}→"
+            f"{nw.astro_night_end_local or nw.sunrise_local} ({nw.timezone})"
+        )
     else:
-        query = "satellite operator briefing storm impact drag fleet"
-    return {
-        "query": query,
-        "trace": _trace(state, f"supervisor: persona={persona} query={query!r}"),
-    }
+        update["query"] = "satellite operator briefing storm impact drag fleet"
+        line = f"supervisor: persona=satellite query={update['query']!r}"
+    update["trace"] = _trace(state, line)
+    return update
 
 
 async def data_fetcher_node(state: BriefingState) -> dict[str, Any]:
@@ -62,9 +82,14 @@ async def data_fetcher_node(state: BriefingState) -> dict[str, Any]:
             flare = xray.flare_class
         except Exception:
             flare = "A"
+        try:
+            forecast = await get_kp_forecast(client)
+        except Exception:
+            forecast = forecast_from_current(kp)
     line = (
         f"data_fetcher: Bz={sw.bz:.1f}nT v={sw.speed_kms:.0f}km/s "
         f"Kp={kp.kp:.1f} Dst={dst_val:.0f}nT flare={flare} "
+        f"forecast_bins={len(forecast.bins)} "
         f"[{sw.timestamp.isoformat(timespec='minutes')}]"
     )
     return {
@@ -72,16 +97,17 @@ async def data_fetcher_node(state: BriefingState) -> dict[str, Any]:
         "kp": kp,
         "dst_nt": dst_val,
         "flare_class": flare,
+        "kp_forecast": forecast,
         "trace": _trace(state, line),
     }
 
 
 _ORBIT_QUERY = {
-    "LEO_low":  "atmospheric drag thermospheric density at low LEO {alt}km during geomagnetic storm",
-    "LEO_mid":  "atmospheric drag at LEO {alt}km during geomagnetic storm fleet operations",
+    "LEO_low": "atmospheric drag thermospheric density at low LEO {alt}km during geomagnetic storm",
+    "LEO_mid": "atmospheric drag at LEO {alt}km during geomagnetic storm fleet operations",
     "LEO_high": "high-LEO operations and surface charging during geomagnetic storm",
-    "MEO":      "MEO GNSS single-event upset surface charging during geomagnetic storm",
-    "GEO":      "geosynchronous satellite surface charging deep dielectric storm anomaly",
+    "MEO": "MEO GNSS single-event upset surface charging during geomagnetic storm",
+    "GEO": "geosynchronous satellite surface charging deep dielectric storm anomaly",
 }
 
 
@@ -117,7 +143,8 @@ def retrieval_node(state: BriefingState) -> dict[str, Any]:
         return {
             "chunks": chunks,
             "trace": _trace(
-                state, f"retrieval: {len(chunks)} chunks via {len(_satellite_subqueries(state))} sub-queries ({summary})"
+                state,
+                f"retrieval: {len(chunks)} chunks via {len(_satellite_subqueries(state))} sub-queries ({summary})",
             ),
         }
     query = state.get("query", "")
@@ -135,14 +162,28 @@ def physics_node(state: BriefingState) -> dict[str, Any]:
     if kp is None:
         return {"trace": _trace(state, "physics: skipped (no kp)")}
     if persona == "aurora":
-        v = assess_visibility(
-            lat=state.get("lat", -42.88),
-            lon=state.get("lon", 147.32),
-            kp=kp.kp,
-        )
+        lat = state.get("lat", -42.88)
+        lon = state.get("lon", 147.32)
+        nw: NightWindow | None = state.get("night_window")
+        forecast = state.get("kp_forecast")
+        bins = list(forecast.bins) if forecast else []
+        if nw is not None and bins:
+            vw = visibility_for_window(lat=lat, lon=lon, night=nw, bins=bins)
+            v = vw.night
+            line = (
+                f"physics: night {vw.summary_window}; peak Kp={vw.peak_kp:.1f} "
+                f"@ {vw.peak_local} → {vw.headline_level}"
+            )
+            return {
+                "visibility": v,
+                "visibility_window": vw,
+                "trace": _trace(state, line),
+            }
+        # fallback: single-shot visibility from current Kp
+        v = assess_visibility(lat=lat, lon=lon, kp=kp.kp)
         line = (
             f"physics: oval threshold ~{v.boundary_lat_deg:.1f}°S; "
-            f"viewer {abs(state.get('lat', -42.88)):.1f}°S → {v.level}"
+            f"viewer {abs(lat):.1f}°S → {v.level} (single-shot)"
         )
         return {"visibility": v, "trace": _trace(state, line)}
     fleet_raw = state.get("fleet", [])
@@ -172,18 +213,45 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
     visibility: Visibility = state["visibility"]
     chunks = state.get("chunks", [])
     location = state.get("location_label", f"({state.get('lat')}, {state.get('lon')})")
+    nw: NightWindow | None = state.get("night_window")
+    vw: VisibilityWindow | None = state.get("visibility_window")
     retry_hint = state.get("retry_hint", "")
+
+    night_block = ""
+    if nw is not None:
+        night_block = (
+            f"Night window for tonight at this location ({nw.timezone}):\n"
+            f"  sunset       = {nw.sunset_local}\n"
+            f"  civil dusk   = {nw.civil_dusk_local}\n"
+            f"  astro night  = {nw.astro_night_start_local} → {nw.astro_night_end_local}\n"
+            f"  civil dawn   = {nw.civil_dawn_local}\n"
+            f"  sunrise      = {nw.sunrise_local}\n"
+            f"  request_in_daylight = {nw.is_daylight_now}\n"
+        )
+    window_block = ""
+    if vw is not None:
+        window_block = (
+            "Forecast visibility per sub-window:\n"
+            f"  evening: level={vw.evening.level}\n"
+            f"  night:   level={vw.night.level}  (HEADLINE)\n"
+            f"  dawn:    level={vw.dawn.level}\n"
+            f"  peak forecast Kp = {vw.peak_kp:.2f} at {vw.peak_local}\n"
+            f"  best-time bracket = {vw.summary_window}\n"
+        )
+
     user_msg = (
         f"Location: {location}\n"
-        f"Now: Bz={sw.bz:.1f}nT, v={sw.speed_kms:.0f}km/s, "
+        f"Observed now: Bz={sw.bz:.1f}nT, v={sw.speed_kms:.0f}km/s, "
         f"density={sw.density_cm3:.1f}cm-3, Kp={kp.kp:.1f} "
-        f"(observed {sw.timestamp.isoformat(timespec='minutes')}).\n"
-        f"Computed visibility: level={visibility.level}, "
+        f"({sw.timestamp.isoformat(timespec='minutes')}).\n"
+        f"{night_block}{window_block}"
+        f"Computed visibility (night block): level={visibility.level}, "
         f"oval threshold ~{visibility.boundary_lat_deg:.1f}°S.\n\n"
         f"Reference chunks:\n{_format_chunks(chunks)}\n\n"
-        "Write the AuroraBriefing as JSON matching this schema: "
-        "{summary, location, when_local, visibility:{level,boundary_lat_deg,reasoning,table_source}, "
-        "headline, body, citations:[{source,detail}]}."
+        "Write the AuroraBriefing as JSON matching the AuroraBriefing schema. "
+        "Required fields: summary, location, when_local, visibility, "
+        "viewing_window, headline, body, citations. "
+        "The when_local string must quote the night window's bracket exactly."
         + (f"\n\n{retry_hint}" if retry_hint else "")
     )
     llm = make_llm()
@@ -224,8 +292,7 @@ async def satellite_composer_node(state: BriefingState) -> dict[str, Any]:
         f"Reference chunks:\n{_format_chunks(chunks)}\n\n"
         "Write the SatelliteBriefing as JSON: "
         "{summary, fleet_label, storm_summary, headline, body, per_unit_actions:[...], "
-        "citations:[{source,detail}]}."
-        + (f"\n\n{retry_hint}" if retry_hint else "")
+        "citations:[{source,detail}]}." + (f"\n\n{retry_hint}" if retry_hint else "")
     )
     llm = make_llm()
     structured = llm.with_structured_output(SatelliteBriefing)
