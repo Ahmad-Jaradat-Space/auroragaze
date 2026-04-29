@@ -13,6 +13,7 @@ Reports per-event scores and per-persona aggregate precision.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import re
 from pathlib import Path
@@ -24,26 +25,53 @@ ROOT = Path(__file__).resolve().parent
 
 JUDGE_SYSTEM = """You are a strict eval judge for AuroraGaze briefings.
 
-Given a briefing JSON, the trace of tool calls that produced it, and the
-expected outcome, return a JSON object with three boolean fields:
+You will be given:
+- The briefing JSON.
+- The "allowed numbers" the briefing was built from — observed values
+  (Kp, Bz, speed, density, Dst), the viewer's lat/lon, the computed
+  oval boundary, and the numbers contained in the cited chunks.
+- The expected outcome (visibility level or severity).
+
+Return a JSON object with three boolean fields:
 
 {
-  "cited": true if the briefing's citations list has at least one entry
-           with a non-empty source string,
-  "grounded": true if every numeric value in the briefing body
-              (Kp, Bz, speed, density, drag fraction, oval boundary)
-              appears in the trace or in one of the cited chunks. False
-              if the briefing introduces a number that did not come from
-              a tool or chunk,
+  "cited": true if the citations list has at least one non-empty source.
+  "grounded": true if every numeric value in the briefing prose
+              (summary + headline + body + storm_summary) is either:
+              - an "allowed number" (within ±5% relative or ±0.5 absolute),
+              - a date or year (1989, 2024-05-11 etc.), OR
+              - a generic small number 0–15 used in counts/categories.
+              The number does NOT have to be quoted exactly; rounding to
+              one decimal or to the nearest integer is fine. It only has
+              to be derivable from the allowed list. Otherwise false.
   "correct": true if the predicted visibility level (for aurora) or
-             severity / per-unit action (for satellite) matches the
-             expected outcome
+             severity word (for satellite) matches the expected outcome.
 }
 
-Return only the JSON object, no preamble. Do not add fields. Do not
-explain."""
+Return only the JSON object, no preamble. Do not add fields. Do not explain."""
 
 _NUM_RE = re.compile(r"-?\d+(?:\.\d+)?")
+_TRACE_NUM = re.compile(r"(Bz|v|Kp|Dst|altitude|kp|threshold)=?\s*(-?\d+(?:\.\d+)?)")
+
+
+def _allowed_numbers_for(result: dict[str, Any]) -> list[float]:
+    nums: list[float] = []
+    for line in result.get("trace") or []:
+        for m in _TRACE_NUM.finditer(str(line)):
+            with contextlib.suppress(ValueError):
+                nums.append(float(m.group(2)))
+        # also pick up any standalone numerics in the trace line (oval boundary
+        # appears as "physics: oval threshold ~46.0°S; viewer 42.9°S → likely")
+        for m in _NUM_RE.finditer(str(line)):
+            with contextlib.suppress(ValueError):
+                nums.append(float(m.group(0)))
+    for c in result.get("chunks") or []:
+        text = c.get("text", "") if isinstance(c, dict) else getattr(c, "text", "")
+        for m in _NUM_RE.finditer(text):
+            with contextlib.suppress(ValueError):
+                nums.append(float(m.group(0)))
+    # de-dup, keep sorted for prompt readability
+    return sorted({round(n, 2) for n in nums})
 
 
 def _deterministic_cited(briefing: dict[str, Any]) -> bool:
@@ -65,9 +93,11 @@ def _deterministic_correct(result: dict[str, Any]) -> bool:
 
 async def _llm_judge(result: dict[str, Any]) -> dict[str, bool]:
     llm = make_llm(temperature=0.0)
+    allowed = _allowed_numbers_for(result)
     msg = (
         f"Persona: {result.get('persona')}\n"
         f"Expected: {json.dumps(result.get('expected', {}))}\n"
+        f"Allowed numbers: {allowed}\n"
         f"Trace:\n{chr(10).join(result.get('trace', []))}\n\n"
         f"Briefing:\n{json.dumps(result.get('briefing'), indent=2)}\n"
     )
