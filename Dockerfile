@@ -24,13 +24,13 @@ COPY data/corpus ./data/corpus
 
 RUN pip install -e .
 
-# Pre-warm both the embedding model and the cross-encoder reranker, then
-# ingest the corpus. With CPU-only torch and the slim runtime stage the
-# image stays under Fly's 8 GB unpacked limit; baking the reranker in
-# avoids a 30-90s download on every cold machine start.
-RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; \
-    SentenceTransformer('BAAI/bge-small-en-v1.5'); \
-    CrossEncoder('BAAI/bge-reranker-v2-m3', max_length=512)"
+# Pre-warm only the embedding model (small, ~130 MB) and ingest the
+# corpus. The cross-encoder reranker is OFF in production: hybrid
+# dense + BM25 + RRF gives ~0.92 eval precision without it, which
+# is sufficient for a 35-doc curated corpus and avoids the 4 GB RAM
+# requirement and ~570 MB image bloat.
+RUN python -c "from sentence_transformers import SentenceTransformer; \
+    SentenceTransformer('BAAI/bge-small-en-v1.5')"
 RUN python -c "from auroragaze.retrieval.ingest import ingest_corpus; print('ingested:', ingest_corpus())"
 
 # Strip caches and bytecode that we don't need at runtime.
@@ -45,7 +45,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     HF_HOME=/app/.cache/huggingface \
     SENTENCE_TRANSFORMERS_HOME=/app/.cache/st \
-    USE_RERANKER=1
+    USE_RERANKER=0
 
 WORKDIR /app
 
