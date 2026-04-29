@@ -1,8 +1,11 @@
+import os
 from functools import lru_cache
 from typing import Any
 
 from auroragaze.config import settings
 from auroragaze.schemas import Chunk
+
+USE_RERANKER = os.getenv("USE_RERANKER", "1") != "0"
 
 
 @lru_cache(maxsize=1)
@@ -62,4 +65,6 @@ def rerank(query: str, candidates: list[Chunk], top_k: int = 5) -> list[Chunk]:
 
 def retrieve(query: str, k: int = 5, persona: str | None = None) -> list[Chunk]:
     candidates = dense_search(query=query, k=20, persona=persona)
-    return rerank(query=query, candidates=candidates, top_k=k)
+    if USE_RERANKER:
+        return rerank(query=query, candidates=candidates, top_k=k)
+    return candidates[:k]
