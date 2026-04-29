@@ -220,6 +220,184 @@
 
   .hidden { display: none !important; }
 
+  /* === Agents-talk-to-the-Sun waiting animation ============================ */
+  .scene {
+    position: relative;
+    height: 110px;
+    margin: 0 0 16px;
+    border-radius: 16px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 92% 50%, rgba(255,217,122,0.25), transparent 55%),
+      linear-gradient(180deg, #f6f1ff 0%, #fafaf7 100%);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transition: opacity 0.5s ease;
+    --rocket-x: 80px;
+    --flame: var(--aurora-2);
+  }
+  .satellite-mode .scene { --flame: var(--sky-2); }
+  .scene.faded { opacity: 0.35; }
+  .scene .stars circle { fill: #fff; opacity: 0.85; animation: twinkle 3.5s ease-in-out infinite; }
+  .scene .stars circle:nth-child(2) { animation-delay: 0.6s; }
+  .scene .stars circle:nth-child(3) { animation-delay: 1.4s; }
+  .scene .stars circle:nth-child(4) { animation-delay: 2.0s; }
+  .scene .stars circle:nth-child(5) { animation-delay: 2.6s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.25; }
+    50%      { opacity: 0.95; }
+  }
+
+  .scene .earth {
+    position: absolute; left: 24px; top: 50%;
+    width: 30px; height: 30px;
+    transform: translateY(-50%);
+  }
+  .scene .earth .land { fill: #b9d8a8; }
+  .scene .earth .ocean { fill: #a9d0f5; }
+  .scene .earth .cloud {
+    fill: rgba(255,255,255,0.85);
+    transform-origin: 15px 15px;
+    animation: earth-spin 22s linear infinite;
+  }
+  @keyframes earth-spin {
+    from { transform: rotate(0); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .scene .sun {
+    position: absolute; right: 18px; top: 50%;
+    width: 64px; height: 64px;
+    transform: translateY(-50%);
+  }
+  .scene .sun .corona {
+    fill: #ffe9b3;
+    transform-origin: 32px 32px;
+    animation: sun-pulse 2.4s ease-in-out infinite;
+  }
+  .scene .sun .core { fill: #ffd97a; }
+  @keyframes sun-pulse {
+    0%, 100% { transform: scale(1.0); opacity: 0.85; }
+    50%      { transform: scale(1.10); opacity: 1.00; }
+  }
+  .scene .sun .eye {
+    fill: #b27a00;
+    transition: transform 0.18s cubic-bezier(.2,.8,.2,1);
+    transform-origin: center;
+  }
+  .scene.scene-fetching .sun .eye { animation: sun-wink 0.6s ease-in-out 1.6s; }
+  @keyframes sun-wink {
+    0%, 100% { transform: scaleY(1); }
+    40%, 60% { transform: scaleY(0.05); }
+  }
+
+  .scene .rocket {
+    position: absolute; top: 50%;
+    width: 36px; height: 16px;
+    left: 60px;
+    transform: translate(var(--rocket-x), -50%);
+    transition: transform 0.9s cubic-bezier(.2,.8,.2,1);
+    animation: rocket-bob 2.2s ease-in-out infinite;
+  }
+  .scene .rocket .body { fill: #ffffff; stroke: var(--ink); stroke-width: 1.2; }
+  .scene .rocket .window { fill: var(--aurora-2); }
+  .satellite-mode .scene .rocket .window { fill: var(--sky-2); }
+  .scene .rocket .flame {
+    fill: var(--flame);
+    transform-origin: 6px 8px;
+    animation: flame-flicker 0.18s ease-in-out infinite alternate;
+  }
+  @keyframes rocket-bob {
+    0%, 100% { transform: translate(var(--rocket-x), calc(-50% - 2px)); }
+    50%      { transform: translate(var(--rocket-x), calc(-50% + 2px)); }
+  }
+  @keyframes flame-flicker {
+    from { transform: scaleX(1.0) scaleY(1.0); opacity: 0.9; }
+    to   { transform: scaleX(0.85) scaleY(1.1); opacity: 1.0; }
+  }
+
+  .scene-idle       { --rocket-x: 60px; }
+  .scene-fetching   { --rocket-x: 240px; }
+  .scene-retrieving { --rocket-x: 200px; }
+  .scene-physics    { --rocket-x: 220px; }
+  .scene-composing  { --rocket-x: 200px; }
+  .scene-verified   { --rocket-x: 180px; }
+  .scene-done       { --rocket-x: 60px; }
+
+  .scene .bubble {
+    position: absolute; top: 18px;
+    left: var(--rocket-x);
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.94);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--ink);
+    box-shadow: 0 2px 6px rgba(26,26,46,0.06);
+    transition: left 0.9s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease;
+    white-space: nowrap;
+  }
+  .scene .bubble::after {
+    content: "";
+    position: absolute; bottom: -5px; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(255,255,255,0.94);
+  }
+  .scene-idle .bubble { opacity: 0.7; }
+
+  .scene .formula {
+    position: absolute; top: 20px;
+    left: var(--rocket-x);
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--aurora-ink);
+    opacity: 0;
+    transition: left 0.9s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease;
+  }
+  .scene-physics .formula { opacity: 0.85; }
+
+  .scene .twinkles {
+    position: absolute; right: 30px; top: 50%;
+    width: 80px; height: 60px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .scene-verified .twinkles { opacity: 1; }
+  .scene .twinkles circle {
+    fill: var(--good);
+    animation: pop 1.2s ease-in-out;
+  }
+  .scene .twinkles circle:nth-child(2) { animation-delay: 0.15s; }
+  .scene .twinkles circle:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes pop {
+    0%   { opacity: 0; transform: scale(0.4); }
+    40%  { opacity: 1; transform: scale(1.4); }
+    100% { opacity: 0; transform: scale(1.0); }
+  }
+
+  .scene .caption {
+    position: absolute; bottom: 8px; left: 0; right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .scene .caption strong { color: var(--ink); font-weight: 500; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene .sun .corona,
+    .scene .earth .cloud,
+    .scene .stars circle,
+    .scene .rocket,
+    .scene .rocket .flame { animation: none !important; }
+    .scene .rocket, .scene .bubble, .scene .formula { transition: none !important; }
+  }
+
   /* Tooltips — accessible, hover on desktop, tap on mobile. */
   .tip {
     position: relative;
@@ -359,7 +537,43 @@
   </div>
 
   <div class="panel">
-    <h2>Agent trace <button class="tip-icon tip" tabindex="0" data-tip="Live view of the multi-agent system at work. Each line is one node of the LangGraph: supervisor, data_fetcher (NOAA), retrieval (RAG over the event corpus), physics (oval boundary or fleet drag), and composer (writes the briefing)." aria-label="Help">?</button></h2>
+    <h2>Agent trace <button class="tip-icon tip" tabindex="0" data-tip="Live view of the multi-agent system at work. Each line is one node of the LangGraph: supervisor, data_fetcher (NOAA), retrieval (RAG over the event corpus), physics (oval boundary or fleet drag), composer (writes the briefing), and verifier (checks every number)." aria-label="Help">?</button></h2>
+
+    <div class="scene scene-idle" id="scene" aria-hidden="true">
+      <svg class="stars" viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" style="position:absolute;inset:0">
+        <circle cx="12" cy="22" r="0.6"/>
+        <circle cx="34" cy="14" r="0.5"/>
+        <circle cx="55" cy="78" r="0.55"/>
+        <circle cx="74" cy="22" r="0.45"/>
+        <circle cx="46" cy="40" r="0.4"/>
+      </svg>
+      <svg class="earth" viewBox="0 0 30 30">
+        <circle class="ocean" cx="15" cy="15" r="14"/>
+        <path class="land" d="M5 13 q4 -3 7 0 q3 3 7 1 q4 -1 6 2 q-2 3 -6 3 q-3 1 -7 -1 q-4 -2 -7 -5 z"/>
+        <ellipse class="cloud" cx="22" cy="11" rx="5" ry="1.5"/>
+      </svg>
+      <svg class="sun" viewBox="0 0 64 64">
+        <circle class="corona" cx="32" cy="32" r="28"/>
+        <circle class="core" cx="32" cy="32" r="20"/>
+        <ellipse class="eye" cx="26" cy="30" rx="1.6" ry="2.4"/>
+        <ellipse class="eye" cx="38" cy="30" rx="1.6" ry="2.4"/>
+        <path d="M26 38 q6 4 12 0" fill="none" stroke="#b27a00" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <svg class="rocket" viewBox="0 0 36 16">
+        <path class="flame" d="M0 8 Q4 4 8 8 Q4 12 0 8 Z"/>
+        <path class="body" d="M8 4 L26 4 Q34 4 34 8 Q34 12 26 12 L8 12 Q6 10 6 8 Q6 6 8 4 Z"/>
+        <circle class="window" cx="20" cy="8" r="2.2"/>
+      </svg>
+      <svg class="twinkles" viewBox="0 0 80 60">
+        <circle cx="20" cy="14" r="2"/>
+        <circle cx="56" cy="22" r="2.5"/>
+        <circle cx="38" cy="44" r="1.8"/>
+      </svg>
+      <div class="bubble"><span id="scene-bubble">preparing…</span></div>
+      <div class="formula">Kp × lat → oval</div>
+      <div class="caption" id="scene-caption">idle — pick a city and click <strong>Get briefing</strong></div>
+    </div>
+
     <div class="trace" id="trace">
       <span style="color:var(--muted)">No briefing yet — pick a location and click <em>Get briefing</em>.</span>
     </div>
@@ -687,19 +901,66 @@ function setLockedUI(locked) {
   toggle.querySelectorAll("button").forEach(b => b.disabled = locked);
 }
 
+// --- waiting animation ("agents talk to the Sun") ---
+const SCENE_BY_STEP = {
+  supervisor:    ["scene-idle",        "preparing the team…"],
+  data_fetcher:  ["scene-fetching",    "what's the wind doing at L1?"],
+  retrieval:     ["scene-retrieving",  "any storms like this on file?"],
+  physics:       ["scene-physics",     "doing the maths…"],
+  composer:      ["scene-composing",   "writing it up…"],
+  verifier:      ["scene-verified",    "every number checks out"],
+};
+const SCENE_CLASSES = ["scene-idle","scene-fetching","scene-retrieving","scene-physics","scene-composing","scene-verified","scene-done"];
+
+function setScene(state, bubble, caption) {
+  const s = $("scene");
+  if (!s) return;
+  SCENE_CLASSES.forEach(c => s.classList.remove(c));
+  s.classList.add(state);
+  s.classList.remove("faded");
+  if (bubble !== undefined) $("scene-bubble").textContent = bubble;
+  if (caption !== undefined) $("scene-caption").innerHTML = caption;
+}
+
+function sceneFromTrace(line) {
+  const head = String(line).split(":")[0].trim();
+  const node = head.replace(/^.*?\b(supervisor|data_fetcher|retrieval|physics|composer|verifier)\b.*$/, "$1");
+  const entry = SCENE_BY_STEP[node];
+  if (!entry) return;
+  setScene(entry[0], entry[1], `<strong>${node}</strong> — ${entry[1]}`);
+}
+
+function sceneStart() {
+  setScene("scene-idle", "preparing the team…", "<strong>supervisor</strong> — preparing the team…");
+}
+function sceneFinish() {
+  setScene("scene-done", "got it!", "<strong>done</strong> — briefing ready");
+  // soft fade after a beat so the briefing card takes the eye
+  setTimeout(() => { const s = $("scene"); if (s) s.classList.add("faded"); }, 1200);
+}
+function sceneError(msg) {
+  setScene("scene-idle", "let's try that again", `<strong>error</strong> — ${msg}`);
+}
+
 function start(url, body, render, mapHook) {
   const trace = $("trace");
   trace.innerHTML = "";
   $("briefing-slot").innerHTML = "";
   setLockedUI(true);
+  sceneStart();
   return streamSSE(url, body,
-    (line) => { trace.insertAdjacentHTML("beforeend", `<div class="step">${line}</div>`); },
+    (line) => {
+      trace.insertAdjacentHTML("beforeend", `<div class="step">${line}</div>`);
+      sceneFromTrace(line);
+    },
     (b) => {
       $("briefing-slot").innerHTML = render(b);
       if (mapHook) mapHook(b);
+      sceneFinish();
     }
   ).catch(e => {
     trace.insertAdjacentHTML("beforeend", `<div class="step" style="color:var(--bad)">error: ${e.message}</div>`);
+    sceneError(e.message);
   }).finally(() => setLockedUI(false));
 }
 
