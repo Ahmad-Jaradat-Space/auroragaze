@@ -1078,24 +1078,53 @@ function clearOverlays() {
   if (bandLayer) { bandLayer.remove(); bandLayer = null; }
   if (gazeMarker) { gazeMarker.remove(); gazeMarker = null; }
   if (gazeLine) { gazeLine.remove(); gazeLine = null; }
-  if (radiusCircle) { radiusCircle.remove(); radiusCircle = null; }
+  // radiusCircle is preserved across briefings — it tracks the slider live.
   for (const m of spotMarkers) m.remove();
   spotMarkers = [];
 }
 
+function currentRadiusKm() {
+  return Math.max(5, Math.min(300, parseInt($("radius") && $("radius").value) || 50));
+}
+
+function currentBaseLatLon() {
+  const idx = parseInt(citySel.value);
+  const c = CITIES[idx];
+  const lat = c.lat !== null ? c.lat : parseFloat($("lat").value);
+  const lon = c.lon !== null ? c.lon : parseFloat($("lon").value);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  return { lat, lon };
+}
+
+function updateRadiusCircle(lat, lon, km) {
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+  const radiusM = Math.max(5, Math.min(300, km)) * 1000;
+  const tip = `${Math.round(km)} km drive radius`;
+  if (radiusCircle) {
+    radiusCircle.setLatLng([lat, lon]);
+    radiusCircle.setRadius(radiusM);
+    radiusCircle.setTooltipContent(tip);
+  } else {
+    radiusCircle = L.circle([lat, lon], {
+      radius: radiusM,
+      color: "#7d4ec3",     // aurora-2 — strong outline so the slider is felt
+      weight: 2.5,
+      dashArray: "8 6",
+      opacity: 0.9,
+      fillColor: "#a884d4",
+      fillOpacity: 0.10,
+      interactive: true,
+    }).addTo(map);
+    radiusCircle.bindTooltip(tip, { permanent: false, direction: "top", sticky: true });
+  }
+}
+
 function drawRankedSpots(baseLat, baseLon, radiusKm, ranked, fallbackColour) {
-  if (radiusCircle) { radiusCircle.remove(); radiusCircle = null; }
   for (const m of spotMarkers) m.remove();
   spotMarkers = [];
   if (!ranked || !ranked.length) return;
-  // Dashed radius circle around base.
-  radiusCircle = L.circle([baseLat, baseLon], {
-    radius: radiusKm * 1000,
-    color: fallbackColour || "#5b6178",
-    weight: 1.2,
-    dashArray: "5 5",
-    fillOpacity: 0.04,
-  }).addTo(map);
+  // Refresh the live radius circle (already tracking the slider).
+  updateRadiusCircle(baseLat, baseLon, radiusKm);
   // Pins for top spots (skip base — it's the city marker).
   const top = ranked.filter(r => !r.is_base).slice(0, 8);
   const bounds = [[baseLat, baseLon]];
@@ -1128,6 +1157,8 @@ function drawCityPin(lat, lon, label) {
     radius: 8, color: "#5b6178", fillColor: "#a9d0f5", fillOpacity: 0.7, weight: 2,
   }).addTo(map);
   cityMarker.bindTooltip(label.split(",")[0], { permanent: true, direction: "top", offset: [0, -10] }).openTooltip();
+  // Refresh the radius preview so it always tracks the current pin.
+  updateRadiusCircle(lat, lon, currentRadiusKm());
   map.flyTo([lat, lon], 7, { duration: 0.8 });
 }
 
@@ -1462,10 +1493,14 @@ function start(url, body, render, mapHook) {
   }).finally(() => setLockedUI(false));
 }
 
-// Live label for the radius slider.
+// Live label + live map circle for the radius slider.
 const radiusInput = $("radius");
 const radiusVal = $("radius-val");
-radiusInput.addEventListener("input", () => { radiusVal.textContent = radiusInput.value; });
+radiusInput.addEventListener("input", () => {
+  radiusVal.textContent = radiusInput.value;
+  const b = currentBaseLatLon();
+  if (b) updateRadiusCircle(b.lat, b.lon, currentRadiusKm());
+});
 
 $("brief-aurora").addEventListener("click", () => {
   const idx = parseInt(citySel.value);
