@@ -223,6 +223,39 @@
   .vw-unlikely  { background: var(--bad-bg);   color: var(--bad);  }
   .vw-meta { font-size: 13px; opacity: 0.85; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
 
+  /* Drive-radius slider */
+  .radius-row { align-items: center; gap: 12px; margin-top: 8px; }
+  .radius-label { font-size: 13px; color: var(--ink); white-space: nowrap; }
+  .radius-label span { font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .radius-slider { flex: 1; max-width: 360px; accent-color: var(--aurora-2); }
+
+  /* Ranked spots table */
+  .spots { margin: 4px 0 12px; }
+  .spots h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
+  .spot-row {
+    display: grid;
+    grid-template-columns: 28px minmax(120px, 1.6fr) 80px 90px 70px 60px;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(0,0,0,0.05);
+    font-size: 13px;
+  }
+  .spot-row.best { background: var(--good-bg); border-color: var(--good); }
+  .spot-row.base { background: rgba(0,0,0,0.04); }
+  .spot-rank { font-weight: 600; font-family: 'JetBrains Mono', monospace; opacity: 0.7; }
+  .spot-name { font-weight: 500; }
+  .spot-name .badge { display:inline-block; margin-left:6px; padding:1px 7px; font-size:10.5px; font-weight:600; border-radius:999px; background: var(--good); color: white; vertical-align: middle; }
+  .spot-name .badge.base { background: #5b6178; }
+  .spot-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0.85; }
+  .spot-score-bar { height: 6px; border-radius: 3px; background: rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+  .spot-score-bar > span { display:block; height: 100%; background: linear-gradient(90deg, var(--aurora-1), var(--aurora-2)); }
+  .spot-score-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; text-align: right; }
+  .spot-why { grid-column: 2 / -1; font-size: 12px; opacity: 0.78; margin-top: 4px; }
+
   .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; vertical-align: middle; }
   .level.likely { background: var(--good-bg); color: var(--good); }
   .level.possible { background: var(--warn-bg); color: var(--warn); }
@@ -693,6 +726,13 @@
       <input class="input hidden" id="lon" placeholder="lon" value="147.32" style="max-width:110px" />
       <button class="btn btn-aurora" id="brief-aurora">Get briefing →</button>
     </div>
+    <div class="row radius-row">
+      <label class="radius-label" for="radius">
+        Drive radius <span id="radius-val">50</span> km
+        <button class="tip-icon tip" tabindex="0" data-tip="How far you're willing to drive tonight to find clearer skies, darker horizons or a slightly higher latitude. AuroraGaze surveys named viewing spots inside this radius and ranks them. 5 km = stay in town; 300 km = chaser commitment." aria-label="Help">?</button>
+      </label>
+      <input type="range" id="radius" min="5" max="300" step="5" value="50" class="radius-slider" />
+    </div>
     <div id="map"></div>
   </div>
 
@@ -959,6 +999,8 @@ let cityMarker = null;
 let bandLayer = null;
 let gazeMarker = null;
 let gazeLine = null;
+let radiusCircle = null;
+let spotMarkers = [];
 
 const LEVEL_COLOUR = {
   likely:    "#2f6f4d",
@@ -970,6 +1012,47 @@ function clearOverlays() {
   if (bandLayer) { bandLayer.remove(); bandLayer = null; }
   if (gazeMarker) { gazeMarker.remove(); gazeMarker = null; }
   if (gazeLine) { gazeLine.remove(); gazeLine = null; }
+  if (radiusCircle) { radiusCircle.remove(); radiusCircle = null; }
+  for (const m of spotMarkers) m.remove();
+  spotMarkers = [];
+}
+
+function drawRankedSpots(baseLat, baseLon, radiusKm, ranked, fallbackColour) {
+  if (radiusCircle) { radiusCircle.remove(); radiusCircle = null; }
+  for (const m of spotMarkers) m.remove();
+  spotMarkers = [];
+  if (!ranked || !ranked.length) return;
+  // Dashed radius circle around base.
+  radiusCircle = L.circle([baseLat, baseLon], {
+    radius: radiusKm * 1000,
+    color: fallbackColour || "#5b6178",
+    weight: 1.2,
+    dashArray: "5 5",
+    fillOpacity: 0.04,
+  }).addTo(map);
+  // Pins for top spots (skip base — it's the city marker).
+  const top = ranked.filter(r => !r.is_base).slice(0, 8);
+  const bounds = [[baseLat, baseLon]];
+  top.forEach((s, i) => {
+    const colour = LEVEL_COLOUR[s.geomag_visibility?.level] || fallbackColour || "#5b6178";
+    const size = i === 0 ? 11 : 7;
+    const m = L.circleMarker([s.lat, s.lon], {
+      radius: size,
+      color: i === 0 ? "#1d4f31" : colour,
+      fillColor: colour,
+      fillOpacity: 0.85,
+      weight: i === 0 ? 2.5 : 1.5,
+    }).addTo(map);
+    m.bindTooltip(
+      `<strong>#${s.rank} ${s.name}</strong><br>${s.distance_km.toFixed(0)} km ${s.bearing} · cloud ${s.cloud_pct}% · B${s.bortle}<br>score ${(s.score||0).toFixed(2)}`,
+      { direction: "top", sticky: true },
+    );
+    spotMarkers.push(m);
+    bounds.push([s.lat, s.lon]);
+  });
+  if (bounds.length > 1) {
+    map.flyToBounds(bounds, { padding: [60, 60], duration: 0.8, maxZoom: 9 });
+  }
 }
 
 function drawCityPin(lat, lon, label) {
@@ -982,8 +1065,9 @@ function drawCityPin(lat, lon, label) {
   map.flyTo([lat, lon], 7, { duration: 0.8 });
 }
 
-function drawBriefingOverlay(cityIdx, visibility) {
+function drawBriefingOverlay(cityIdx, briefing) {
   const c = CITIES[cityIdx];
+  const visibility = briefing.visibility || {};
   const colour = LEVEL_COLOUR[visibility.level] || "#5b6178";
   // Recolour the city marker based on visibility.
   if (cityMarker) {
@@ -996,21 +1080,10 @@ function drawBriefingOverlay(cityIdx, visibility) {
   bandLayer = L.polygon([
     [boundaryLat, c.lon - 40], [boundaryLat, c.lon + 40], [-90, c.lon + 40], [-90, c.lon - 40],
   ], { color: colour, fillColor: colour, fillOpacity: 0.10, weight: 1, dashArray: "4 4" }).addTo(map);
-  // If visibility is likely/possible, place a "gaze" pin at the dark-sky site.
-  if (c.gaze && (visibility.level === "likely" || visibility.level === "possible")) {
-    gazeMarker = L.marker([c.gaze.lat, c.gaze.lon], {
-      icon: L.divIcon({
-        className: "gaze-pin",
-        html: `<div style="background:${colour};color:white;font-size:11px;padding:4px 8px;border-radius:8px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.2);font-family:Inter,sans-serif">★ ${c.gaze.name}</div>`,
-        iconSize: null, iconAnchor: [0, 0],
-      }),
-    }).addTo(map);
-    gazeLine = L.polyline([[c.lat, c.lon], [c.gaze.lat, c.gaze.lon]], {
-      color: colour, weight: 2, opacity: 0.6, dashArray: "4 4",
-    }).addTo(map);
-    // zoom to fit both points
-    map.flyToBounds([[c.lat, c.lon], [c.gaze.lat, c.gaze.lon]], { padding: [60, 60], duration: 0.8, maxZoom: 8 });
-  } else {
+  // Ranked spots: draw radius circle + per-spot pins.
+  const radiusKm = briefing.radius_km || parseInt($("radius").value) || 50;
+  drawRankedSpots(c.lat, c.lon, radiusKm, briefing.ranked_spots || [], colour);
+  if (!(briefing.ranked_spots && briefing.ranked_spots.length)) {
     map.flyTo([c.lat, c.lon], 7, { duration: 0.6 });
   }
 }
@@ -1049,6 +1122,34 @@ const VISIBILITY_TIP = {
   unlikely: "Unlikely: too quiet, or the auroral oval is too far south, for visible aurora at this latitude.",
 };
 
+function renderRankedSpots(b) {
+  const list = b.ranked_spots || [];
+  if (!list.length) return "";
+  const rows = list.slice(0, 8).map((s, i) => {
+    const isBest = i === 0 && !s.is_base;
+    const cls = isBest ? "spot-row best" : (s.is_base ? "spot-row base" : "spot-row");
+    const scorePct = Math.round((s.score || 0) * 100);
+    const badge = isBest
+      ? '<span class="badge">Best bet</span>'
+      : (s.is_base ? '<span class="badge base">Base</span>' : "");
+    return `
+      <div class="${cls}">
+        <div class="spot-rank">#${s.rank}</div>
+        <div class="spot-name">${s.name}${badge}</div>
+        <div class="spot-meta">${s.distance_km.toFixed(0)} km ${s.bearing}</div>
+        <div class="spot-meta">cloud ${s.cloud_pct}% · B${s.bortle}</div>
+        <div class="spot-score-bar"><span style="width:${scorePct}%"></span></div>
+        <div class="spot-score-num">${(s.score || 0).toFixed(2)}</div>
+        <div class="spot-why">${s.why || ""}</div>
+      </div>`;
+  }).join("");
+  return `
+    <div class="spots">
+      <h3>Top spots within ${b.radius_km || 50} km</h3>
+      ${rows}
+    </div>`;
+}
+
 function renderViewingWindow(vw) {
   if (!vw) return "";
   const seg = (label, vis, hint) => {
@@ -1078,6 +1179,7 @@ function renderAurora(b) {
       <h3>Headline <span class="level ${lvl} tip" tabindex="0" data-tip="${lvlTip}">${lvl}</span></h3>
       <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
       ${renderViewingWindow(b.viewing_window)}
+      ${renderRankedSpots(b)}
       <h3>Detail</h3>
       <div class="body">${b.body}</div>
       <div class="meta"><strong>${b.location}</strong> · ${b.when_local}</div>
@@ -1225,20 +1327,28 @@ function start(url, body, render, mapHook) {
   }).finally(() => setLockedUI(false));
 }
 
+// Live label for the radius slider.
+const radiusInput = $("radius");
+const radiusVal = $("radius-val");
+radiusInput.addEventListener("input", () => { radiusVal.textContent = radiusInput.value; });
+
 $("brief-aurora").addEventListener("click", () => {
   const idx = parseInt(citySel.value);
   const c = CITIES[idx];
   const lat = c.lat !== null ? c.lat : parseFloat($("lat").value);
   const lon = c.lon !== null ? c.lon : parseFloat($("lon").value);
   const label = c.label === "Custom…" ? `(${lat.toFixed(2)},${lon.toFixed(2)})` : c.label;
+  const radius_km = Math.max(5, Math.min(300, parseInt(radiusInput.value) || 50));
   // Ensure the city pin exists (needed for Custom… and to refresh after re-toggle).
   drawCityPin(lat, lon, label);
-  // For Custom… with no preset gaze, fabricate one ~50 km south.
-  const cityRecord = c.lat !== null ? c : { ...c, lat, lon, label, gaze: { lat: lat - 0.5, lon: lon, name: "~50 km south of pinned location" } };
-  CITIES[idx] = cityRecord;
-  start("/api/brief/aurora", { lat, lon, location: label }, renderAurora, (b) => {
-    if (b.visibility) drawBriefingOverlay(idx, b.visibility);
-  });
+  // Ensure CITIES[idx] has the resolved coords (used by drawBriefingOverlay for the band).
+  if (c.lat === null) CITIES[idx] = { ...c, lat, lon, label };
+  start(
+    "/api/brief/aurora",
+    { lat, lon, location: label, radius_km },
+    renderAurora,
+    (b) => drawBriefingOverlay(idx, b),
+  );
 });
 
 $("brief-satellite").addEventListener("click", () => {

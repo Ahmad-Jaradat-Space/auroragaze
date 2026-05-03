@@ -18,6 +18,7 @@ class AuroraRequest(BaseModel):
     lat: float
     lon: float
     location: str = ""
+    radius_km: int = 50
 
 
 class FleetUnitInput(BaseModel):
@@ -51,6 +52,7 @@ async def _stream_aurora(req: AuroraRequest) -> AsyncIterator[str]:
         "lat": req.lat,
         "lon": req.lon,
         "location_label": req.location or f"({req.lat:.2f}, {req.lon:.2f})",
+        "radius_km": max(5, min(300, int(req.radius_km))),
     }
     seen = 0
     final: dict[str, Any] = {}

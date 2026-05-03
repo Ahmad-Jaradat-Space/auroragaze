@@ -93,6 +93,18 @@ def _allowed_from_tools(state: dict[str, Any]) -> list[float]:
     if vw is not None:
         out.append(float(vw.peak_kp))
         out.extend(_hhmm_to_floats(vw.peak_local))
+    # Ranked spots — distance, cloud %, Bortle, lat/lon, score
+    radius = state.get("radius_km")
+    if radius is not None:
+        out.append(float(radius))
+    for rs in state.get("ranked_spots", []) or []:
+        out.append(float(rs.distance_km))
+        out.append(float(rs.cloud_pct))
+        out.append(float(rs.bortle))
+        out.append(float(rs.lat))
+        out.append(float(rs.lon))
+        out.append(float(rs.rank))
+        out.append(float(rs.geomag_visibility.boundary_lat_deg))
     return out
 
 

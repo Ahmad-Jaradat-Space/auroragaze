@@ -22,17 +22,22 @@ from auroragaze.schemas import (
     BriefingState,
     Citation,
     NightWindow,
+    RankedSpot,
     SatelliteBriefing,
     Visibility,
     VisibilityWindow,
 )
+from auroragaze.tools.cloud import cloud_cover_for_window
 from auroragaze.tools.dst import get_dst_now
 from auroragaze.tools.fleet import FleetUnit, assess_fleet_impact
 from auroragaze.tools.kp import get_kp_now
 from auroragaze.tools.kp_forecast import forecast_from_current, get_kp_forecast
+from auroragaze.tools.light_pollution import bortle_at
 from auroragaze.tools.night import local_night
 from auroragaze.tools.physics import assess_visibility, visibility_for_window
+from auroragaze.tools.ranker import rank_spots
 from auroragaze.tools.solar_wind import get_solar_wind
+from auroragaze.tools.spots import find_candidate_spots, find_populated_places
 from auroragaze.tools.xray import get_goes_xray
 
 
@@ -98,6 +103,74 @@ async def data_fetcher_node(state: BriefingState) -> dict[str, Any]:
         "dst_nt": dst_val,
         "flare_class": flare,
         "kp_forecast": forecast,
+        "trace": _trace(state, line),
+    }
+
+
+async def nearby_spots_node(state: BriefingState) -> dict[str, Any]:
+    """Survey candidate viewing spots inside `radius_km` and rank them.
+
+    Aurora chasers don't sit at home — they drive to clear skies, dark
+    horizons, or a slightly higher latitude. This node fetches OSM
+    viewpoints/peaks/parks within the user's radius, queries cloud
+    forecast and population density, and produces a ranked list.
+
+    Skipped for satellite persona; degraded gracefully (returns just the
+    base point) if Overpass is down.
+    """
+    if state.get("persona", "aurora") != "aurora":
+        return {"trace": _trace(state, "nearby_spots: skipped (satellite persona)")}
+    nw: NightWindow | None = state.get("night_window")
+    forecast = state.get("kp_forecast")
+    if nw is None or forecast is None:
+        return {"trace": _trace(state, "nearby_spots: skipped (no night window or forecast)")}
+
+    base_lat = state.get("lat", -42.88)
+    base_lon = state.get("lon", 147.32)
+    base_name = state.get("location_label", "base")
+    radius_km = int(state.get("radius_km", 50))
+    radius_km = max(5, min(300, radius_km))
+
+    async with httpx.AsyncClient(timeout=12.0) as client:
+        # Pull candidates and populated places concurrently — Overpass is the
+        # slow leg and we save real wall time by overlapping them.
+        import asyncio
+
+        candidates_task = find_candidate_spots(
+            base_lat, base_lon, radius_km, base_name=base_name, client=client
+        )
+        # Use a slightly larger radius for places: a town 50 km outside the
+        # search ring still contributes to sky glow at the ring's edge.
+        places_task = find_populated_places(
+            base_lat, base_lon, min(400, radius_km + 60), client=client
+        )
+        candidates, places = await asyncio.gather(candidates_task, places_task)
+
+        coords = [(c.lat, c.lon) for c in candidates]
+        cloud_lookup = await cloud_cover_for_window(coords, nw, client=client)
+
+    bortle_lookup = {
+        (round(c.lat, 3), round(c.lon, 3)): bortle_at(c.lat, c.lon, places) for c in candidates
+    }
+
+    ranked = rank_spots(
+        base_lat=base_lat,
+        candidates=candidates,
+        night=nw,
+        bins=list(forecast.bins),
+        cloud_lookup=cloud_lookup,
+        bortle_lookup=bortle_lookup,
+    )
+
+    line = (
+        f"nearby_spots: radius={radius_km}km candidates={len(candidates)} "
+        f"places={len(places)} top={ranked[0].name!r} score={ranked[0].score:.2f}"
+        if ranked
+        else f"nearby_spots: radius={radius_km}km no candidates"
+    )
+    return {
+        "ranked_spots": ranked,
+        "radius_km": radius_km,
         "trace": _trace(state, line),
     }
 
@@ -216,6 +289,8 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
     nw: NightWindow | None = state.get("night_window")
     vw: VisibilityWindow | None = state.get("visibility_window")
     retry_hint = state.get("retry_hint", "")
+    ranked: list[RankedSpot] = state.get("ranked_spots", []) or []
+    radius_km = int(state.get("radius_km", 0) or 0)
 
     night_block = ""
     if nw is not None:
@@ -239,19 +314,40 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
             f"  best-time bracket = {vw.summary_window}\n"
         )
 
+    spots_block = ""
+    if ranked:
+        top = ranked[0]
+        rest = ranked[1:5]
+        lines = [
+            f"Best bet: {top.name} ({top.distance_km:.0f} km {top.bearing}) — "
+            f"score={top.score:.2f}, cloud={top.cloud_pct}%, Bortle={top.bortle}, "
+            f"geomag={top.geomag_visibility.level}"
+        ]
+        for r in rest:
+            lines.append(
+                f"  alt: {r.name} ({r.distance_km:.0f} km {r.bearing}) — "
+                f"score={r.score:.2f}, cloud={r.cloud_pct}%, Bortle={r.bortle}"
+            )
+        spots_block = (
+            f"Ranked spots within {radius_km} km drive radius "
+            f"(best-first, base included):\n" + "\n".join(lines) + "\n"
+        )
+
     user_msg = (
         f"Location: {location}\n"
         f"Observed now: Bz={sw.bz:.1f}nT, v={sw.speed_kms:.0f}km/s, "
         f"density={sw.density_cm3:.1f}cm-3, Kp={kp.kp:.1f} "
         f"({sw.timestamp.isoformat(timespec='minutes')}).\n"
-        f"{night_block}{window_block}"
+        f"{night_block}{window_block}{spots_block}"
         f"Computed visibility (night block): level={visibility.level}, "
         f"oval threshold ~{visibility.boundary_lat_deg:.1f}°S.\n\n"
         f"Reference chunks:\n{_format_chunks(chunks)}\n\n"
         "Write the AuroraBriefing as JSON matching the AuroraBriefing schema. "
         "Required fields: summary, location, when_local, visibility, "
         "viewing_window, headline, body, citations. "
-        "The when_local string must quote the night window's bracket exactly."
+        "The when_local string must quote the night window's bracket exactly. "
+        "If a 'Best bet' spot is provided, name it in the summary and body "
+        "(not just the base location), and quote its distance and bearing exactly."
         + (f"\n\n{retry_hint}" if retry_hint else "")
     )
     llm = make_llm()
@@ -270,6 +366,16 @@ async def aurora_composer_node(state: BriefingState) -> dict[str, Any]:
                         detail="reference event",
                     )
                 ]
+            }
+        )
+    # Stamp radius + ranked spots onto the briefing so the API/MCP/frontend
+    # see them without going through the LLM (which can't be trusted with
+    # structured nested arrays).
+    if ranked or radius_km:
+        briefing = briefing.model_copy(
+            update={
+                "radius_km": radius_km or None,
+                "ranked_spots": ranked,
             }
         )
     return {"briefing": briefing, "trace": _trace(state, "composer: aurora briefing ready")}
@@ -370,6 +476,7 @@ def build_graph() -> Any:
     g = StateGraph(BriefingState)
     g.add_node("supervisor", supervisor_node)
     g.add_node("data_fetcher", data_fetcher_node)
+    g.add_node("nearby_spots", nearby_spots_node)
     g.add_node("retrieval", retrieval_node)
     g.add_node("physics", physics_node)
     g.add_node("aurora_composer", aurora_composer_node)
@@ -379,7 +486,8 @@ def build_graph() -> Any:
     g.add_edge(START, "supervisor")
     g.add_edge("supervisor", "data_fetcher")
     g.add_edge("supervisor", "retrieval")
-    g.add_edge("data_fetcher", "physics")
+    g.add_edge("data_fetcher", "nearby_spots")
+    g.add_edge("nearby_spots", "physics")
     g.add_edge("retrieval", "physics")
     g.add_conditional_edges(
         "physics",

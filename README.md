@@ -92,9 +92,10 @@ Seven nodes, **one LLM call** per briefing (two if the verifier rejects and retr
 - **DeepSeek V3** (`deepseek-chat`) via `langchain-deepseek` — provider-agnostic factory, swap with one env var.
 - **LangGraph** — seven-node graph, parallel `data_fetcher` ‖ `retrieval`, conditional persona routing, verifier with one-retry.
 - **Time-aware visibility** — `tools/night.py` runs the NOAA solar-position algorithm (Julian day → declination → hour angle) in pure Python to compute sunset / civil dusk / astronomical night / sunrise per latitude+longitude+date. `tools/kp_forecast.py` reads NOAA SWPC's 3-hour Kp forecast and `physics.visibility_for_window` picks the peak Kp inside local night, returning a per-sub-window verdict (evening / night / dawn).
+- **Drive-radius spot ranker** — chasers don't sit at home. A 5–300 km radius slider drives `tools/spots.py` (OpenStreetMap Overpass viewpoints / peaks / reserves), `tools/cloud.py` (Open-Meteo cloud-cover forecast for tonight's window), and an OSM-population light-pollution proxy. `tools/ranker.py` blends geomagnetic latitude, cloud cover, Bortle estimate, and drive distance into a single 0..1 score per candidate. Output: a ranked list of named spots with a one-sentence rationale each.
 - **Hybrid retrieval** — ChromaDB + `bge-small-en-v1.5` dense + `rank-bm25` lexical, fused via Reciprocal Rank Fusion (k=60). Multi-query expansion for satellite (per orbit class). The cross-encoder reranker was tested and dropped — on a 35-doc curated corpus it added image bloat and a 4 GB RAM requirement without earning eval points.
 - **FastAPI + SSE** streaming the agent trace; **single-page HTML + Tailwind CDN + Leaflet** frontend with public-facing tooltips, live SDO/LASCO/OVATION imagery, and a three-segment evening/night/dawn viewing-window bar.
-- **MCP server** (FastMCP) exposing six primitives to Claude Desktop and any MCP client.
+- **MCP server** (FastMCP) exposing seven primitives to MCP clients, including `nearby_viewing_spots(lat, lon, radius_km)` for the ranked spot survey.
 - **Docker** multi-stage build, **Fly.io** Sydney region (2 GB shared-cpu-2x, one machine always warm).
 
 ---

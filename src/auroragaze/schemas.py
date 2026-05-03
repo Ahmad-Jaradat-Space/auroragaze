@@ -90,6 +90,27 @@ class Citation(BaseModel):
     detail: str
 
 
+class RankedSpot(BaseModel):
+    """One candidate viewing spot inside the chaser's drive radius."""
+
+    name: str = Field(description="Place name from OSM, or '15 km SW of <base>' fallback")
+    lat: float
+    lon: float
+    distance_km: float = Field(ge=0)
+    bearing: str = Field(description="Cardinal/intercardinal: N, NE, E, SE, S, SW, W, NW")
+    geomag_visibility: Visibility
+    cloud_pct: int = Field(ge=0, le=100, description="Mean cloud cover over night window")
+    bortle: int = Field(
+        ge=1,
+        le=9,
+        description="Estimated Bortle class (1=pristine dark, 9=inner-city)",
+    )
+    score: float = Field(ge=0, le=1, description="Composite 0..1 ranking score")
+    rank: int = Field(ge=1)
+    why: str = Field(description="One sentence explaining the rank rationale")
+    is_base: bool = Field(default=False, description="True for the user's chosen city")
+
+
 class AuroraBriefing(BaseModel):
     summary: str = Field(description="1-2 plain-English sentences, no jargon")
     location: str
@@ -101,6 +122,14 @@ class AuroraBriefing(BaseModel):
     headline: str
     body: str
     citations: list[Citation]
+    radius_km: int | None = Field(
+        default=None,
+        description="Search radius in km for the ranked-spots survey",
+    )
+    ranked_spots: list[RankedSpot] = Field(
+        default_factory=list,
+        description="Candidate viewing spots inside radius, best-first",
+    )
 
 
 class SatelliteBriefing(BaseModel):
@@ -135,4 +164,6 @@ class BriefingState(TypedDict, total=False):
     briefing: AuroraBriefing | SatelliteBriefing
     retry_hint: str
     retry_count: int
+    radius_km: int
+    ranked_spots: list[RankedSpot]
     trace: Annotated[list[str], add]
