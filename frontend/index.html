@@ -924,8 +924,10 @@ $("fleet-json").value = JSON.stringify([
 citySel.addEventListener("change", () => {
   const c = CITIES[citySel.value];
   if (c.lat === null) {
+    // Custom: reveal inputs and draw whatever the current values are.
     $("lat").classList.remove("hidden");
     $("lon").classList.remove("hidden");
+    liveCustomPin();
   } else {
     $("lat").classList.add("hidden");
     $("lon").classList.add("hidden");
@@ -934,6 +936,18 @@ citySel.addEventListener("change", () => {
     drawCityPin(c.lat, c.lon, c.label);
   }
 });
+
+// Live-update the map pin as the user types/edits custom coords.
+function liveCustomPin() {
+  const lat = parseFloat($("lat").value);
+  const lon = parseFloat($("lon").value);
+  if (Number.isFinite(lat) && Number.isFinite(lon)
+      && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+    drawCityPin(lat, lon, `(${lat.toFixed(2)}, ${lon.toFixed(2)})`);
+  }
+}
+$("lat").addEventListener("input", liveCustomPin);
+$("lon").addEventListener("input", liveCustomPin);
 
 fleetSel.addEventListener("change", () => {
   const f = FLEETS[fleetSel.value];
@@ -1025,6 +1039,28 @@ function refreshImagery() {
 const map = L.map("map", { zoomControl: true, attributionControl: false, scrollWheelZoom: false }).setView([-40, 150], 3);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 10 }).addTo(map);
 L.control.attribution({ position: "bottomright", prefix: "" }).addTo(map).addAttribution("CARTO · OSM");
+
+// Click anywhere on the map to drop a custom pin and use that as the briefing location.
+map.on("click", (e) => {
+  const lat = e.latlng.lat;
+  const lon = e.latlng.lng;
+  const customIdx = CITIES.findIndex(c => c.label === "Custom…");
+  if (customIdx >= 0) {
+    citySel.value = String(customIdx);
+    $("lat").classList.remove("hidden");
+    $("lon").classList.remove("hidden");
+  }
+  $("lat").value = lat.toFixed(4);
+  $("lon").value = lon.toFixed(4);
+  drawCityPin(lat, lon, `(${lat.toFixed(2)}, ${lon.toFixed(2)})`);
+});
+
+// Hint that the map is clickable.
+const mapEl = document.getElementById("map");
+if (mapEl) {
+  mapEl.title = "Click anywhere to drop a custom pin and use that as your viewing location.";
+  mapEl.style.cursor = "crosshair";
+}
 let cityMarker = null;
 let bandLayer = null;
 let gazeMarker = null;
