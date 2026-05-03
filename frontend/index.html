@@ -229,32 +229,62 @@
   .radius-label span { font-weight: 600; font-family: 'JetBrains Mono', monospace; }
   .radius-slider { flex: 1; max-width: 360px; accent-color: var(--aurora-2); }
 
-  /* Ranked spots table */
-  .spots { margin: 4px 0 12px; }
-  .spots h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
-  .spot-row {
+  /* Ranked spots — clickable list + details panel */
+  .spots-h { margin: 0 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
+  .spots-h .muted { font-weight: 400; text-transform: none; letter-spacing: 0; opacity: 0.7; font-size: 12.5px; margin-left: 6px; }
+  .spots-list {
     display: grid;
-    grid-template-columns: 28px minmax(120px, 1.6fr) 80px 90px 70px 60px;
-    gap: 10px;
-    align-items: center;
-    padding: 8px 10px;
-    border-radius: 10px;
-    margin-bottom: 6px;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(0,0,0,0.05);
-    font-size: 13px;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
   }
-  .spot-row.best { background: var(--good-bg); border-color: var(--good); }
-  .spot-row.base { background: rgba(0,0,0,0.04); }
-  .spot-rank { font-weight: 600; font-family: 'JetBrains Mono', monospace; opacity: 0.7; }
-  .spot-name { font-weight: 500; }
-  .spot-name .badge { display:inline-block; margin-left:6px; padding:1px 7px; font-size:10.5px; font-weight:600; border-radius:999px; background: var(--good); color: white; vertical-align: middle; }
-  .spot-name .badge.base { background: #5b6178; }
-  .spot-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0.85; }
-  .spot-score-bar { height: 6px; border-radius: 3px; background: rgba(0,0,0,0.08); position: relative; overflow: hidden; }
-  .spot-score-bar > span { display:block; height: 100%; background: linear-gradient(90deg, var(--aurora-1), var(--aurora-2)); }
-  .spot-score-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; text-align: right; }
-  .spot-why { grid-column: 2 / -1; font-size: 12px; opacity: 0.78; margin-top: 4px; }
+  .spot-card {
+    text-align: left;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    font-family: inherit;
+    font-size: 13px;
+    color: inherit;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 2px 8px;
+  }
+  .spot-card:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .spot-card.active { border-color: var(--aurora-2); box-shadow: 0 0 0 2px rgba(140, 95, 200, 0.18); background: rgba(255,255,255,0.92); }
+  .spot-card.best { background: var(--good-bg); border-color: var(--good); }
+  .spot-card.best.active { box-shadow: 0 0 0 2px var(--good); }
+  .spot-card.good { background: #f6f3ff; }
+  .spot-card.fair { background: rgba(255,255,255,0.72); }
+  .spot-card.poor { background: rgba(0,0,0,0.04); opacity: 0.85; }
+  .spot-card-rank { grid-column: 1; grid-row: 1; font-size: 11px; font-weight: 600; opacity: 0.55; font-family: 'JetBrains Mono', monospace; }
+  .spot-card-name { grid-column: 1; grid-row: 1; margin-left: 22px; font-weight: 600; font-size: 13.5px; line-height: 1.25; }
+  .spot-card-tag { grid-column: 1; grid-row: 2; margin-left: 22px; font-size: 11.5px; opacity: 0.78; line-height: 1.3; }
+  .spot-card-pct { grid-column: 2; grid-row: 1 / 3; align-self: center; font-weight: 700; font-size: 22px; line-height: 1; font-family: 'JetBrains Mono', monospace; color: var(--aurora-2); }
+  .spot-card.best .spot-card-pct { color: var(--good); }
+  .spot-card.poor .spot-card-pct { color: var(--ink); opacity: 0.6; }
+  .spot-card-pct span { font-size: 11px; font-weight: 600; opacity: 0.6; margin-left: 1px; }
+
+  .spot-detail {
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 0 0 16px;
+  }
+  .spot-detail-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; gap: 12px; flex-wrap: wrap; }
+  .spot-detail-head h4 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.2; }
+  .spot-detail-pct { font-size: 13px; opacity: 0.85; }
+  .spot-detail-pct strong { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--aurora-2); }
+  .spot-detail-list { list-style: none; padding: 0; margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; }
+  .spot-detail-list li { padding: 3px 0; }
+  .spot-detail-list li strong { font-weight: 600; opacity: 0.78; margin-right: 4px; }
+  .spot-detail-why { font-size: 13px; opacity: 0.85; margin: 0; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06); font-style: italic; }
 
   .level { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-left: 8px; vertical-align: middle; }
   .level.likely { background: var(--good-bg); color: var(--good); }
@@ -1122,32 +1152,99 @@ const VISIBILITY_TIP = {
   unlikely: "Unlikely: too quiet, or the auroral oval is too far south, for visible aurora at this latitude.",
 };
 
+// --- plain-English helpers for the spots panel ---
+const BORTLE_LABEL = [
+  "", "pristine — sky as dark as it gets", "very dark sky",
+  "rural — dark sky", "rural / suburban transition",
+  "suburban sky", "bright suburban sky",
+  "edge of urban — washed out", "city sky — bright",
+  "inner-city — washed out",
+];
+function bortleLabel(b) { return BORTLE_LABEL[b] || "—"; }
+function cloudLabel(c) {
+  if (c < 20) return "clear skies";
+  if (c < 50) return "partly cloudy";
+  if (c < 80) return "mostly cloudy";
+  return "overcast";
+}
+function chanceTier(score) {
+  if (score >= 0.65) return ["best", "Strong chance"];
+  if (score >= 0.5)  return ["good", "Decent chance"];
+  if (score >= 0.35) return ["fair", "Worth a look"];
+  return ["poor", "Marginal"];
+}
+function distanceLabel(d, isBase) {
+  if (isBase) return "your location";
+  if (d < 1) return "less than 1 km away";
+  return `${Math.round(d)} km away`;
+}
+function geomagPlain(level) {
+  if (level === "likely")   return "aurora reaches your latitude tonight";
+  if (level === "possible") return "borderline — aurora may glow on the southern horizon";
+  return "aurora unlikely to reach this latitude tonight";
+}
+function shortTagFor(s, baseRef) {
+  if (s.is_base) return "your spot";
+  if (s.cloud_pct < 30 && (!baseRef || baseRef.cloud_pct - s.cloud_pct >= 20)) return "clearer skies";
+  if (s.bortle <= 3) return "very dark sky";
+  if (s.cloud_pct < 30) return "clear skies";
+  if (s.cloud_pct >= 80) return "overcast";
+  if (baseRef && s.bortle < baseRef.bortle - 1) return "darker than home";
+  return "alternative";
+}
+
+// Stash currently-shown spots so the click handler can swap detail panels.
+let lastBriefingSpots = [];
+
+function renderSpotDetail(s) {
+  if (!s) return "";
+  const pct = Math.round((s.score || 0) * 100);
+  const [, tierLabel] = chanceTier(s.score || 0);
+  const cloud = cloudLabel(s.cloud_pct);
+  const dark = bortleLabel(s.bortle);
+  const geomag = geomagPlain(s.geomag_visibility && s.geomag_visibility.level);
+  const where = s.is_base
+    ? "your location"
+    : `${Math.round(s.distance_km)} km away${s.bearing && s.bearing !== "-" ? " (" + s.bearing.toLowerCase() + ")" : ""}`;
+  return `
+    <div class="spot-detail-head">
+      <h4>${s.is_base ? "★ " : ""}${s.name}</h4>
+      <div class="spot-detail-pct">${tierLabel} · <strong>${pct}%</strong></div>
+    </div>
+    <ul class="spot-detail-list">
+      <li><strong>Where:</strong> ${where}</li>
+      <li><strong>Sky tonight:</strong> ${cloud} (${s.cloud_pct}% cloud cover during viewing window)</li>
+      <li><strong>Sky darkness:</strong> ${dark} (Bortle ${s.bortle} of 9)</li>
+      <li><strong>Aurora at this latitude:</strong> ${geomag}</li>
+    </ul>
+    <p class="spot-detail-why">${s.why || ""}</p>`;
+}
+
 function renderRankedSpots(b) {
   const list = b.ranked_spots || [];
   if (!list.length) return "";
-  const rows = list.slice(0, 8).map((s, i) => {
-    const isBest = i === 0 && !s.is_base;
-    const cls = isBest ? "spot-row best" : (s.is_base ? "spot-row base" : "spot-row");
-    const scorePct = Math.round((s.score || 0) * 100);
-    const badge = isBest
-      ? '<span class="badge">Best bet</span>'
-      : (s.is_base ? '<span class="badge base">Base</span>' : "");
+  const spots = list.slice(0, 8);
+  const baseRef = spots.find(s => s.is_base) || spots[0];
+  const cards = spots.map((s, i) => {
+    const pct = Math.round((s.score || 0) * 100);
+    const [tier] = chanceTier(s.score || 0);
+    const isBest = i === 0;
+    const cls = `spot-card ${tier}` + (isBest ? " best" : "") + (i === 0 ? " active" : "");
     return `
-      <div class="${cls}">
-        <div class="spot-rank">#${s.rank}</div>
-        <div class="spot-name">${s.name}${badge}</div>
-        <div class="spot-meta">${s.distance_km.toFixed(0)} km ${s.bearing}</div>
-        <div class="spot-meta">cloud ${s.cloud_pct}% · B${s.bortle}</div>
-        <div class="spot-score-bar"><span style="width:${scorePct}%"></span></div>
-        <div class="spot-score-num">${(s.score || 0).toFixed(2)}</div>
-        <div class="spot-why">${s.why || ""}</div>
-      </div>`;
+      <button type="button" class="${cls}" data-rank="${i}">
+        <div class="spot-card-rank">#${s.rank}</div>
+        <div class="spot-card-name">${s.name}</div>
+        <div class="spot-card-tag">${distanceLabel(s.distance_km, s.is_base)} · ${shortTagFor(s, baseRef)}</div>
+        <div class="spot-card-pct">${pct}<span>%</span></div>
+      </button>`;
   }).join("");
   return `
-    <div class="spots">
-      <h3>Top spots within ${b.radius_km || 50} km</h3>
-      ${rows}
-    </div>`;
+    <h3 class="spots-h">Top spots within ${b.radius_km || 50} km
+      <span class="muted">— click a card to see why</span>
+      <button class="tip-icon tip" tabindex="0" data-tip="Each percentage is a 'chase score' — how good a bet this spot is tonight, combining how clear the sky is forecast to be, how dark the sky is from light pollution, how close you are to the auroral oval at that latitude, and how far you'd have to drive. 0% = don't bother, 100% = absolutely go." aria-label="Help">?</button>
+    </h3>
+    <div class="spots-list">${cards}</div>
+    <div class="spot-detail" id="spot-detail">${renderSpotDetail(spots[0])}</div>`;
 }
 
 function renderViewingWindow(vw) {
@@ -1173,14 +1270,16 @@ function renderAurora(b) {
   const cites = (b.citations || []).map(c => `<li><span class="src">${c.source}</span> — ${c.detail}</li>`).join("");
   const lvl = v.level || "";
   const lvlTip = VISIBILITY_TIP[lvl] || "";
+  // Stash for the click delegator so card clicks can swap the detail panel.
+  lastBriefingSpots = (b.ranked_spots || []).slice(0, 8);
   return `
     <div class="briefing">
+      ${renderRankedSpots(b)}
       <div class="summary">${b.summary || ""}</div>
       <h3>Headline <span class="level ${lvl} tip" tabindex="0" data-tip="${lvlTip}">${lvl}</span></h3>
       <p style="margin:0 0 12px"><strong>${b.headline}</strong></p>
       ${renderViewingWindow(b.viewing_window)}
-      ${renderRankedSpots(b)}
-      <h3>Detail</h3>
+      <h3>More on tonight</h3>
       <div class="body">${b.body}</div>
       <div class="meta"><strong>${b.location}</strong> · ${b.when_local}</div>
       <div class="meta">${v.reasoning || ''}</div>
@@ -1378,6 +1477,30 @@ document.addEventListener("click", (e) => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") document.querySelectorAll(".tip.shown").forEach(t => t.classList.remove("shown"));
+});
+
+// --- spot card click → swap details panel ---
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".spot-card");
+  if (!card) return;
+  const idx = parseInt(card.dataset.rank);
+  const s = lastBriefingSpots[idx];
+  if (!s) return;
+  document.querySelectorAll(".spot-card").forEach(c => c.classList.remove("active"));
+  card.classList.add("active");
+  const detail = document.getElementById("spot-detail");
+  if (detail) detail.innerHTML = renderSpotDetail(s);
+  // Map highlight: re-emphasize the matching marker if present.
+  if (typeof spotMarkers !== "undefined" && spotMarkers.length) {
+    spotMarkers.forEach(m => m.setStyle && m.setStyle({ weight: 1.5, radius: 7 }));
+    // spotMarkers excludes the base; idx==0 in lastBriefingSpots is best non-base by rank.
+    const nonBaseIdx = lastBriefingSpots.slice(0, idx + 1).filter(x => !x.is_base).length - 1;
+    if (nonBaseIdx >= 0 && spotMarkers[nonBaseIdx]) {
+      const m = spotMarkers[nonBaseIdx];
+      if (m.setStyle) m.setStyle({ weight: 3, radius: 11 });
+      if (m._latlng) map.flyTo(m._latlng, Math.max(map.getZoom(), 8), { duration: 0.6 });
+    }
+  }
 });
 
 // init
