@@ -117,20 +117,20 @@ def rank_spots(
         cloud_term = 1.0 - cloud / 100.0
         bortle_term = bortle_score(bortle)
         dist_pen = _distance_penalty(c.distance_km)
-        s = (
+        score = (
             W_GEOMAG * geomag
             + W_CLOUD * cloud_term
             + W_BORTLE * bortle_term
             - W_DIST * dist_pen
         )
-        s = max(0.0, min(1.0, s))
+        score = max(0.0, min(1.0, score))
         scored.append(
             _Scored(
                 candidate=c,
                 visibility=v,
                 cloud_pct=cloud,
                 bortle=bortle,
-                score=s,
+                score=score,
                 geomag=geomag,
                 distance_km=c.distance_km,
             )
