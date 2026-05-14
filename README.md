@@ -60,13 +60,19 @@ Live imagery from NASA SDO and NOAA SWPC sits above the data widgets so the syst
   ┌──────────────┐               ┌──────────────────────┐
   │ data_fetcher │               │      retrieval       │
   │ 4 NOAA tools │               │ dense + BM25 → RRF   │
-  └──────┬───────┘               │  → top-5             │
+  └──────┬───────┘               │  multi-query → top-5 │
          │                       └──────────┬───────────┘
+         ▼                                  │
+  ┌──────────────┐                          │
+  │ nearby_spots │ (aurora only)            │
+  │ OSM + cloud  │                          │
+  │ + ranker     │                          │
+  └──────┬───────┘                          │
          └──────────────┬───────────────────┘
                         ▼
                  ┌─────────────┐
                  │   physics   │  pure functions
-                 │ vis OR fleet│  (oval, drag, fleet)
+                 │ vis OR fleet│  (oval, drag, window)
                  └─────┬───────┘
                        │
               ┌────────┴─────────┐
@@ -79,13 +85,13 @@ Live imagery from NASA SDO and NOAA SWPC sits above the data widgets so the syst
                            ▼
                   ┌─────────────────┐
                   │    verifier     │  every number must trace
-                  │ pure-Python check│ to a tool or chunk
+                  │ pure-Python    │  to a tool or chunk
                   └────────┬────────┘
                            ▼ (one retry on rejection)
                           END
 ```
 
-Seven nodes, **one LLM call** per briefing (two if the verifier rejects and retries — happens on ~10% of runs). The intelligence lives in the retrieval and physics layers, not in token sampling. The composer's only job is to write a cited paragraph from typed state — it never invents a number, and the verifier enforces this deterministically. ADRs in [`docs/decisions/`](docs/decisions/) carry the full rationale.
+Eight nodes, **one LLM call** per briefing (two if the verifier rejects and retries — happens on ~10% of runs). The intelligence lives in the retrieval, physics, and ranker layers, not in token sampling. The composer's only job is to write a cited paragraph from typed state — it never invents a number, and the verifier enforces this deterministically. ADRs in [`docs/decisions/`](docs/decisions/) carry the full rationale.
 
 ### Stack
 
@@ -123,7 +129,7 @@ python eval/judge.py --in eval/results.json --out eval/results_judged.json
 
 ## MCP
 
-Six tools available to any MCP client. To install in Claude Desktop, add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Seven tools available to any MCP client. To install in Claude Desktop, add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -137,7 +143,7 @@ Six tools available to any MCP client. To install in Claude Desktop, add to `~/L
 }
 ```
 
-Tools: `get_solar_wind`, `get_kp_now`, `get_dst_now`, `assess_visibility`, `compute_drag_delta_tool`, `retrieve_context`.
+Tools: `get_solar_wind`, `get_kp_now`, `get_dst_now`, `assess_visibility`, `compute_drag_delta_tool`, `retrieve_context`, `nearby_viewing_spots`.
 
 ---
 
@@ -173,15 +179,82 @@ The image bakes in the embedding model and an ingested ChromaDB so the container
 
 ---
 
+## Repository layout
+
+```
+auroragaze/
+├── src/auroragaze/
+│   ├── graph.py                 # 8-node LangGraph wiring
+│   ├── schemas.py               # Pydantic models at every I/O boundary
+│   ├── llm.py                   # provider factory (DeepSeek default)
+│   ├── config.py
+│   ├── agents/
+│   │   ├── prompts.py           # aurora + satellite composer prompts
+│   │   └── verifier.py          # pure-Python number-grounding check
+│   ├── tools/
+│   │   ├── solar_wind.py        # DSCOVR plasma + magnetic field
+│   │   ├── kp.py                # NOAA Kp (now)
+│   │   ├── kp_forecast.py       # NOAA 3-day Kp forecast
+│   │   ├── dst.py               # Kyoto WDC Dst
+│   │   ├── xray.py              # GOES X-ray flux
+│   │   ├── physics.py           # oval, visibility-for-window, fleet drag
+│   │   ├── night.py             # solar-position → twilight per lat/lon/date
+│   │   ├── drag.py              # thermospheric density × ballistic coef
+│   │   ├── fleet.py             # per-orbit-class drag aggregation
+│   │   ├── spots.py             # OSM Overpass: viewpoints, peaks, reserves
+│   │   ├── cloud.py             # Open-Meteo cloud forecast in night window
+│   │   ├── light_pollution.py   # OSM-population Bortle proxy
+│   │   └── ranker.py            # weighted blend → ranked spot list
+│   ├── retrieval/
+│   │   ├── ingest.py            # chunking + embed → ChromaDB
+│   │   └── retriever.py         # dense + BM25 → RRF (k=60)
+│   ├── api/
+│   │   ├── main.py              # FastAPI app, CORS, lifespan
+│   │   └── routes.py            # /brief, /fleet-brief, SSE trace
+│   ├── mcp_server/server.py     # 7 FastMCP tools
+│   ├── __main__.py              # `python -m auroragaze brief …`
+│   └── __init__.py
+├── frontend/
+│   ├── index.html               # single-page UI, Tailwind CDN, Leaflet
+│   ├── auroragaze-mark.svg
+│   └── auroragaze-favicon.svg
+├── eval/
+│   ├── golden_set.jsonl         # 40 curated events (20 aurora, 19 satellite)
+│   ├── run_eval.py
+│   ├── judge.py                 # LLM-judge cross-vote
+│   ├── results.json
+│   ├── results_judged.json
+│   └── calibration.md
+├── redteam/                     # adversarial prompt traces
+├── reliability/                 # chaos test scaffolding
+├── tests/
+│   ├── unit/                    # one test file per tool / schema
+│   └── integration/             # graph-level smoke tests
+├── docs/
+│   ├── decisions/               # ADRs 0001–0006
+│   ├── blog/
+│   └── img/                     # README + social images
+├── deploy/hetzner.md            # single-VPS alternative
+├── examples/fleet.json          # sample LEO constellation input
+├── Dockerfile                   # multi-stage, embedding model baked in
+├── fly.toml                     # Sydney region, 2 GB shared-cpu-2x
+├── pyproject.toml
+├── CLAUDE.md                    # project rules for AI assistants
+└── README.md
+```
+
+---
+
 ## Architecture decisions
 
-The five load-bearing choices, each as its own ADR:
+The load-bearing choices, each as its own ADR:
 
 1. [DeepSeek over Anthropic](docs/decisions/0001-llm-provider.md) — cost discipline and provider lock-in.
-2. [Hard-coded six-node graph, not ReAct](docs/decisions/0002-graph-shape.md) — deterministic pipeline, debuggable, predictable cost.
-3. [ChromaDB + BGE + reranker](docs/decisions/0003-rag-stack.md) — self-contained retrieval, swappable.
+2. [Hard-coded graph, not ReAct](docs/decisions/0002-graph-shape.md) — deterministic pipeline, debuggable, predictable cost.
+3. [ChromaDB + BGE hybrid retrieval](docs/decisions/0003-rag-stack.md) — self-contained retrieval, swappable.
 4. [MCP exposes primitives, not the briefing](docs/decisions/0004-mcp-scope.md) — tools compose; black-box endpoints don't.
-5. [Physics is plain Python, not an LLM call](docs/decisions/0005-physics-not-llm.md) — the most important: the engineer knows when *not* to use the LLM.
+5. [Physics is plain Python, not an LLM call](docs/decisions/0005-physics-not-llm.md) — the engineer knows when *not* to use the LLM.
+6. [Drive-radius and ranked spots](docs/decisions/0006-radius-and-ranking.md) — chasers don't sit at home; the briefing answers *where to drive*.
 
 ---
 
